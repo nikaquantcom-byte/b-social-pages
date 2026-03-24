@@ -1,0 +1,193 @@
+import { createClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL = "https://rbengtfrthqdfbcdcugp.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZW5ndGZydGhxZGZiY2RjdWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2MjUwNjksImV4cCI6MjA4ODIwMTA2OX0.9RXVN3u0UzXO2ideDFA8Un34jqUEf6hiG8ZJki5RAXk";
+
+// Custom in-memory storage to avoid localStorage (blocked in sandboxed iframes)
+const memoryStorage: Record<string, string> = {};
+const customStorage = {
+  getItem: (key: string) => memoryStorage[key] ?? null,
+  setItem: (key: string, value: string) => { memoryStorage[key] = value; },
+  removeItem: (key: string) => { delete memoryStorage[key]; },
+};
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: customStorage,
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: false,
+  },
+});
+
+/* ── Types matching Supabase schema ── */
+
+export type Event = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  image_url: string | null;
+  date: string;
+  category: string;
+  max_participants: number;
+  created_by: string | null;
+  created_at: string;
+  latitude: number | null;
+  longitude: number | null;
+  price: number | null;
+  interest_tags: string[] | null;
+  suitable_for_modes: string[] | null;
+  weather_suitable: string | null;
+  indoor_outdoor: string | null;
+  category_level: string | null;
+};
+
+export type Profile = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  full_name: string | null;
+  location: string | null;
+  city: string | null;
+  interests: string[] | null;
+  vibe_tags: string[] | null;
+  created_at: string;
+  updated_at: string | null;
+};
+
+export type Place = {
+  id: string;
+  name: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  region: string;
+  country: string;
+  main_categories: string[];
+  tags: string[];
+  smart_tags: string[];
+  metadata: Record<string, any> | null;
+  rating_avg: number;
+  rating_count: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SupabaseRoute = {
+  id: string;
+  place_id: string;
+  name: string;
+  description: string;
+  activity_type: string;
+  distance_km: number;
+  difficulty: string;
+  loop: boolean;
+  surface: string;
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type Review = {
+  id: string;
+  place_id: string;
+  user_id: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+};
+
+/* ── API helpers ── */
+
+export async function fetchPlaces(): Promise<Place[]> {
+  // Supabase defaults to 1000 rows — we need all places
+  const all: Place[] = [];
+  let from = 0;
+  const PAGE = 1000;
+  while (true) {
+    const { data, error } = await supabase
+      .from("places")
+      .select("*")
+      .order("rating_avg", { ascending: false })
+      .range(from, from + PAGE - 1);
+    if (error) { console.error("fetchPlaces error:", error); break; }
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < PAGE) break;
+    from += PAGE;
+  }
+  return all;
+}
+
+export async function fetchRoutes(): Promise<SupabaseRoute[]> {
+  const { data, error } = await supabase
+    .from("routes")
+    .select("*");
+  if (error) { console.error("fetchRoutes error:", error); return []; }
+  return data || [];
+}
+
+export async function fetchEvents(): Promise<Event[]> {
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .order("date", { ascending: true });
+  if (error) { console.error("fetchEvents error:", error); return []; }
+  return data || [];
+}
+
+export async function fetchReviews(): Promise<Review[]> {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) { console.error("fetchReviews error:", error); return []; }
+  return data || [];
+}
+
+export async function fetchProfiles(): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*");
+  if (error) { console.error("fetchProfiles error:", error); return []; }
+  return data || [];
+}
+
+/** Fetch the 5 newest places, sorted by created_at DESC */
+export async function fetchNewestPlaces(limit = 5): Promise<Place[]> {
+  const { data, error } = await supabase
+    .from("places")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) { console.error("fetchNewestPlaces error:", error); return []; }
+  return data || [];
+}
+
+/** Fetch places with optional limit */
+export async function fetchPlacesWithLimit(limit = 50): Promise<Place[]> {
+  const { data, error } = await supabase
+    .from("places")
+    .select("*")
+    .order("rating_avg", { ascending: false })
+    .limit(limit);
+  if (error) { console.error("fetchPlacesWithLimit error:", error); return []; }
+  return data || [];
+}
+
+/** Count places by city */
+export async function fetchPlaceCounts(): Promise<{ aalborg: number; nordjylland: number }> {
+  const { data, error } = await supabase
+    .from("places")
+    .select("city, region");
+  if (error) { console.error("fetchPlaceCounts error:", error); return { aalborg: 0, nordjylland: 0 }; }
+  const all = data || [];
+  const aalborg = all.filter(p => p.city?.toLowerCase() === "aalborg").length;
+  const nordjylland = all.length; // All 60 are in Nordjylland
+  return { aalborg, nordjylland };
+}

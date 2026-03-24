@@ -1,0 +1,1608 @@
+[
+  {
+    "id": "f53aba3a-4bec-43e8-a246-052adb8596d7",
+    "title": "Night of Famous Musicals",
+    "description": "Ikoniske numre fra Phantom, Les Mis og Cats.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800",
+    "date": "2026-03-07T18:30:00+00:00",
+    "category": "musik",
+    "max_participants": 1600,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 395,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "musical",
+      "teater",
+      "kultur"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "62cd8d21-3658-4b48-ade8-9d1e93d852e2",
+    "title": "Thomas Helmig - Tre aftener i KBH",
+    "description": "Klassiske danske hits og ny musik i Royal Arena.",
+    "location": "Royal Arena, København",
+    "image_url": "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=800",
+    "date": "2026-03-12T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 16000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6258,
+    "longitude": 12.5725,
+    "price": 450,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "dansk",
+      "pop"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "68252e27-e353-4e43-b377-8236047f494e",
+    "title": "Walk & Talk - Aalborg Havn",
+    "description": "Gratis guidet gåtur langs havnefronten.",
+    "location": "Musikkens Hus, Aalborg",
+    "image_url": "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800",
+    "date": "2026-03-13T15:45:00+00:00",
+    "category": "social",
+    "max_participants": 30,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 57.0488,
+    "longitude": 9.9217,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "social",
+      "gåtur",
+      "outdoor",
+      "netværk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 1
+  },
+  {
+    "id": "f42c26ac-7f54-4aeb-b913-16e0704b6e98",
+    "title": "Family Culture Night - København",
+    "description": "Kulturnat for familier. 200+ museer åbner dørene.",
+    "location": "Hele København",
+    "image_url": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800",
+    "date": "2026-03-13T16:00:00+00:00",
+    "category": "kultur",
+    "max_participants": 50000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "kultur",
+      "familie",
+      "gratis",
+      "museum"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 1
+  },
+  {
+    "id": "afabfc86-220f-4431-a9c3-d927479f11d4",
+    "title": "Of Monsters And Men - Live",
+    "description": "Den islandske indie-folk gruppe spiller i Poolen.",
+    "location": "Poolen, København K",
+    "image_url": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800",
+    "date": "2026-03-14T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 2000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 299,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "indie",
+      "folk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "fe8e6caa-0321-4dad-a6a1-928fc8184a1e",
+    "title": "Dorthe Gerlach - ODEON Odense",
+    "description": "Dansk jazz og pop i intim udgave.",
+    "location": "ODEON, Odense",
+    "image_url": "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800",
+    "date": "2026-03-15T15:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1200,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.4038,
+    "longitude": 10.4024,
+    "price": 250,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "jazz",
+      "pop",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "ecf343d5-b802-4547-a217-7aa0a911e6f2",
+    "title": "The Show - A Tribute to ABBA",
+    "description": "ABBA tribute-show med fuldt band og kostumer.",
+    "location": "Forum Kolding, Kolding",
+    "image_url": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800",
+    "date": "2026-03-15T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 2000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.4904,
+    "longitude": 9.4709,
+    "price": 295,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "ABBA",
+      "tribute",
+      "fest"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "415dd7e1-6c2c-4018-aa5f-a6ed5fd0f7c6",
+    "title": "Don Pasquale - Operagalla",
+    "description": "Donizettis komiske opera med Aarhus Symfoni.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=800",
+    "date": "2026-03-18T18:30:00+00:00",
+    "category": "kultur",
+    "max_participants": 1200,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 350,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "opera",
+      "klassisk",
+      "kultur",
+      "kunst"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "81727326-a54d-4e06-8a90-6281b980f520",
+    "title": "Alex Vargas - Vertigo Releasekoncert",
+    "description": "Speciel releasekoncert i Musikhuset.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",
+    "date": "2026-03-19T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1600,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 275,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "indie",
+      "release"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "b768d62a-953b-4b90-a5c9-4eafe6abb413",
+    "title": "APHACA - Forum Frederiksberg",
+    "description": "APHACA indtager Forum med deres unikke sound.",
+    "location": "Forum, Frederiksberg",
+    "image_url": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
+    "date": "2026-03-20T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 5000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6802,
+    "longitude": 12.5345,
+    "price": 350,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "pop",
+      "live"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "05f55c02-fcf6-4644-a230-273c12daf856",
+    "title": "Nicklas Sahl - Musikhuset Aarhus",
+    "description": "Intim koncert med danske følelser.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800",
+    "date": "2026-03-20T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1600,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 295,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "dansk",
+      "pop"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "6b1fbf5e-5c3b-4dc4-8054-ad6e4e46906b",
+    "title": "Keramik Workshop - København",
+    "description": "Lær at dreje på keramikdrejeskive.",
+    "location": "Kreativoli, København",
+    "image_url": "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800",
+    "date": "2026-03-22T13:00:00+00:00",
+    "category": "workshop",
+    "max_participants": 12,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 495,
+    "min_required_participants": 4,
+    "interest_tags": [
+      "kreativ",
+      "keramik",
+      "workshop",
+      "kunst"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "8c6684f0-d835-4ffc-953f-56c47b02e77c",
+    "title": "Fællesspisning - Endelave",
+    "description": "Spis sammen med naboer og venner.",
+    "location": "Café Heden, Endelave By",
+    "image_url": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+    "date": "2026-03-22T17:00:00+00:00",
+    "category": "social",
+    "max_participants": 40,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.756,
+    "longitude": 10.284,
+    "price": 0,
+    "min_required_participants": 5,
+    "interest_tags": [
+      "mad",
+      "social",
+      "hygge",
+      "fællesspisning"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 1
+  },
+  {
+    "id": "58417da0-c5e8-4274-b444-d945653f52bb",
+    "title": "Morgensang - Musikhuset Aarhus",
+    "description": "Gratis morgensang med kaffe.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800",
+    "date": "2026-03-25T08:00:00+00:00",
+    "category": "social",
+    "max_participants": 200,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "social",
+      "sang",
+      "hygge"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 1
+  },
+  {
+    "id": "67b35a84-ad67-44b9-b1df-1e604ec916e0",
+    "title": "Meter i sekundet - Aarhus Teater",
+    "description": "Stine Pilgaards morsomme fortælling.",
+    "location": "Aarhus Teater, Teatergaden",
+    "image_url": "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800",
+    "date": "2026-03-26T18:30:00+00:00",
+    "category": "teater",
+    "max_participants": 800,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.1567,
+    "longitude": 10.2098,
+    "price": 295,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "teater",
+      "kultur",
+      "dansk",
+      "kunst"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "ace9c955-afb8-445a-aae1-ee0c42abb9da",
+    "title": "Poul Krebs med band - Musikhuset",
+    "description": "Danske klassikere og nye sange.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800",
+    "date": "2026-03-26T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1600,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 325,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "dansk",
+      "folk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "4212dea3-0d8a-4301-ae02-597b6e549ec6",
+    "title": "Tinlicker - Electronic Night",
+    "description": "Progressive house og trance i Poolen.",
+    "location": "Poolen, København K",
+    "image_url": "https://images.unsplash.com/photo-1571266028243-3716f02d3f52?w=800",
+    "date": "2026-03-26T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1500,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 275,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "electronic",
+      "house",
+      "trance"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "3e82e1fb-b158-48ec-a890-3b26429919db",
+    "title": "The Minds of 99 - Royal Arena",
+    "description": "Danmarks største band fylder Royal Arena.",
+    "location": "Royal Arena, København",
+    "image_url": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800",
+    "date": "2026-03-27T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 16000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6258,
+    "longitude": 12.5725,
+    "price": 495,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "rock",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "96041276-81b6-4076-95d2-24a68d6d159a",
+    "title": "Magtens Korridorer - ODEON Akustisk",
+    "description": "Akustisk turné gæster Odense.",
+    "location": "ODEON, Odense",
+    "image_url": "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=800",
+    "date": "2026-03-27T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1200,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.4038,
+    "longitude": 10.4024,
+    "price": 295,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "akustisk",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "2b71e5af-122a-4416-94ba-fbeb75167b02",
+    "title": "Magtens Korridorer - Akustisk",
+    "description": "Intime akustiske versioner af største hits.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
+    "date": "2026-03-28T19:00:00+00:00",
+    "category": "musik",
+    "max_participants": 800,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 295,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "akustisk",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "cd0637a8-3f6b-4222-8246-70c2bc72124d",
+    "title": "Danish Pastry Workshop",
+    "description": "Lær at bage dansk wienerbrød.",
+    "location": "København Centrum",
+    "image_url": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800",
+    "date": "2026-03-29T09:00:00+00:00",
+    "category": "workshop",
+    "max_participants": 10,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 650,
+    "min_required_participants": 4,
+    "interest_tags": [
+      "madlavning",
+      "bagning",
+      "workshop",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "d147cb15-8f33-44b0-b441-66b34ec9e29c",
+    "title": "Jensen og Bugge - Jubilæum",
+    "description": "Jubilæumskoncert i Kulturmaskinen.",
+    "location": "Kulturmaskinen, Odense",
+    "image_url": "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=800",
+    "date": "2026-04-01T18:00:00+00:00",
+    "category": "musik",
+    "max_participants": 500,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.4038,
+    "longitude": 10.4024,
+    "price": 275,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "dansk",
+      "hygge"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "561a7f6b-a1d9-4517-9d1c-79489c250407",
+    "title": "Røsnæs Trail",
+    "description": "Trailløb i smuk natur. 12 og 32 km ruter.",
+    "location": "Røsnæs, Kalundborg",
+    "image_url": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800",
+    "date": "2026-04-05T07:00:00+00:00",
+    "category": "sport",
+    "max_participants": 500,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.7298,
+    "longitude": 10.9687,
+    "price": 295,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "løb",
+      "trail",
+      "sport",
+      "natur"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "39a3a0b1-f1b7-40ff-b1c2-8b72a11cfbc7",
+    "title": "Loveboat Påskefest",
+    "description": "Voksen påskefest med Loveboat-tema.",
+    "location": "Halmtorvet 9, København",
+    "image_url": "https://images.unsplash.com/photo-1504680177321-2e6a879aac86?w=800",
+    "date": "2026-04-05T18:00:00+00:00",
+    "category": "fest",
+    "max_participants": 1000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6681,
+    "longitude": 12.5623,
+    "price": 250,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "fest",
+      "dans",
+      "musik",
+      "social"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "949645f9-6de1-40f3-8674-078e7454ef91",
+    "title": "Frost - The Musical",
+    "description": "Disneys Frost live på scenen i Musikhuset.",
+    "location": "Musikhuset, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800",
+    "date": "2026-04-08T15:00:00+00:00",
+    "category": "teater",
+    "max_participants": 1600,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.1536,
+    "longitude": 10.2013,
+    "price": 395,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "teater",
+      "musical",
+      "familie",
+      "børn"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "9f19d90f-1daf-49b4-a453-a70da648ebfc",
+    "title": "Sanne Salomonsen - Forårsturné",
+    "description": "Rockdronningen på forårsturné.",
+    "location": "Folkets Hus, Struer",
+    "image_url": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+    "date": "2026-04-09T18:00:00+00:00",
+    "category": "musik",
+    "max_participants": 500,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.4895,
+    "longitude": 8.5836,
+    "price": 350,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "rock",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "a7ae31f1-5243-408c-94e1-46230ae7ac9b",
+    "title": "ANNIKA - Falkonersalen",
+    "description": "Dansk pop på højeste niveau.",
+    "location": "Falkonersalen, København",
+    "image_url": "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+    "date": "2026-04-09T18:00:00+00:00",
+    "category": "musik",
+    "max_participants": 2000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6818,
+    "longitude": 12.5301,
+    "price": 325,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "pop",
+      "dansk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "6fb53d07-0d79-49ea-8387-8fae4987f9c4",
+    "title": "Rundt om Rold - Cykelløb",
+    "description": "Cykelløb i smukke Rold Skov. 55-160 km.",
+    "location": "Rold Skov, Rebild",
+    "image_url": "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800",
+    "date": "2026-04-14T06:00:00+00:00",
+    "category": "sport",
+    "max_participants": 2000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.831,
+    "longitude": 9.777,
+    "price": 250,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "cykling",
+      "sport",
+      "outdoor",
+      "natur"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "a25da041-8034-40ca-bb83-d5bdb4c3be86",
+    "title": "Alex Warren - København",
+    "description": "Amerikansk singer-songwriter på europæisk turné.",
+    "location": "Poolen, København K",
+    "image_url": "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=800",
+    "date": "2026-04-16T18:00:00+00:00",
+    "category": "musik",
+    "max_participants": 1500,
+    "created_by": null,
+    "created_at": "2026-03-12T22:27:21.851328+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 275,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "singer-songwriter",
+      "international"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "2e77c3c8-0189-4019-9cd4-4b41b3b06f54",
+    "title": "Aalborg Brutal Marathon 2026",
+    "description": "Halvmaraton og maraton gennem Aalborg.",
+    "location": "Aalborg Centrum",
+    "image_url": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?w=800",
+    "date": "2026-04-18T07:00:00+00:00",
+    "category": "sport",
+    "max_participants": 3000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 57.0488,
+    "longitude": 9.9217,
+    "price": 350,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "løb",
+      "maraton",
+      "sport",
+      "outdoor"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "3c6e4965-24ca-4c9a-8413-eb6476a61591",
+    "title": "IT-DAY Career Fair - Aalborg",
+    "description": "Karrieremesse for IT og studerende.",
+    "location": "Aalborg Congress Center",
+    "image_url": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800",
+    "date": "2026-04-23T08:00:00+00:00",
+    "category": "karriere",
+    "max_participants": 2000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 57.0488,
+    "longitude": 9.9217,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "karriere",
+      "IT",
+      "netværk",
+      "læring"
+    ],
+    "suitable_for_modes": [
+      "solo"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 1
+  },
+  {
+    "id": "5130689b-84a9-42de-a9dc-78325e3847ab",
+    "title": "Poul Krebs - 70 år turné",
+    "description": "Historisk turné: 70 koncerter for 70 år.",
+    "location": "Magasinet Odense",
+    "image_url": "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800",
+    "date": "2026-04-23T18:00:00+00:00",
+    "category": "musik",
+    "max_participants": 800,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.4038,
+    "longitude": 10.4024,
+    "price": 375,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "musik",
+      "koncert",
+      "dansk",
+      "folk"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "09c7403b-2a3d-4f18-88c2-23e41d6a4557",
+    "title": "Copenhagen Marathon 2026",
+    "description": "Løb gennem Københavns smukkeste gader.",
+    "location": "Fælledparken, København",
+    "image_url": "https://images.unsplash.com/photo-1513593771513-7b58b6c4af38?w=800",
+    "date": "2026-05-10T07:00:00+00:00",
+    "category": "sport",
+    "max_participants": 12000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.7,
+    "longitude": 12.5609,
+    "price": 550,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "løb",
+      "maraton",
+      "sport",
+      "outdoor"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "6bcad32a-fe6c-412d-85d1-461a0bf7a717",
+    "title": "Thomas & Uber Cup 2026",
+    "description": "VM i holdbadminton i Odense.",
+    "location": "Jyske Bank Arena, Odense",
+    "image_url": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800",
+    "date": "2026-05-16T08:00:00+00:00",
+    "category": "sport",
+    "max_participants": 5000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.396,
+    "longitude": 10.377,
+    "price": 250,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "sport",
+      "badminton",
+      "VM",
+      "live"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "all"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "b4eada8b-c458-44ea-9de9-b97f961d504f",
+    "title": "Jelling Musikfestival 2026",
+    "description": "Gratis festival ved UNESCO verdensarv.",
+    "location": "Jelling Monumenterne, Jelling",
+    "image_url": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
+    "date": "2026-05-21T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 35000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.756,
+    "longitude": 9.4243,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "musik",
+      "gratis",
+      "outdoor"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 1
+  },
+  {
+    "id": "b4953f73-ea53-4018-b580-ff1a436e4965",
+    "title": "Royal Run 2026",
+    "description": "Løb med Kronprins Christian i 5 byer.",
+    "location": "Forskellige byer, Danmark",
+    "image_url": "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800",
+    "date": "2026-06-01T08:00:00+00:00",
+    "category": "sport",
+    "max_participants": 75000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 200,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "løb",
+      "sport",
+      "social",
+      "outdoor"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 1
+  },
+  {
+    "id": "599395b0-4f40-491b-933c-efe304184949",
+    "title": "Distortion 2026 - København",
+    "description": "Gadefest og musikfestival i København.",
+    "location": "Forskellige locations, København",
+    "image_url": "https://images.unsplash.com/photo-1504680177321-2e6a879aac86?w=800",
+    "date": "2026-06-03T13:00:00+00:00",
+    "category": "festival",
+    "max_participants": 100000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "fest",
+      "musik",
+      "gadefest"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "cec78a42-f7fb-43e3-9312-338a97a7cc6c",
+    "title": "NorthSide 2026",
+    "description": "3 dage med musik i Eskelunden, Aarhus.",
+    "location": "Eskelunden, Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800",
+    "date": "2026-06-04T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 35000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.1629,
+    "longitude": 10.2039,
+    "price": 1595,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "musik",
+      "outdoor",
+      "social"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "b34d9f97-dcea-480f-9384-22e150781ddd",
+    "title": "L'Etape Denmark by Tour de France",
+    "description": "Officiel Tour de France-oplevelse i DK.",
+    "location": "Hærvejen, Jylland",
+    "image_url": "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800",
+    "date": "2026-06-13T06:00:00+00:00",
+    "category": "sport",
+    "max_participants": 5000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.7113,
+    "longitude": 9.5363,
+    "price": 895,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "cykling",
+      "sport",
+      "outdoor",
+      "tour"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "80ee98a5-7549-45c8-b30c-bfac052f1c8b",
+    "title": "Heartland Festival 2026",
+    "description": "Musik, kunst og gastronomi på Egeskov Slot.",
+    "location": "Egeskov Slot, Kværndrup",
+    "image_url": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800",
+    "date": "2026-06-18T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 15000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.1744,
+    "longitude": 10.4911,
+    "price": 1895,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "musik",
+      "kunst",
+      "gastronomi"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "061c185f-20fb-4929-9258-c6179bd47e3d",
+    "title": "Copenhell 2026",
+    "description": "Metal- og rockfestival på Refshaleøen.",
+    "location": "Refshaleøen, København",
+    "image_url": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",
+    "date": "2026-06-18T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 25000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6892,
+    "longitude": 12.6134,
+    "price": 2200,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "metal",
+      "rock",
+      "musik"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "ac254eb1-3f68-4167-bda6-c5ee78f5fa4a",
+    "title": "Tinderbox 2026",
+    "description": "Odenses store musikfestival i Tusindårsskoven.",
+    "location": "Tusindårsskoven, Odense",
+    "image_url": "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=800",
+    "date": "2026-06-25T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 40000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.3727,
+    "longitude": 10.3873,
+    "price": 1795,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "musik",
+      "pop",
+      "electronic"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "913e3995-dd5b-4e47-8cd8-6ead5ef666ed",
+    "title": "Aarhus Jazz Festival 2026",
+    "description": "Ti dage med jazz i hele Aarhus.",
+    "location": "Hele Aarhus",
+    "image_url": "https://images.unsplash.com/photo-1415201364774-f6f0bb35f28f?w=800",
+    "date": "2026-06-26T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 50000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 56.1567,
+    "longitude": 10.2098,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "jazz",
+      "musik",
+      "kultur",
+      "festival"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 1
+  },
+  {
+    "id": "316ce529-8a0e-4b16-9169-8580561c71e2",
+    "title": "Roskilde Festival 2026",
+    "description": "Nordens største musikfestival. 175+ artister.",
+    "location": "Roskilde Festival Pladsen",
+    "image_url": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800",
+    "date": "2026-06-27T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 130000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6151,
+    "longitude": 12.0803,
+    "price": 2400,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "musik",
+      "outdoor",
+      "kultur"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "1ea2e1f8-aced-441f-8cc4-2c7061dbad12",
+    "title": "Copenhagen Jazz Festival 2026",
+    "description": "1000+ koncerter over hele København.",
+    "location": "Hele København",
+    "image_url": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800",
+    "date": "2026-07-03T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 250000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "price": 0,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "jazz",
+      "musik",
+      "kultur",
+      "festival"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 1
+  },
+  {
+    "id": "86cfa7a9-c021-4442-8fa2-f1ab9ee768cb",
+    "title": "Syd for Solen 2026",
+    "description": "Pop, R&B og urban musik på Frederiksberg.",
+    "location": "Frederiksberg, København",
+    "image_url": "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=800",
+    "date": "2026-08-13T12:00:00+00:00",
+    "category": "festival",
+    "max_participants": 20000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 55.6802,
+    "longitude": 12.5345,
+    "price": 995,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "pop",
+      "rnb",
+      "urban"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "1b6d02d3-6d29-4a18-99e0-b440ccda320b",
+    "title": "Tønder Festival 2026",
+    "description": "Folk, country og americana i Sønderjylland.",
+    "location": "Tønder",
+    "image_url": "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800",
+    "date": "2026-08-26T10:00:00+00:00",
+    "category": "festival",
+    "max_participants": 12000,
+    "created_by": null,
+    "created_at": "2026-03-12T22:34:22.66683+00:00",
+    "latitude": 54.9333,
+    "longitude": 8.8667,
+    "price": 1495,
+    "min_required_participants": 2,
+    "interest_tags": [
+      "festival",
+      "folk",
+      "country",
+      "musik"
+    ],
+    "suitable_for_modes": [
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "outdoor",
+    "category_level": 2
+  },
+  {
+    "id": "new-faellesspisning",
+    "title": "Fællesspisning — Nordisk Køkken",
+    "description": "Hyggelig aften med mad, vin og nye mennesker. Nordisk menu med lokale råvarer.",
+    "location": "Aalborg C",
+    "image_url": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&auto=format&fit=crop",
+    "date": "2026-03-20T18:00:00+00:00",
+    "category": "mad",
+    "max_participants": 20,
+    "created_by": null,
+    "created_at": "2026-03-15T00:00:00+00:00",
+    "latitude": 57.048,
+    "longitude": 9.9187,
+    "price": 89,
+    "interest_tags": [
+      "mad",
+      "social",
+      "hygge",
+      "fællesspisning"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "new-keramik",
+    "title": "Keramik-workshop — Lav din egen skål",
+    "description": "Lær at dreje og glasere. Alt materiale inkluderet. Ingen erfaring nødvendig.",
+    "location": "Aalborg, Vestbyen",
+    "image_url": "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&auto=format&fit=crop",
+    "date": "2026-03-22T14:00:00+00:00",
+    "category": "kunst",
+    "max_participants": 12,
+    "created_by": null,
+    "created_at": "2026-03-15T00:00:00+00:00",
+    "latitude": 57.048,
+    "longitude": 9.9187,
+    "price": 150,
+    "interest_tags": [
+      "kunst",
+      "keramik",
+      "kreativt",
+      "workshop"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  },
+  {
+    "id": "new-vinsmagning",
+    "title": "Vinsmagning — Italienske vine",
+    "description": "5 vine fra Toscana og Piemonte med ostebord. Sommelier guider jer igennem.",
+    "location": "Aalborg C",
+    "image_url": "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&auto=format&fit=crop",
+    "date": "2026-03-28T19:00:00+00:00",
+    "category": "mad",
+    "max_participants": 16,
+    "created_by": null,
+    "created_at": "2026-03-15T00:00:00+00:00",
+    "latitude": 57.048,
+    "longitude": 9.9187,
+    "price": 199,
+    "interest_tags": [
+      "vin",
+      "mad",
+      "social",
+      "vinsmagning"
+    ],
+    "suitable_for_modes": [
+      "solo",
+      "duo",
+      "gruppe"
+    ],
+    "weather_suitable": [
+      "sun",
+      "cloudy",
+      "rain"
+    ],
+    "indoor_outdoor": "indoor",
+    "category_level": 2
+  }
+]
