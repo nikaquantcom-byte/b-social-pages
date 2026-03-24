@@ -28,11 +28,11 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./source
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build
         working-directory: ./source
-        run: npm run build
+        run: npx vite build
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
