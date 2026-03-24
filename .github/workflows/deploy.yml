@@ -4,17 +4,35 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'source/**'
+      - '.github/workflows/deploy.yml'
+
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
-    name: Deploy to Cloudflare Pages
+    name: Build and Deploy
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./source
+        run: npm install
+
+      - name: Build
+        working-directory: ./source
+        run: npm run build
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
@@ -22,5 +40,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: b-social
-          directory: public
+          directory: source/dist/public
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
