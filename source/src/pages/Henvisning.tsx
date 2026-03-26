@@ -78,7 +78,7 @@ export default function Henvisning() {
             </div>
             <div>
               <h1 className="text-2xl font-bold mb-2">Henvisningsprogram</h1>
-              <p className="text-white/50 text-sm leading-relaxed">Tjen penge ved at dele B-Social. F\u00e5 kommission hver gang en person du henviser betaler.</p>
+              <p className="text-white/50 text-sm leading-relaxed">Tjen penge ved at dele B-Social. Få kommission hver gang en person du henviser betaler.</p>
             </div>
             <div className="space-y-3 w-full">
               <button onClick={() => setLocation("/auth")} className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 flex items-center justify-center gap-2">
@@ -162,7 +162,7 @@ export default function Henvisning() {
               {copied ? "Kopieret" : "Kopier"}
             </button>
           </div>
-          <p className="text-white/30 text-xs">Kommission: {stats!.commission_pct}% af al omsaetning</p>
+          <p className="text-white/30 text-xs">Kommission: {stats!.commission_pct}% af al omsætning</p>
         </motion.div>
         <div className="grid grid-cols-2 gap-3">
           {[{ icon: MousePointerClick, val: stats!.total_clicks, label: "Klik", d: 0.1 },
