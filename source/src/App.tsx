@@ -34,6 +34,14 @@ import FirmaTargeting from "@/pages/FirmaTargeting";
 import FirmaAnalytics from "@/pages/FirmaAnalytics";
 import FirmaFakturering from "@/pages/FirmaFakturering";
 
+// Desktop test pages
+import DesktopAppLayout from "@/components/DesktopAppLayout";
+import TestFeed from "@/pages/TestFeed";
+import TestUdforsk from "@/pages/TestUdforsk";
+import TestKort from "@/pages/TestKort";
+import TestBeskeder from "@/pages/TestBeskeder";
+import TestMinSide from "@/pages/TestMinSide";
+
 function AppRouter() {
   return (
     <div className="phone-wrapper dark">
@@ -76,12 +84,31 @@ function FirmaRouter() {
   );
 }
 
+function TestRouter() {
+  return (
+    <DesktopAppLayout>
+      <Switch>
+        <Route path="/test" component={TestFeed} />
+        <Route path="/test/udforsk" component={TestUdforsk} />
+        <Route path="/test/kort" component={TestKort} />
+        <Route path="/test/beskeder" component={TestBeskeder} />
+        <Route path="/test/min-side" component={TestMinSide} />
+        <Route path="/test/event/:id" component={EventDetail} />
+      </Switch>
+    </DesktopAppLayout>
+  );
+}
+
 function RootRouter() {
   const [location] = useHashLocation();
   const isFirma = location.startsWith("/firma");
+  const isTest = location.startsWith("/test");
 
   if (isFirma) {
     return <FirmaRouter />;
+  }
+  if (isTest) {
+    return <TestRouter />;
   }
   return <AppRouter />;
 }
