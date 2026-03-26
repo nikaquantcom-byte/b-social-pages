@@ -37,12 +37,12 @@ function TagEditorModal({ open, onClose, activeTags, onSave }: {
         </div>
         <div className="relative mb-4">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-          <input type="search" placeholder="S\u00f8g interesser..." value={search} onChange={e => setSearch(e.target.value)}
+          <input type="search" placeholder="Søg interesser..." value={search} onChange={e => setSearch(e.target.value)}
             className="w-full bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
         </div>
         {search && results.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs text-white/40 mb-2">S\u00f8geresultater</p>
+            <p className="text-xs text-white/40 mb-2">Søgeresultater</p>
             <div className="flex flex-wrap gap-1.5">
               {results.map(t => (
                 <button key={t.tag} onClick={() => toggle(t.tag)}
@@ -148,7 +148,7 @@ export default function TestFeed() {
           <div className="flex items-center gap-3">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-              <input type="search" placeholder="S\u00f8g events, steder..." value={searchQuery}
+              <input type="search" placeholder="Søg events, steder..." value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
             </div>
@@ -173,7 +173,7 @@ export default function TestFeed() {
             <h2 className="text-xl font-bold text-white">{greeting}</h2>
             {userTags.length === 0 && (
               <button onClick={() => setEditorOpen(true)} className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#4ECDC4]/15 text-[#4ECDC4] hover:bg-[#4ECDC4]/25 transition-all">
-                + V\u00e6lg interesser
+                + Vælg interesser
               </button>
             )}
           </div>
@@ -281,9 +281,9 @@ export default function TestFeed() {
             ))}
           </div>
 
-          {/* Popul\u00e6re Tags - connected to superhjerne */}
+          {/* Populære Tags - connected to superhjerne */}
           <div className="bg-white/5 rounded-xl border border-white/8 p-4">
-            <h3 className="text-sm font-semibold text-white mb-3">Popul\u00e6re Tags</h3>
+            <h3 className="text-sm font-semibold text-white mb-3">Populære Tags</h3>
             <div className="flex flex-wrap gap-1.5">
               {TAG_TREE.slice(0, 12).map(tag => (
                 <button key={tag.tag}
@@ -304,13 +304,13 @@ export default function TestFeed() {
               <TrendingUp size={14} /> #firma - Dashboard
             </Link>
             <Link href="/henvisning" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-[#4ECDC4]/10 text-white/70 hover:text-[#4ECDC4] text-sm transition-all">
-              <Users size={14} /> #henvisning - Bliv ambassad\u00f8r
+              <Users size={14} /> #henvisning - Bliv ambassadør
             </Link>
           </div>
 
           {/* Foreslaaede Profiler */}
           <div className="bg-white/5 rounded-xl border border-white/8 p-4">
-            <h3 className="text-sm font-semibold text-white mb-3">Foresl\u00e5ede Profiler</h3>
+            <h3 className="text-sm font-semibold text-white mb-3">Foreslåede Profiler</h3>
             {AMBASSADORS.slice(0, 3).map((amb: Ambassador) => (
               <div key={amb.name} className="flex items-center gap-3 py-2">
                 <img src={amb.avatar} alt={amb.name} className="w-10 h-10 rounded-full object-cover" />
@@ -318,7 +318,7 @@ export default function TestFeed() {
                   <p className="text-sm font-medium text-white">{amb.name}</p>
                   <p className="text-xs text-white/40 truncate">{amb.bio}</p>
                 </div>
-                <button className="px-3 py-1 rounded-full text-xs font-medium bg-[#4ECDC4]/15 text-[#4ECDC4] hover:bg-[#4ECDC4]/25">F\u00f8lg</button>
+                <button className="px-3 py-1 rounded-full text-xs font-medium bg-[#4ECDC4]/15 text-[#4ECDC4] hover:bg-[#4ECDC4]/25">Følg</button>
               </div>
             ))}
           </div>
