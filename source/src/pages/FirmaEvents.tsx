@@ -9,11 +9,16 @@ import {
   Tag,
   Image,
   Megaphone,
-  MoreHorizontal,
   Edit,
   Trash2,
   Eye,
   Filter,
+  Copy,
+  ChevronDown,
+  ChevronUp,
+  X,
+  Calendar,
+  List,
 } from "lucide-react";
 
 type EventStatus = "draft" | "aktiv" | "afsluttet" | "promoted";
@@ -27,35 +32,80 @@ interface FirmaEvent {
   tags: string[];
   views: number;
   signups: number;
+  maxSignups: number;
+  description: string;
   image?: string;
 }
 
 const MOCK_EVENTS: FirmaEvent[] = [
-  { id: 1, title: "Sommertr\u00e6ning i parken", date: "2026-04-15", location: "Aalborg, Kildeparken", status: "aktiv", tags: ["Fitness", "Outdoor"], views: 2340, signups: 45, image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=300" },
-  { id: 2, title: "MTB tur - Rebild", date: "2026-04-20", location: "Rebild Bakker", status: "aktiv", tags: ["Cykling", "MTB", "Natur"], views: 1890, signups: 28, image: "https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?w=300" },
-  { id: 3, title: "Yoga p\u00e5 stranden", date: "2026-05-01", location: "Blokhus Strand", status: "draft", tags: ["Yoga", "Wellness"], views: 0, signups: 0 },
-  { id: 4, title: "L\u00f8beklub opstart", date: "2026-03-01", location: "Aalborg Storcenter", status: "afsluttet", tags: ["L\u00f8b"], views: 4210, signups: 67 },
-  { id: 5, title: "Paddle Tennis turnering", date: "2026-04-28", location: "Aalborg Padel", status: "promoted", tags: ["Padel", "Turnering"], views: 3100, signups: 32 },
+  { id: 1, title: "Sommertræning i parken", date: "2026-04-15", location: "Aalborg, Kildeparken", status: "aktiv", tags: ["Fitness", "Outdoor"], views: 2340, signups: 45, maxSignups: 60, description: "Kom og vær med til sommertræning i Kildeparken. Vi træner styrke og cardio i det fri.", image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=300" },
+  { id: 2, title: "MTB tur - Rebild", date: "2026-04-20", location: "Rebild Bakker", status: "aktiv", tags: ["Cykling", "MTB", "Natur"], views: 1890, signups: 28, maxSignups: 40, description: "Mountain bike tur gennem Rebild Bakker. Alle niveauer velkomne.", image: "https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?w=300" },
+  { id: 3, title: "Yoga på stranden", date: "2026-05-01", location: "Blokhus Strand", status: "draft", tags: ["Yoga", "Wellness"], views: 0, signups: 0, maxSignups: 30, description: "Morgenyoga på Blokhus Strand med professionel instruktør." },
+  { id: 4, title: "Løbeklub opstart", date: "2026-03-01", location: "Aalborg Storcenter", status: "afsluttet", tags: ["Løb"], views: 4210, signups: 67, maxSignups: 80, description: "Opstart af ny løbeklub i Aalborg. Ugentlige løbeture for alle niveauer." },
+  { id: 5, title: "Paddle Tennis turnering", date: "2026-04-28", location: "Aalborg Padel", status: "promoted", tags: ["Padel", "Turnering"], views: 3100, signups: 32, maxSignups: 48, description: "Stor padel-turnering med præmier. Tilmelding i par." },
 ];
 
 function StatusBadge({ status }: { status: EventStatus }) {
-  const colors: Record<EventStatus, string> = {
+  const colors: Record<string, string> = {
     aktiv: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
     draft: "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
     afsluttet: "bg-white/5 text-muted-foreground border-white/10",
     promoted: "bg-blue-500/15 text-blue-400 border-blue-500/20",
   };
   return (
-    <span className={`px-2 py-0.5 rounded-full text-xs border ${colors[status]}`}>
-      {status === "promoted" ? "\u2728 promoted" : status}
+    <span className={`px-2 py-0.5 rounded-full text-xs border ${colors[status] || colors.draft}`}>
+      {status === "promoted" ? "✨ promoted" : status}
     </span>
+  );
+}
+
+function BoostModal({ event, onClose }: { event: FirmaEvent; onClose: () => void }) {
+  const [budget, setBudget] = useState(200);
+  const [duration, setDuration] = useState(7);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="glass-card rounded-xl p-6 w-full max-w-md mx-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-lg">Boost: {event.title}</h3>
+          <button onClick={onClose} className="p-1 rounded hover:bg-white/10 text-muted-foreground"><X size={18} /></button>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm text-muted-foreground mb-2 block">Budget: {budget} kr</label>
+            <input type="range" min={50} max={500} step={50} value={budget} onChange={(e) => setBudget(Number(e.target.value))} className="w-full accent-primary" />
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>50 kr</span><span>500 kr</span></div>
+          </div>
+          <div>
+            <label className="text-sm text-muted-foreground mb-2 block">Estimeret rækkevidde</label>
+            <p className="text-2xl font-bold text-primary">{(budget * 8).toLocaleString()} brugere</p>
+          </div>
+          <div>
+            <label className="text-sm text-muted-foreground mb-2 block">Varighed</label>
+            <div className="flex gap-2">
+              {[3, 7, 14].map((d) => (
+                <button key={d} onClick={() => setDuration(d)} className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${duration === d ? "bg-primary/15 text-primary border border-primary/30" : "bg-white/5 text-muted-foreground border border-white/10"}`}>
+                  {d} dage
+                </button>
+              ))}
+            </div>
+          </div>
+          <button className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+            Start boost
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export default function FirmaEvents() {
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState<EventStatus | "alle">("alle");
+  const [filterStatus, setFilterStatus] = useState<string>("alle");
   const [showCreate, setShowCreate] = useState(false);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [boostEvent, setBoostEvent] = useState<FirmaEvent | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
 
   const filtered = MOCK_EVENTS.filter((e) => {
     if (filterStatus !== "alle" && e.status !== filterStatus) return false;
@@ -63,28 +113,36 @@ export default function FirmaEvents() {
     return true;
   });
 
+  const now = new Date(2026, 3, 1);
+  const daysInMonth = new Date(2026, 4, 0).getDate();
+  const firstDay = now.getDay() || 7;
+
   return (
     <FirmaLayout>
       <div className="space-y-6">
+        {boostEvent && <BoostModal event={boostEvent} onClose={() => setBoostEvent(null)} />}
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Events</h1>
             <p className="text-muted-foreground text-sm mt-1">Administrer dine events og kampagner.</p>
           </div>
-          <button
-            onClick={() => setShowCreate(!showCreate)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
-          >
-            <Plus size={16} />
-            Opret event
-          </button>
+          <div className="flex gap-2">
+            <div className="flex rounded-lg border border-white/10 overflow-hidden">
+              <button onClick={() => setViewMode("list")} className={`p-2 ${viewMode === "list" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"}`}><List size={16} /></button>
+              <button onClick={() => setViewMode("calendar")} className={`p-2 ${viewMode === "calendar" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"}`}><Calendar size={16} /></button>
+            </div>
+            <button onClick={() => setShowCreate(!showCreate)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+              <Plus size={16} /> Opret event
+            </button>
+          </div>
         </div>
 
-        {/* Create event form (toggle) */}
+        {/* Create event form */}
         {showCreate && (
-          <div className="glass-card rounded-xl p-6 space-y-4">
-            <h2 className="font-semibold text-lg">Nyt event</h2>
+          <div className="glass-card rounded-xl p-4 space-y-4">
+            <h2 className="font-semibold">Nyt event</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm text-muted-foreground mb-1 block">Titel</label>
@@ -96,40 +154,21 @@ export default function FirmaEvents() {
               </div>
               <div>
                 <label className="text-sm text-muted-foreground mb-1 block">Lokation</label>
-                <div className="relative">
-                  <MapPin size={16} className="absolute left-3 top-2.5 text-muted-foreground" />
-                  <input type="text" placeholder="Adresse..." className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
-                </div>
+                <input type="text" placeholder="Adresse..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div>
                 <label className="text-sm text-muted-foreground mb-1 block">Tags</label>
-                <div className="relative">
-                  <Tag size={16} className="absolute left-3 top-2.5 text-muted-foreground" />
-                  <input type="text" placeholder="Tilf\u00f8j tags..." className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
-                </div>
+                <input type="text" placeholder="Tilføj tags..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div className="md:col-span-2">
                 <label className="text-sm text-muted-foreground mb-1 block">Beskrivelse</label>
                 <textarea rows={3} placeholder="Beskriv dit event..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary resize-none" />
               </div>
-              <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Billede</label>
-                <div className="border border-dashed border-white/20 rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer">
-                  <Image size={24} className="mx-auto text-muted-foreground mb-2" />
-                  <p className="text-xs text-muted-foreground">Klik for at uploade billede</p>
-                </div>
-              </div>
             </div>
-            <div className="flex gap-3 pt-2">
-              <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90">
-                Gem som kladde
-              </button>
-              <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-600/90">
-                Publicer event
-              </button>
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-muted-foreground text-sm hover:text-foreground">
-                Annuller
-              </button>
+            <div className="flex gap-3">
+              <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">Gem som kladde</button>
+              <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium">Publicer event</button>
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-muted-foreground text-sm">Annuller</button>
             </div>
           </div>
         )}
@@ -138,82 +177,109 @@ export default function FirmaEvents() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search size={16} className="absolute left-3 top-2.5 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="S\u00f8g events..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary"
-            />
+            <input type="text" placeholder="Søg events..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
           </div>
           <div className="flex gap-2">
             {(["alle", "aktiv", "draft", "promoted", "afsluttet"] as const).map((s) => (
-              <button
-                key={s}
-                onClick={() => setFilterStatus(s)}
-                className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
-                  filterStatus === s ? "bg-primary/15 text-primary" : "bg-white/5 text-muted-foreground hover:text-foreground"
-                }`}
-              >
+              <button key={s} onClick={() => setFilterStatus(s)} className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${filterStatus === s ? "bg-primary/15 text-primary" : "bg-white/5 text-muted-foreground hover:text-foreground"}`}>
                 {s === "alle" ? "Alle" : s}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Events list */}
-        <div className="glass-card rounded-xl overflow-hidden">
-          <div className="hidden lg:grid grid-cols-[1fr_120px_140px_80px_80px_100px_40px] gap-4 px-4 py-3 text-xs text-muted-foreground font-medium border-b border-white/10">
-            <span>Event</span>
-            <span>Dato</span>
-            <span>Lokation</span>
-            <span>Visninger</span>
-            <span>Tilmeld.</span>
-            <span>Status</span>
-            <span></span>
+        {/* Calendar view */}
+        {viewMode === "calendar" && (
+          <div className="glass-card rounded-xl p-4">
+            <h3 className="font-semibold mb-3">April 2026</h3>
+            <div className="grid grid-cols-7 gap-1 text-center">
+              {["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"].map((d) => (
+                <div key={d} className="text-xs text-muted-foreground py-1">{d}</div>
+              ))}
+              {Array.from({ length: firstDay - 1 }).map((_, i) => (<div key={`e${i}`} />))}
+              {Array.from({ length: daysInMonth }).map((_, i) => {
+                const day = i + 1;
+                const eventsOnDay = MOCK_EVENTS.filter((e) => {
+                  const d = new Date(e.date);
+                  return d.getMonth() === 3 && d.getDate() === day;
+                });
+                return (
+                  <div key={day} className={`py-2 rounded-lg text-sm ${eventsOnDay.length > 0 ? "bg-primary/10" : "hover:bg-white/5"}`}>
+                    {day}
+                    {eventsOnDay.length > 0 && <div className="w-1.5 h-1.5 rounded-full bg-primary mx-auto mt-0.5" />}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <div className="divide-y divide-white/5">
-            {filtered.map((event) => (
-              <div key={event.id} className="px-4 py-3 hover:bg-white/5 transition-colors">
-                <div className="lg:grid lg:grid-cols-[1fr_120px_140px_80px_80px_100px_40px] lg:gap-4 lg:items-center">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
-                      {event.image ? (
-                        <img src={event.image} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <CalendarPlus size={18} className="text-primary" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{event.title}</p>
-                      <div className="flex gap-1 mt-1">
-                        {event.tags.map((t) => (
-                          <span key={t} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">{t}</span>
-                        ))}
+        )}
+
+        {/* Events list */}
+        {viewMode === "list" && (
+          <div className="glass-card rounded-xl overflow-hidden">
+            <div className="divide-y divide-white/5">
+              {filtered.map((event) => (
+                <div key={event.id}>
+                  <div className="px-4 py-3 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setExpandedId(expandedId === event.id ? null : event.id)}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 overflow-hidden">
+                          {event.image ? <img src={event.image} alt="" className="w-full h-full object-cover" /> : <CalendarPlus size={18} className="text-primary" />}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{event.title}</p>
+                          <div className="flex gap-1 mt-1">
+                            {event.tags.map((t) => (<span key={t} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">{t}</span>))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-muted-foreground hidden sm:block">{event.date}</span>
+                        <StatusBadge status={event.status} />
+                        <button onClick={(e) => { e.stopPropagation(); setBoostEvent(event); }} className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground">
+                          <Megaphone size={14} />
+                        </button>
+                        {expandedId === event.id ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
                       </div>
                     </div>
                   </div>
-                  <span className="text-sm text-muted-foreground hidden lg:block">{event.date}</span>
-                  <span className="text-sm text-muted-foreground hidden lg:block truncate">{event.location}</span>
-                  <span className="text-sm hidden lg:block">{event.views.toLocaleString()}</span>
-                  <span className="text-sm hidden lg:block">{event.signups}</span>
-                  <div className="hidden lg:block"><StatusBadge status={event.status} /></div>
-                  <div className="hidden lg:flex gap-1">
-                    <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground">
-                      <Megaphone size={14} />
-                    </button>
-                  </div>
+
+                  {/* Expand panel */}
+                  {expandedId === event.id && (
+                    <div className="px-4 py-4 bg-white/[0.02] border-t border-white/5">
+                      <p className="text-sm text-muted-foreground mb-3">{event.description}</p>
+                      <div className="mb-3">
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-muted-foreground">Tilmeldinger</span>
+                          <span>{event.signups} / {event.maxSignups}</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-white/10">
+                          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(event.signups / event.maxSignups) * 100}%` }} />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
+                        <span className="flex items-center gap-1"><MapPin size={12} /> {event.location}</span>
+                        <span className="flex items-center gap-1"><Eye size={12} /> {event.views.toLocaleString()} visninger</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-white/10 flex items-center gap-1"><Edit size={12} /> Redigér</button>
+                        <button className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-white/10 flex items-center gap-1"><Copy size={12} /> Dupliker</button>
+                        {confirmDelete === event.id ? (
+                          <>
+                            <button onClick={() => setConfirmDelete(null)} className="px-3 py-1.5 rounded-lg text-xs bg-red-500/15 text-red-400 border border-red-500/20">Bekræft slet</button>
+                            <button onClick={() => setConfirmDelete(null)} className="px-3 py-1.5 rounded-lg text-xs text-muted-foreground">Annuller</button>
+                          </>
+                        ) : (
+                          <button onClick={() => setConfirmDelete(event.id)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-red-500/10 hover:text-red-400 flex items-center gap-1"><Trash2 size={12} /> Slet</button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {/* Mobile meta */}
-                <div className="flex items-center gap-4 mt-2 lg:hidden">
-                  <span className="text-xs text-muted-foreground">{event.date}</span>
-                  <span className="text-xs text-muted-foreground">{event.location}</span>
-                  <StatusBadge status={event.status} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </FirmaLayout>
   );
