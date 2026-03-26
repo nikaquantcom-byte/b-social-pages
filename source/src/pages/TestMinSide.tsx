@@ -42,7 +42,7 @@ export default function TestMinSide() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-xl font-bold">Nic Bjergby</h1>
-                  <p className="text-sm text-white/40 mt-0.5">@nicbjergby \u00b7 K\u00f8benhavn</p>
+                  <p className="text-sm text-white/40 mt-0.5">{"@nicbjergby \u00b7 K\u00f8benhavn"}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button className="px-4 py-2 rounded-xl bg-white/8 text-sm text-white/70 hover:bg-white/12 flex items-center gap-2">
@@ -65,11 +65,11 @@ export default function TestMinSide() {
             </div>
             <div className="text-center">
               <p className="text-lg font-bold">156</p>
-              <p className="text-xs text-white/40">F\u00f8lgere</p>
+              <p className="text-xs text-white/40">{"F\u00f8lgere"}</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold">89</p>
-              <p className="text-xs text-white/40">F\u00f8lger</p>
+              <p className="text-xs text-white/40">{"F\u00f8lger"}</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold">4.8</p>
@@ -86,7 +86,7 @@ export default function TestMinSide() {
           <div className="space-y-4">
             <div className="glass-card rounded-2xl p-4">
               <h3 className="font-semibold text-sm mb-2">Om mig</h3>
-              <p className="text-sm text-white/50">Naturelsker og eventarrang\u00f8r i K\u00f8benhavn. Elsker vandring, yoga og at m\u00f8de nye mennesker.</p>
+              <p className="text-sm text-white/50">{"Naturelsker og eventarrang\u00f8r i K\u00f8benhavn. Elsker vandring, yoga og at m\u00f8de nye mennesker."}</p>
               <div className="flex flex-wrap gap-2 mt-3">
                 {["Natur", "Yoga", "Vandring", "Foto", "Musik"].map((tag) => (
                   <span key={tag} className="px-2.5 py-1 rounded-full bg-[#4ECDC4]/10 text-[#4ECDC4] text-[11px]">
@@ -99,24 +99,34 @@ export default function TestMinSide() {
             <div className="glass-card rounded-2xl p-4">
               <h3 className="font-semibold text-sm mb-3">Genveje</h3>
               <div className="space-y-1">
-                {[
-                  { icon: Calendar, label: "Kalender", href: "/test" },
-                  { icon: Bookmark, label: "Gemte events", href: "/test" },
-                  { icon: Heart, label: "Favoritter", href: "/test" },
-                  { icon: Settings, label: "Indstillinger", href: "/test" },
-                ].map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <item.icon size={16} className="text-white/40" />
-                      <span className="text-sm text-white/60">{item.label}</span>
-                    </div>
-                    <ChevronRight size={14} className="text-white/20" />
-                  </Link>
-                ))}
+                <Link href="/test" className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <Calendar size={16} className="text-white/40" />
+                    <span className="text-sm text-white/60">Kalender</span>
+                  </div>
+                  <ChevronRight size={14} className="text-white/20" />
+                </Link>
+                <Link href="/test" className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <Bookmark size={16} className="text-white/40" />
+                    <span className="text-sm text-white/60">Gemte events</span>
+                  </div>
+                  <ChevronRight size={14} className="text-white/20" />
+                </Link>
+                <Link href="/test" className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <Heart size={16} className="text-white/40" />
+                    <span className="text-sm text-white/60">Favoritter</span>
+                  </div>
+                  <ChevronRight size={14} className="text-white/20" />
+                </Link>
+                <Link href="/test" className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <div className="flex items-center gap-2.5">
+                    <Settings size={16} className="text-white/40" />
+                    <span className="text-sm text-white/60">Indstillinger</span>
+                  </div>
+                  <ChevronRight size={14} className="text-white/20" />
+                </Link>
               </div>
             </div>
           </div>
@@ -167,7 +177,7 @@ export default function TestMinSide() {
 
             {activeTab === "tags" && (
               <div className="glass-card rounded-2xl p-6">
-                <p className="text-sm text-white/50 mb-4">Tags du f\u00f8lger:</p>
+                <p className="text-sm text-white/50 mb-4">{"Tags du f\u00f8lger:"}</p>
                 <div className="flex flex-wrap gap-2">
                   {["Natur", "Yoga", "Musik", "Vandring", "Foto", "Mad", "Kunst", "Sport"].map((tag) => (
                     <span key={tag} className="px-4 py-2 rounded-xl bg-[#4ECDC4]/10 text-[#4ECDC4] text-sm cursor-pointer hover:bg-[#4ECDC4]/20 transition-colors">
