@@ -56,12 +56,12 @@ export default function TestMinSide() {
             </div>
             <div className="flex-1 pb-2">
               <h1 className="text-xl font-bold text-white">Nicolaj</h1>
-              <p className="text-white/50 text-sm">@nicolaj \u00b7 Aalborg, Danmark</p>
+              <p className="text-white/50 text-sm">@nicolaj · Aalborg, Danmark</p>
             </div>
           </div>
           <div className="flex gap-6 mt-4 text-sm">
-            <span className="text-white/60"><strong className="text-white">12</strong> f\u00f8lger</span>
-            <span className="text-white/60"><strong className="text-white">48</strong> f\u00f8lger</span>
+            <span className="text-white/60"><strong className="text-white">12</strong> følger</span>
+            <span className="text-white/60"><strong className="text-white">48</strong> følger</span>
             <span className="text-white/60"><strong className="text-white">{myTags.length}</strong> tags</span>
           </div>
           <button className="mt-3 px-4 py-1.5 rounded-lg text-xs font-medium bg-white/5 text-white/60 hover:bg-white/10 transition-all flex items-center gap-1">
@@ -138,7 +138,7 @@ export default function TestMinSide() {
               <p className="text-white/60 text-sm">{myTags.length} interesser valgt</p>
               <button onClick={() => setEditingTags(!editingTags)}
                 className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#4ECDC4]/15 text-[#4ECDC4] hover:bg-[#4ECDC4]/25 transition-all flex items-center gap-1">
-                <Pencil size={12} /> {editingTags ? "F\u00e6rdig" : "Rediger"}
+                <Pencil size={12} /> {editingTags ? "Færdig" : "Rediger"}
               </button>
             </div>
 
@@ -164,7 +164,7 @@ export default function TestMinSide() {
               <div className="mt-4">
                 <input
                   type="search"
-                  placeholder="S\u00f8g tags..."
+                  placeholder="Søg tags..."
                   value={tagSearch}
                   onChange={e => setTagSearch(e.target.value)}
                   className="w-full bg-white/8 border border-white/10 rounded-xl px-4 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50 mb-3"
@@ -207,7 +207,7 @@ export default function TestMinSide() {
               <div className="text-center py-12">
                 <Star size={40} className="mx-auto text-white/20 mb-3" />
                 <p className="text-white/40">Du har ikke valgt nogen interesser endnu</p>
-                <button onClick={() => setEditingTags(true)} className="mt-3 px-4 py-2 rounded-xl bg-[#4ECDC4] text-white text-sm font-medium">V\u00e6lg interesser</button>
+                <button onClick={() => setEditingTags(true)} className="mt-3 px-4 py-2 rounded-xl bg-[#4ECDC4] text-white text-sm font-medium">Vælg interesser</button>
               </div>
             )}
           </div>
