@@ -1,7 +1,7 @@
 /*
   B-Social News Engine
   Henter nyheder fra RSS feeds og matcher dem med brugerens tags
-  via Superhjernen. Bruger corsproxy.io som CORS proxy.
+  via Superhjernen. Bruger api.codetabs.com som CORS proxy.
 */
 
 import { TAG_TREE, type TagNode } from "./tagTree";
@@ -51,10 +51,10 @@ const RSS_FEEDS: FeedConfig[] = [
 ];
 
 // --- CORS Proxy ---
-const PROXY = "https://corsproxy.io/?";
+const PROXY = "https://api.codetabs.com/v1/proxy?quest=";
 
 // --- Cache ---
-const CACHE_KEY = "bsocial_news_v2";
+const CACHE_KEY = "bsocial_news_v3";
 const CACHE_TTL = 30 * 60 * 1000; // 30 min
 
 interface NewsCache {
@@ -298,10 +298,11 @@ export function buildNewsSections(allNews: NewsItem[], userTags: string[]): News
     if (matched.length > 0) {
       // Sort by date within section
       matched.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+
       sections.push({
         tag,
         label: node?.label || tag,
-        emoji: node?.emoji || "\u2B50",
+        emoji: node?.emoji || "⭐",
         items: matched.slice(0, 5),
       });
     }
