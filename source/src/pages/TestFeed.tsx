@@ -38,7 +38,7 @@ function TagEditorModal({ open, onClose, activeTags, onSave }: {
         <div className="relative mb-4">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
           <input type="search" placeholder="Søg interesser..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
+            className="w-full bg-white/10 border border-white/15 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
         </div>
         {search && results.length > 0 && (
           <div className="mb-4">
@@ -150,7 +150,7 @@ export default function TestFeed() {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
               <input type="search" placeholder="Søg events, steder..." value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
+                className="bg-white/10 border border-white/15 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
             </div>
             <button onClick={() => setEditorOpen(true)} className="p-2 rounded-lg bg-white/8 text-white/60 hover:bg-[#4ECDC4]/15 hover:text-[#4ECDC4] transition-all" title="Rediger feed-tags">
               <Pencil size={16} />
