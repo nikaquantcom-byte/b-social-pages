@@ -4,11 +4,11 @@ import { Home, Compass, MapPin, MessageCircle, User, Bell, Search, Plus, Buildin
 import { useState } from "react";
 
 const NAV = [
-  { label: "Feed", icon: Home, href: "/test" },
-  { label: "Udforsk", icon: Compass, href: "/test/udforsk" },
-  { label: "Kort", icon: MapPin, href: "/test/kort" },
-  { label: "Beskeder", icon: MessageCircle, href: "/test/beskeder" },
-  { label: "Min Side", icon: User, href: "/test/min-side" },
+  { label: "Feed", icon: Home, href: "/" },
+  { label: "Udforsk", icon: Compass, href: "/udforsk" },
+  { label: "Kort", icon: MapPin, href: "/kort" },
+  { label: "Beskeder", icon: MessageCircle, href: "/beskeder" },
+  { label: "Min Side", icon: User, href: "/min-side" },
 ];
 
 export default function DesktopAppLayout({ children }: { children: React.ReactNode }) {
@@ -30,7 +30,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
         <nav className="flex-1 px-3">
           {NAV.map((item) => {
             const Icon = item.icon;
-            const isActive = location === item.href || (item.href !== "/test" && location.startsWith(item.href));
+            const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
             return (
               <Link
                 key={item.href}
@@ -44,41 +44,32 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   isActive ? "bg-[#4ECDC4]/20" : ""
                 }`}
-                style={isActive ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}
+                  style={isActive ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}
                 >
-                  <Icon size={18} strokeWidth={isActive ? 2.5 : 1.8} />
+                  <Icon size={18} />
                 </div>
                 {item.label}
               </Link>
             );
           })}
-
           {/* Kunde section link */}
-          <div className="mt-4 pt-4 border-t border-white/10">
-            <Link
-              href="/firma"
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mb-0.5 ${
-                location.startsWith("/firma")
-                  ? "bg-[#4ECDC4]/15 text-[#4ECDC4] font-medium"
-                  : "text-white/50 hover:text-white/80 hover:bg-white/5"
-              }`}
-            >
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                location.startsWith("/firma") ? "bg-[#4ECDC4]/20" : ""
-              }`}
-              style={location.startsWith("/firma") ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}
-              >
-                <Building2 size={18} strokeWidth={location.startsWith("/firma") ? 2.5 : 1.8} />
-              </div>
-              Kunde
-            </Link>
-          </div>
+          <Link
+            href="/firma"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mt-6 ${
+              location.startsWith("/firma")
+                ? "bg-[#4ECDC4]/15 text-[#4ECDC4] font-medium"
+                : "text-white/50 hover:text-white/80 hover:bg-white/5"
+            }`}
+          >
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <Building2 size={18} />
+            </div>
+            Kunde
+          </Link>
         </nav>
 
-        <div className="px-3 pb-5">
-          <Link href="/test" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-white/30 hover:text-white/50">
-            <span>v1.0 beta</span>
-          </Link>
+        <div className="p-4 text-white/20 text-xs">
+          v1.0 beta
         </div>
       </aside>
 
@@ -88,42 +79,27 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
       </main>
 
       {/* Mobile bottom nav - visible only on mobile */}
-      <nav className="dsk-bottom-nav glass-nav">
-        <div className="flex items-center justify-around px-1 pt-3 pb-5">
+      <div className="dsk-bottom-nav glass-nav">
+        <div className="flex items-center justify-around h-16">
           {NAV.map((item) => {
             const Icon = item.icon;
-            const isActive = location === item.href || (item.href !== "/test" && location.startsWith(item.href));
+            const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex flex-col items-center gap-1 px-2 py-1 group transition-all duration-200"
+                className={`flex flex-col items-center gap-0.5 text-[10px] py-1 px-3 ${
+                  isActive ? "text-[#4ECDC4]" : "text-white/40"
+                }`}
               >
-                <div
-                  className={`relative flex items-center justify-center w-9 h-9 rounded-2xl transition-all duration-200 ${
-                    isActive ? "bg-[#4ECDC4]/20" : "group-hover:bg-white/5"
-                  }`}
-                  style={isActive ? { boxShadow: "0 0 12px rgba(78, 205, 196, 0.3)" } : undefined}
-                >
-                  <Icon
-                    size={20}
-                    strokeWidth={isActive ? 2.5 : 1.8}
-                    className={`transition-colors ${
-                      isActive ? "text-[#4ECDC4]" : "text-white/40 group-hover:text-white/60"
-                    }`}
-                  />
-                </div>
-                <span className={`text-[10px] transition-colors ${
-                  isActive ? "text-[#4ECDC4] font-medium" : "text-white/30"
-                }`}>
-                  {item.label}
-                </span>
-                {isActive && <div className="absolute -bottom-1 w-1 h-1 rounded-full bg-[#4ECDC4]" />}
+                <Icon size={20} />
+                <span>{item.label}</span>
+                {isActive && <div className="w-1 h-1 rounded-full bg-[#4ECDC4] mt-0.5" />}
               </Link>
             );
           })}
         </div>
-      </nav>
+      </div>
     </div>
   );
 }
