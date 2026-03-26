@@ -47,17 +47,17 @@ function MainRouter() {
 
 function FirmaRouter() {
   return (
-    <FirmaDashboard>
+
       <Switch>
         <Route path="/firma/events" component={FirmaEvents} />
         <Route path="/firma/targeting" component={FirmaTargeting} />
         <Route path="/firma/analytics" component={FirmaAnalytics} />
         <Route path="/firma/fakturering" component={FirmaFakturering} />
                 <Route path="/firma/rekruttering" component={FirmaRekruttering} />
-        <Route path="/firma" component={Overblik} />
+        <Route path="/firma" component={FirmaDashboard} />
       
       </Switch>
-    </FirmaDashboard>
+    
   );
 }
 
