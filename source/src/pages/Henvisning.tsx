@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, Copy, Check, Users, MousePointerClick, DollarSign, TrendingUp, Loader2, LogIn, Link2 } from "lucide-react";
+import { Copy, Check, Users, MousePointerClick, DollarSign, TrendingUp, Loader2, LogIn, Link2, ArrowLeft, Gift } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
@@ -62,133 +62,172 @@ export default function Henvisning() {
     ? ((stats.total_referrals / stats.total_clicks) * 100).toFixed(1)
     : "0";
 
-  // Not logged in - show nice CTA
+  // Not logged in
   if (!user) {
     return (
-      <div className="min-h-svh bg-[#0a0e23] text-white flex flex-col">
-        <div className="pt-12 px-5">
-          <button onClick={() => window.history.back()} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center">
-            <ArrowLeft size={18} className="text-white" />
-          </button>
-        </div>
-        <div className="flex-1 flex flex-col items-center justify-center px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-6 max-w-sm">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#4ECDC4]/20 to-[#4ECDC4]/5 border border-[#4ECDC4]/20 flex items-center justify-center mx-auto">
+      <div className="min-h-screen bg-[#0D1220] flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-lg"
+        >
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-[#4ECDC4]/30 to-[#4ECDC4]/10 border border-[#4ECDC4]/20 mb-6">
               <Link2 size={36} className="text-[#4ECDC4]" />
             </div>
-            <div>
-              <h1 className="text-2xl font-bold mb-2">Henvisningsprogram</h1>
-              <p className="text-white/50 text-sm leading-relaxed">Tjen penge ved at dele B-Social. Få kommission hver gang en person du henviser betaler.</p>
-            </div>
-            <div className="space-y-3 w-full">
-              <button onClick={() => setLocation("/auth")} className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 flex items-center justify-center gap-2">
-                <LogIn size={18} />
-                Log ind for at komme i gang
-              </button>
-              <button onClick={() => setLocation("/feed")} className="w-full py-3 rounded-2xl bg-white/5 text-white/50 text-sm font-medium hover:bg-white/10 transition-all">
-                Tilbage til Feed
-              </button>
-            </div>
-            <div className="grid grid-cols-3 gap-3 pt-4">
-              <div className="p-3 rounded-xl bg-white/5 text-center">
-                <p className="text-[#4ECDC4] text-lg font-bold">20%</p>
-                <p className="text-white/40 text-[10px]">Kommission</p>
+            <h1 className="text-3xl font-bold text-white mb-3">Henvisningsprogram</h1>
+            <p className="text-white/50 text-base leading-relaxed max-w-sm mx-auto">
+              Tjen penge ved at dele B-Social. Få kommission hver gang en person du henviser betaler.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            {[
+              { value: "20%", label: "Kommission" },
+              { value: "Permanent", label: "Binding" },
+              { value: "Auto", label: "Udbetaling" },
+            ].map((item, i) => (
+              <div key={i} className="bg-white/5 border border-white/8 rounded-2xl p-4 text-center">
+                <div className="text-[#4ECDC4] font-bold text-lg mb-1">{item.value}</div>
+                <div className="text-white/40 text-xs">{item.label}</div>
               </div>
-              <div className="p-3 rounded-xl bg-white/5 text-center">
-                <p className="text-[#4ECDC4] text-lg font-bold">Permanent</p>
-                <p className="text-white/40 text-[10px]">Binding</p>
-              </div>
-              <div className="p-3 rounded-xl bg-white/5 text-center">
-                <p className="text-[#4ECDC4] text-lg font-bold">Auto</p>
-                <p className="text-white/40 text-[10px]">Udbetaling</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setLocation("/auth")}
+            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 flex items-center justify-center gap-2 mb-3"
+          >
+            <LogIn size={18} />
+            Log ind for at komme i gang
+          </button>
+          <button
+            onClick={() => setLocation("/feed")}
+            className="w-full py-3 rounded-2xl bg-white/5 text-white/50 text-sm font-medium hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+          >
+            <ArrowLeft size={16} />
+            Tilbage til Feed
+          </button>
+        </motion.div>
       </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="min-h-svh flex items-center justify-center bg-[#0a0e23]">
-        <Loader2 className="animate-spin text-[#4ECDC4]" size={32} />
+      <div className="min-h-screen bg-[#0D1220] flex items-center justify-center">
+        <Loader2 size={32} className="animate-spin text-[#4ECDC4]" />
       </div>
     );
   }
 
   if (notInfluencer) {
     return (
-      <div className="min-h-svh bg-[#0a0e23] text-white flex flex-col">
-        <div className="pt-12 px-5">
-          <button onClick={() => window.history.back()} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center">
-            <ArrowLeft size={18} className="text-white" />
-          </button>
-        </div>
-        <div className="flex-1 flex flex-col items-center justify-center px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-5 max-w-sm">
-            <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mx-auto">
-              <Users size={36} className="text-white/30" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold mb-2">Bliv influencer</h1>
-              <p className="text-white/50 text-sm leading-relaxed">Du er ikke registreret som influencer endnu. Kontakt B-Social for at blive en del af henvisningsprogrammet og begynde at tjene kommission.</p>
-            </div>
-            <button onClick={() => setLocation("/feed")} className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold">
-              Tilbage til Feed
-            </button>
-          </motion.div>
-        </div>
+      <div className="min-h-screen bg-[#0D1220] flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-lg text-center"
+        >
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/5 border border-white/10 mb-6">
+            <Gift size={36} className="text-white/40" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-3">Bliv influencer</h1>
+          <p className="text-white/50 mb-8">Du er ikke registreret som influencer endnu. Kontakt B-Social for at blive en del af henvisningsprogrammet.</p>
+          <button
+            onClick={() => setLocation("/feed")}
+            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold"
+          >Tilbage til Feed</button>
+        </motion.div>
       </div>
     );
   }
 
+  // Full dashboard
   return (
-    <div className="min-h-svh bg-[#0a0e23] text-white">
-      <div className="pt-12 px-5 pb-4">
-        <button onClick={() => window.history.back()} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center mb-4">
-          <ArrowLeft size={18} className="text-white" />
-        </button>
-        <h1 className="text-2xl font-bold">Henvisningspanel</h1>
-        <p className="text-white/50 text-sm mt-1">Del dit link og tjen kommission</p>
+    <div className="min-h-screen bg-[#0D1220] text-white">
+      {/* Header */}
+      <div className="border-b border-white/8 bg-[#0D1220]/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-4">
+          <button
+            onClick={() => setLocation("/feed")}
+            className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"
+          >
+            <ArrowLeft size={18} />
+          </button>
+          <div className="flex items-center gap-3">
+            <Link2 size={20} className="text-[#4ECDC4]" />
+            <h1 className="text-lg font-bold">Henvisningspanel</h1>
+          </div>
+        </div>
       </div>
-      <div className="px-5 space-y-4 pb-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
-          <p className="text-white/60 text-xs font-medium">Dit henvisningslink</p>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 px-3 py-2.5 rounded-xl bg-white/5 text-sm text-white/80 truncate">{referralLink}</div>
-            <button onClick={copyLink} className="px-4 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-sm font-medium flex items-center gap-1.5 shrink-0">
+
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Referral link card */}
+        <div className="bg-white/5 border border-white/8 rounded-2xl p-6 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-white/60 text-sm font-medium">Dit henvisningslink</p>
+            <span className="text-xs bg-[#4ECDC4]/10 text-[#4ECDC4] border border-[#4ECDC4]/20 px-2 py-1 rounded-full">
+              {stats!.commission_pct}% kommission
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 bg-white/5 rounded-xl px-4 py-3 text-white/70 text-sm font-mono truncate border border-white/8">
+              {referralLink}
+            </div>
+            <button
+              onClick={copyLink}
+              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[#4ECDC4] text-white font-medium text-sm hover:bg-[#3dbdb5] transition-all whitespace-nowrap"
+            >
               {copied ? <Check size={16} /> : <Copy size={16} />}
-              {copied ? "Kopieret" : "Kopier"}
+              {copied ? "Kopieret!" : "Kopier"}
             </button>
           </div>
-          <p className="text-white/30 text-xs">Kommission: {stats!.commission_pct}% af al omsætning</p>
-        </motion.div>
-        <div className="grid grid-cols-2 gap-3">
-          {[{ icon: MousePointerClick, val: stats!.total_clicks, label: "Klik", d: 0.1 },
-            { icon: Users, val: stats!.total_referrals, label: "Henviste brugere", d: 0.15 },
-            { icon: TrendingUp, val: `${conversionRate}%`, label: "Konverteringsrate", d: 0.2 },
-            { icon: DollarSign, val: `${stats!.total_paid_dkk.toFixed(0)} kr`, label: "Udbetalt", d: 0.25 },
-          ].map(({ icon: Icon, val, label, d }) => (
-            <motion.div key={label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: d }} className="p-4 rounded-2xl bg-white/5 border border-white/10">
-              <Icon size={20} className="text-[#4ECDC4] mb-2" />
-              <p className="text-2xl font-bold">{val}</p>
-              <p className="text-white/50 text-xs">{label}</p>
+        </div>
+
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          {[
+            { icon: MousePointerClick, label: "Klik", value: stats!.total_clicks, color: "text-blue-400" },
+            { icon: Users, label: "Henviste brugere", value: stats!.total_referrals, color: "text-green-400" },
+            { icon: TrendingUp, label: "Konvertering", value: `${conversionRate}%`, color: "text-purple-400" },
+            { icon: DollarSign, label: "Udbetalt", value: `${stats!.total_paid_dkk.toFixed(0)} kr`, color: "text-[#4ECDC4]" },
+          ].map(({ icon: Icon, label, value, color }, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="bg-white/5 border border-white/8 rounded-2xl p-5"
+            >
+              <Icon size={20} className={`${color} mb-3`} />
+              <div className="text-2xl font-bold text-white mb-1">{value}</div>
+              <div className="text-white/50 text-xs">{label}</div>
             </motion.div>
           ))}
         </div>
+
+        {/* Pending payout */}
         {stats!.total_pending_dkk > 0 && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="p-4 rounded-2xl bg-[#4ECDC4]/10 border border-[#4ECDC4]/20">
-            <p className="text-[#4ECDC4] text-sm font-medium">Afventer udbetaling</p>
-            <p className="text-white text-2xl font-bold mt-1">{stats!.total_pending_dkk.toFixed(2)} kr</p>
-          </motion.div>
+          <div className="bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 rounded-2xl p-5 mb-6 flex items-center justify-between">
+            <span className="text-white/70 text-sm">Afventer udbetaling</span>
+            <span className="text-[#4ECDC4] font-bold text-lg">{stats!.total_pending_dkk.toFixed(2)} kr</span>
+          </div>
         )}
+
+        {/* Stripe Connect */}
         {!stats!.stripe_onboarding_complete && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20">
-            <p className="text-amber-400 text-sm font-medium">Stripe Connect</p>
-            <p className="text-white/50 text-xs mt-1">Opret din Stripe-konto for automatiske udbetalinger.</p>
-            <button className="mt-3 px-4 py-2 rounded-xl bg-amber-500 text-white text-sm font-medium" onClick={() => alert("Stripe Connect onboarding kommer snart")}>Opret Stripe-konto</button>
-          </motion.div>
+          <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
+            <h3 className="text-white font-semibold mb-2">Stripe Connect</h3>
+            <p className="text-white/50 text-sm mb-4">Opret din Stripe-konto for automatiske udbetalinger.</p>
+            <button
+              onClick={() => alert("Stripe Connect onboarding kommer snart")}
+              className="px-6 py-3 rounded-xl bg-[#4ECDC4] text-white font-medium text-sm hover:bg-[#3dbdb5] transition-all"
+            >
+              Opret Stripe-konto
+            </button>
+          </div>
         )}
       </div>
     </div>
