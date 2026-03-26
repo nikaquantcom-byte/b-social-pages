@@ -44,7 +44,6 @@ export default function TestKort() {
   // Initialize Leaflet map
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
-    // Load Leaflet CSS
     if (!document.getElementById("leaflet-css")) {
       const link = document.createElement("link");
       link.id = "leaflet-css";
@@ -52,12 +51,8 @@ export default function TestKort() {
       link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
       document.head.appendChild(link);
     }
-    // Load Leaflet JS
     const loadLeaflet = () => {
-      if ((window as any).L) {
-        initMap();
-        return;
-      }
+      if ((window as any).L) { initMap(); return; }
       const script = document.createElement("script");
       script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
       script.onload = () => initMap();
@@ -67,7 +62,7 @@ export default function TestKort() {
       const L = (window as any).L;
       if (!L || !mapRef.current) return;
       const map = L.map(mapRef.current, {
-        center: [55.95, 10.5], // Denmark center
+        center: [55.95, 10.5],
         zoom: 7,
         zoomControl: false,
       });
@@ -80,23 +75,15 @@ export default function TestKort() {
       setTimeout(() => map.invalidateSize(), 100);
     };
     loadLeaflet();
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
+    return () => { if (mapInstanceRef.current) { mapInstanceRef.current.remove(); mapInstanceRef.current = null; } };
   }, []);
 
-  // Update markers when events change
   useEffect(() => {
     const L = (window as any).L;
     const map = mapInstanceRef.current;
     if (!L || !map) return;
-    // Clear old markers
     markersRef.current.forEach(m => map.removeLayer(m));
     markersRef.current = [];
-    // Add new markers
     geoEvents.forEach(event => {
       const icon = L.divIcon({
         html: `<div style="width:12px;height:12px;background:#4ECDC4;border:2px solid #0a0e23;border-radius:50%;box-shadow:0 0 8px rgba(78,205,196,0.5)"></div>`,
@@ -110,7 +97,6 @@ export default function TestKort() {
       marker.bindTooltip(event.title, { className: "leaflet-dark-tooltip", direction: "top", offset: [0, -8] });
       markersRef.current.push(marker);
     });
-    // Fit bounds if markers exist
     if (geoEvents.length > 1) {
       const bounds = L.latLngBounds(geoEvents.map(e => [e.latitude, e.longitude]));
       map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
@@ -125,14 +111,13 @@ export default function TestKort() {
 
   return (
     <div className="min-h-screen nature-bg flex flex-col">
-      {/* Header */}
       <header className="sticky top-0 z-30 backdrop-blur-xl bg-[#0a0e23]/80 border-b border-white/8">
         <div className="max-w-full px-6 h-14 flex items-center justify-between">
           <h1 className="text-lg font-bold">Kort</h1>
           <div className="flex items-center gap-3">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-              <input type="search" placeholder="S\u00f8g p\u00e5 kortet..." value={searchQuery}
+              <input type="search" placeholder={"S\u00f8g p\u00e5 kortet..."} value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
             </div>
@@ -142,7 +127,6 @@ export default function TestKort() {
             </button>
           </div>
         </div>
-        {/* Tag filter pills */}
         <div className="px-6 pb-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
           {TAG_TREE.slice(0, 10).map(tag => (
             <button key={tag.tag} onClick={() => toggleTag(tag.tag)}
@@ -155,12 +139,9 @@ export default function TestKort() {
         </div>
       </header>
 
-      {/* Map + sidebar layout */}
       <div className="flex-1 flex">
-        {/* Map area */}
         <div className="flex-1 relative">
           <div ref={mapRef} className="absolute inset-0" style={{ background: "#1a1a2e" }} />
-          {/* Selected event popup */}
           {selectedEvent && (
             <div className="absolute bottom-4 left-4 right-4 z-20 bg-[#0a0e23]/95 backdrop-blur-lg rounded-xl border border-white/10 p-4 max-w-md">
               <button onClick={() => setSelectedEvent(null)} className="absolute top-2 right-2 text-white/40 hover:text-white">
@@ -183,11 +164,10 @@ export default function TestKort() {
           )}
         </div>
 
-        {/* Side panel - event list */}
         {showList && (
           <div className="w-80 bg-[#0a0e23]/90 backdrop-blur-lg border-l border-white/8 overflow-y-auto">
             <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Events i n\u00e6rheden ({filteredEvents.length})</h3>
+              <h3 className="text-sm font-semibold text-white mb-3">{"Events i n\u00e6rheden"} ({filteredEvents.length})</h3>
               {filteredEvents.slice(0, 20).map(event => (
                 <button key={event.id} onClick={() => {
                   setSelectedEvent(event);
@@ -208,7 +188,6 @@ export default function TestKort() {
         )}
       </div>
 
-      {/* Dark tooltip style */}
       <style>{`
         .leaflet-dark-tooltip {
           background: rgba(10,14,35,0.9) !important;
