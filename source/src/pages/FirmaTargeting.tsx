@@ -1,16 +1,6 @@
 import FirmaLayout from "@/components/FirmaLayout";
-import { useState } from "react";
-import {
-  Target,
-  Users,
-  Search,
-  ChevronRight,
-  Check,
-  X,
-  Sparkles,
-  MapPin,
-  Info,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { Target, Users, Search, ChevronRight, Check, X, Sparkles, MapPin, Info, Save, Download, Plus } from "lucide-react";
 
 interface TagCategory {
   name: string;
@@ -18,75 +8,75 @@ interface TagCategory {
 }
 
 const INITIAL_CATEGORIES: TagCategory[] = [
-  {
-    name: "Sport & Fitness",
-    tags: [
-      { name: "Cykling", reach: 847, selected: false },
-      { name: "L\u00f8b", reach: 1234, selected: false },
-      { name: "MTB", reach: 623, selected: false },
-      { name: "Yoga", reach: 456, selected: false },
-      { name: "Sv\u00f8mning", reach: 312, selected: false },
-      { name: "Fitness", reach: 1890, selected: false },
-      { name: "Padel", reach: 278, selected: false },
-      { name: "Crossfit", reach: 189, selected: false },
-    ],
-  },
-  {
-    name: "Natur & Outdoor",
-    tags: [
-      { name: "Vandring", reach: 567, selected: false },
-      { name: "Camping", reach: 345, selected: false },
-      { name: "Fiskeri", reach: 234, selected: false },
-      { name: "Kajak", reach: 178, selected: false },
-      { name: "Klatring", reach: 156, selected: false },
-      { name: "Shelter", reach: 289, selected: false },
-    ],
-  },
-  {
-    name: "Social & Kultur",
-    tags: [
-      { name: "Br\u00e6tspil", reach: 423, selected: false },
-      { name: "Madlavning", reach: 356, selected: false },
-      { name: "Musik", reach: 678, selected: false },
-      { name: "Kunst", reach: 234, selected: false },
-      { name: "Fotografi", reach: 189, selected: false },
-    ],
-  },
-  {
-    name: "Aldersgruppe",
-    tags: [
-      { name: "18-25", reach: 2345, selected: false },
-      { name: "26-35", reach: 3456, selected: false },
-      { name: "36-50", reach: 2890, selected: false },
-      { name: "50+", reach: 1234, selected: false },
-    ],
-  },
+  { name: "Sport & Fitness", tags: [
+    { name: "Cykling", reach: 847, selected: false }, { name: "Løb", reach: 1234, selected: false },
+    { name: "MTB", reach: 623, selected: false }, { name: "Yoga", reach: 456, selected: false },
+    { name: "Svømning", reach: 312, selected: false }, { name: "Fitness", reach: 1890, selected: false },
+    { name: "Padel", reach: 278, selected: false }, { name: "Crossfit", reach: 189, selected: false },
+  ] },
+  { name: "Natur & Outdoor", tags: [
+    { name: "Vandring", reach: 567, selected: false }, { name: "Camping", reach: 345, selected: false },
+    { name: "Fiskeri", reach: 234, selected: false }, { name: "Kajak", reach: 178, selected: false },
+    { name: "Klatring", reach: 156, selected: false }, { name: "Shelter", reach: 289, selected: false },
+  ] },
+  { name: "Social & Kultur", tags: [
+    { name: "Brætspil", reach: 423, selected: false }, { name: "Madlavning", reach: 356, selected: false },
+    { name: "Musik", reach: 678, selected: false }, { name: "Kunst", reach: 234, selected: false },
+    { name: "Fotografi", reach: 189, selected: false },
+  ] },
+  { name: "Aldersgruppe", tags: [
+    { name: "18-25", reach: 2345, selected: false }, { name: "26-35", reach: 3456, selected: false },
+    { name: "36-50", reach: 2890, selected: false }, { name: "50+", reach: 1234, selected: false },
+  ] },
+];
+
+const PERSONAS = [
+  { navn: "Mads, 31", interesser: ["Cykling", "MTB"], lokation: "Aalborg", avatar: "M", match: 94 },
+  { navn: "Sofie, 27", interesser: ["Yoga", "Wellness"], lokation: "Hjørring", avatar: "S", match: 87 },
+  { navn: "Lars, 45", interesser: ["Løb", "Fitness"], lokation: "Thisted", avatar: "L", match: 79 },
 ];
 
 export default function FirmaTargeting() {
-  const [categories, setCategories] = useState(INITIAL_CATEGORIES);
+  const [categories, setCategories] = useState<TagCategory[]>(INITIAL_CATEGORIES);
   const [search, setSearch] = useState("");
   const [expandedCat, setExpandedCat] = useState<string | null>("Sport & Fitness");
+  const [presetName, setPresetName] = useState("");
+  const [presets, setPresets] = useState<{ name: string; tags: string[] }[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("targeting-presets");
+    if (saved) setPresets(JSON.parse(saved));
+  }, []);
 
   const toggleTag = (catName: string, tagName: string) => {
-    setCategories((prev) =>
-      prev.map((cat) =>
-        cat.name === catName
-          ? { ...cat, tags: cat.tags.map((t) => (t.name === tagName ? { ...t, selected: !t.selected } : t)) }
-          : cat
-      )
-    );
+    setCategories((prev) => prev.map((cat) => cat.name === catName ? { ...cat, tags: cat.tags.map((t) => (t.name === tagName ? { ...t, selected: !t.selected } : t)) } : cat));
   };
 
   const selectedTags = categories.flatMap((c) => c.tags.filter((t) => t.selected));
   const totalReach = selectedTags.reduce((sum, t) => sum + t.reach, 0);
+
+  const savePreset = () => {
+    if (!presetName || selectedTags.length === 0) return;
+    const newPresets = [...presets, { name: presetName, tags: selectedTags.map((t) => t.name) }];
+    setPresets(newPresets);
+    localStorage.setItem("targeting-presets", JSON.stringify(newPresets));
+    setPresetName("");
+  };
+
+  const loadPreset = (preset: { name: string; tags: string[] }) => {
+    setCategories((prev) => prev.map((cat) => ({ ...cat, tags: cat.tags.map((t) => ({ ...t, selected: preset.tags.includes(t.name) })) })));
+  };
+
+  const clearAll = () => {
+    setCategories((prev) => prev.map((cat) => ({ ...cat, tags: cat.tags.map((t) => ({ ...t, selected: false })) })));
+  };
 
   return (
     <FirmaLayout>
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold">Tag-targeting</h1>
-          <p className="text-muted-foreground text-sm mt-1">V\u00e6lg m\u00e5lgruppe-tags for dine kampagner og se estimeret r\u00e6kkevidde.</p>
+          <p className="text-muted-foreground text-sm mt-1">Vælg målgruppe-tags for dine kampagner og se estimeret rækkevidde.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -94,137 +84,121 @@ export default function FirmaTargeting() {
           <div className="lg:col-span-2 space-y-4">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-2.5 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="S\u00f8g tags..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary"
-              />
+              <input type="text" placeholder="Søg tags..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
             </div>
 
-            {categories.map((cat) => {
-              const filteredTags = search
-                ? cat.tags.filter((t) => t.name.toLowerCase().includes(search.toLowerCase()))
-                : cat.tags;
-              if (filteredTags.length === 0) return null;
-              const isExpanded = expandedCat === cat.name;
-
-              return (
-                <div key={cat.name} className="glass-card rounded-xl overflow-hidden">
-                  <button
-                    onClick={() => setExpandedCat(isExpanded ? null : cat.name)}
-                    className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors"
-                  >
-                    <span className="font-medium text-sm">{cat.name}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">
-                        {cat.tags.filter((t) => t.selected).length} valgt
-                      </span>
-                      <ChevronRight size={16} className={`transition-transform ${isExpanded ? "rotate-90" : ""}`} />
-                    </div>
-                  </button>
-                  {isExpanded && (
-                    <div className="px-4 pb-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {filteredTags.map((tag) => (
-                        <button
-                          key={tag.name}
-                          onClick={() => toggleTag(cat.name, tag.name)}
-                          className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
-                            tag.selected
-                              ? "bg-primary/15 border border-primary/30 text-primary"
-                              : "bg-white/5 border border-white/5 text-foreground hover:bg-white/10"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            {tag.selected && <Check size={14} />}
-                            <span>{tag.name}</span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">{tag.reach.toLocaleString()} brugere</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Reach summary sidebar */}
-          <div className="space-y-4">
-            <div className="glass-card rounded-xl p-4 sticky top-6">
-              <h3 className="font-semibold mb-4 flex items-center gap-2">
-                <Target size={16} className="text-primary" />
-                Estimeret r\u00e6kkevidde
-              </h3>
-
-              {selectedTags.length === 0 ? (
-                <div className="text-center py-8">
-                  <Users size={32} className="mx-auto text-muted-foreground mb-3" />
-                  <p className="text-sm text-muted-foreground">V\u00e6lg tags for at se estimeret r\u00e6kkevidde</p>
-                </div>
-              ) : (
-                <>
-                  <div className="text-center mb-4">
-                    <p className="text-4xl font-bold text-primary">{totalReach.toLocaleString()}</p>
-                    <p className="text-sm text-muted-foreground">potentielle brugere</p>
-                  </div>
-
-                  <div className="space-y-2 mb-4">
-                    {selectedTags.map((tag) => (
-                      <div key={tag.name} className="flex items-center justify-between text-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full bg-primary" />
-                          <span>{tag.name}</span>
-                        </div>
-                        <span className="text-muted-foreground">{tag.reach.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="pt-3 border-t border-white/10">
-                    <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <Info size={14} className="shrink-0 mt-0.5" />
-                      <p>R\u00e6kkevidde er et estimat baseret p\u00e5 brugere i Nordjylland med matchende interesser.</p>
-                    </div>
-                  </div>
-
-                  <button className="w-full mt-4 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors inline-flex items-center justify-center gap-2">
-                    <Sparkles size={16} />
-                    Anvend p\u00e5 kampagne
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Auto-suggest */}
-            <div className="glass-card rounded-xl p-4">
-              <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
-                <Sparkles size={14} className="text-primary" />
-                Auto-forslag
-              </h3>
-              <p className="text-xs text-muted-foreground mb-3">Baseret p\u00e5 dine events foresl\u00e5r vi:</p>
-              <div className="space-y-2">
-                {["Cykling", "Outdoor", "26-35"].map((tag) => (
-                  <button key={tag} className="w-full text-left px-3 py-2 rounded-lg bg-white/5 text-sm hover:bg-white/10 transition-colors flex items-center justify-between">
-                    <span>{tag}</span>
-                    <Plus size={14} className="text-muted-foreground" />
+            {/* Presets */}
+            {presets.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {presets.map((p) => (
+                  <button key={p.name} onClick={() => loadPreset(p)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-primary/10 hover:text-primary transition-colors">
+                    <Download size={10} className="inline mr-1" />{p.name}
                   </button>
                 ))}
               </div>
+            )}
+
+            {/* Categories */}
+            {categories.filter((cat) => !search || cat.tags.some((t) => t.name.toLowerCase().includes(search.toLowerCase()))).map((cat) => (
+              <div key={cat.name} className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
+                <button onClick={() => setExpandedCat(expandedCat === cat.name ? null : cat.name)} className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors">
+                  <span className="font-medium text-sm">{cat.name}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">{cat.tags.filter((t) => t.selected).length} valgt</span>
+                    <ChevronRight size={14} className={`transition-transform ${expandedCat === cat.name ? "rotate-90" : ""}`} />
+                  </div>
+                </button>
+                {expandedCat === cat.name && (
+                  <div className="px-4 pb-4 flex flex-wrap gap-2">
+                    {cat.tags.filter((t) => !search || t.name.toLowerCase().includes(search.toLowerCase())).map((tag) => (
+                      <button key={tag.name} onClick={() => toggleTag(cat.name, tag.name)} className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
+                        tag.selected ? "bg-primary/20 border-primary text-primary" : "bg-white/5 border-white/10 hover:border-white/20"
+                      }`}>
+                        {tag.selected && <Check size={10} className="inline mr-1" />}
+                        {tag.name}
+                        <span className="ml-1 text-muted-foreground">({tag.reach.toLocaleString()})</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-4">
+            {/* Selected tags & reach */}
+            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-medium text-sm flex items-center gap-2"><Target size={14} /> Valgte tags</h3>
+                {selectedTags.length > 0 && (
+                  <button onClick={clearAll} className="text-xs text-muted-foreground hover:text-red-400"><X size={12} className="inline" /> Ryd</button>
+                )}
+              </div>
+              {selectedTags.length === 0 ? (
+                <p className="text-xs text-muted-foreground">Ingen tags valgt endnu. Klik på tags til venstre.</p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedTags.map((t) => (
+                    <span key={t.name} className="px-2 py-1 rounded-full text-xs bg-primary/20 text-primary border border-primary/30 flex items-center gap-1">
+                      {t.name}
+                      <button onClick={() => {
+                        const cat = categories.find((c) => c.tags.some((tag) => tag.name === t.name));
+                        if (cat) toggleTag(cat.name, t.name);
+                      }}><X size={10} /></button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Reach meter */}
+              <div className="pt-3 border-t border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-muted-foreground">Estimeret rækkevidde</span>
+                  <span className="text-sm font-bold text-primary">{totalReach.toLocaleString()}</span>
+                </div>
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-primary to-green-400 rounded-full transition-all" style={{ width: `${Math.min((totalReach / 10000) * 100, 100)}%` }} />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">af ~10.000 brugere i Nordjylland</p>
+              </div>
+
+              {/* Save preset */}
+              <div className="pt-3 border-t border-white/10">
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Gem som preset..." value={presetName} onChange={(e) => setPresetName(e.target.value)} className="flex-1 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs focus:outline-none focus:border-primary" />
+                  <button onClick={savePreset} disabled={!presetName || selectedTags.length === 0} className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs disabled:opacity-30">
+                    <Save size={12} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Personas */}
+            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 space-y-3">
+              <h3 className="font-medium text-sm flex items-center gap-2"><Sparkles size={14} /> Matchende personas</h3>
+              {PERSONAS.map((p) => (
+                <div key={p.navn} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold">{p.avatar}</div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium">{p.navn}</p>
+                    <p className="text-xs text-muted-foreground truncate">{p.interesser.join(", ")} - <MapPin size={10} className="inline" /> {p.lokation}</p>
+                  </div>
+                  <span className="text-xs font-medium text-green-400">{p.match}%</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Info */}
+            <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4">
+              <p className="text-xs text-blue-400 flex items-start gap-2">
+                <Info size={14} className="mt-0.5 shrink-0" />
+                Tags bruges til at målrette dine kampagner og events mod de rette brugergrupper.
+              </p>
             </div>
           </div>
         </div>
       </div>
     </FirmaLayout>
-  );
-}
-
-function Plus({ size, className }: { size: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <line x1="12" y1="5" x2="12" y2="19"></line>
-      <line x1="5" y1="12" x2="19" y2="12"></line>
-    </svg>
   );
 }
