@@ -67,12 +67,12 @@ export default function TestKort() {
       const L = (window as any).L;
       if (!L || !mapRef.current) return;
       const map = L.map(mapRef.current, {
-        center: [57.048, 9.9187], // Aalborg
-        zoom: 12,
+        center: [55.95, 10.5], // Denmark center
+        zoom: 7,
         zoomControl: false,
       });
       L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        attribution: "© OSM © CARTO",
+        attribution: "\u00a9 OSM \u00a9 CARTO",
         maxZoom: 19,
       }).addTo(map);
       L.control.zoom({ position: "bottomright" }).addTo(map);
@@ -114,6 +114,8 @@ export default function TestKort() {
     if (geoEvents.length > 1) {
       const bounds = L.latLngBounds(geoEvents.map(e => [e.latitude, e.longitude]));
       map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+    } else if (geoEvents.length === 1) {
+      map.flyTo([geoEvents[0].latitude, geoEvents[0].longitude], 13, { duration: 0.5 });
     }
   }, [geoEvents]);
 
@@ -130,7 +132,7 @@ export default function TestKort() {
           <div className="flex items-center gap-3">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-              <input type="search" placeholder="Søg på kortet..." value={searchQuery}
+              <input type="search" placeholder="S\u00f8g p\u00e5 kortet..." value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
             </div>
@@ -158,7 +160,6 @@ export default function TestKort() {
         {/* Map area */}
         <div className="flex-1 relative">
           <div ref={mapRef} className="absolute inset-0" style={{ background: "#1a1a2e" }} />
-
           {/* Selected event popup */}
           {selectedEvent && (
             <div className="absolute bottom-4 left-4 right-4 z-20 bg-[#0a0e23]/95 backdrop-blur-lg rounded-xl border border-white/10 p-4 max-w-md">
@@ -186,7 +187,7 @@ export default function TestKort() {
         {showList && (
           <div className="w-80 bg-[#0a0e23]/90 backdrop-blur-lg border-l border-white/8 overflow-y-auto">
             <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">Events i nærheden ({filteredEvents.length})</h3>
+              <h3 className="text-sm font-semibold text-white mb-3">Events i n\u00e6rheden ({filteredEvents.length})</h3>
               {filteredEvents.slice(0, 20).map(event => (
                 <button key={event.id} onClick={() => {
                   setSelectedEvent(event);
