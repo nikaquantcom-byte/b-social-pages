@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { bindReferral } from "@/hooks/useReferral";
 
 export default function Auth() {
   const [, setLocation] = useLocation();
@@ -24,7 +25,7 @@ export default function Auth() {
     if (mode === "login") {
       const { error: authError } = await signIn(email, password);
       if (authError) {
-        setError("Forkert e-mail eller adgangskode. Prøv igen.");
+        setError("Forkert e-mail eller adgangskode. Pr\u00f8v igen.");
         setLoading(false);
       } else {
         setLocation("/feed");
@@ -36,26 +37,31 @@ export default function Auth() {
         return;
       }
       if (password.length < 6) {
-        setError("Adgangskode skal være mindst 6 tegn");
+        setError("Adgangskode skal v\u00e6re mindst 6 tegn");
         setLoading(false);
         return;
       }
+
       const { error: authError, needsConfirmation } = await signUp(email, password, name);
       if (authError) {
-        // Translate common Supabase errors
         const msg = authError.message;
         if (msg.includes("already registered")) {
-          setError("Denne e-mail er allerede registreret. Prøv at logge ind.");
+          setError("Denne e-mail er allerede registreret. Pr\u00f8v at logge ind.");
         } else {
           setError(msg);
         }
         setLoading(false);
       } else if (needsConfirmation) {
-        setSuccessMsg("Tjek din e-mail for at bekræfte din konto, og log derefter ind.");
+        setSuccessMsg("Tjek din e-mail for at bekr\u00e6fte din konto, og log derefter ind.");
         setMode("login");
         setLoading(false);
       } else {
-        // Auto-logged in → go to onboarding
+        // Auto-logged in -> bind referral then go to onboarding
+        // Get user from auth state
+        const { data: { user } } = await (await import("@/lib/supabase")).supabase.auth.getUser();
+        if (user) {
+          await bindReferral(user.id);
+        }
         setLocation("/onboarding");
       }
     }
@@ -154,7 +160,7 @@ export default function Auth() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
                 required
                 minLength={6}
                 className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
@@ -216,12 +222,12 @@ export default function Auth() {
           className="w-full py-3.5 rounded-2xl glass-card text-white/60 font-medium text-sm hover:text-white hover:bg-white/10 transition-all"
           data-testid="button-continue-without-login"
         >
-          Fortsæt uden login
+          Forts\u00e6t uden login
         </button>
 
         <p className="text-center text-white/30 text-xs mt-6 leading-relaxed">
           Ved at oprette en konto accepterer du vores{" "}
-          <span className="text-white/50 underline cursor-pointer">vilkår</span> og{" "}
+          <span className="text-white/50 underline cursor-pointer">vilk\u00e5r</span> og{" "}
           <span className="text-white/50 underline cursor-pointer">privatlivspolitik</span>
         </p>
       </div>
