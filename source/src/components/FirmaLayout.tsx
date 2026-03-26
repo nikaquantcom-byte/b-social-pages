@@ -11,6 +11,9 @@ import {
   Menu,
   X,
   LogOut,
+  Bell,
+  Settings,
+  ArrowLeft,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -20,68 +23,92 @@ const NAV_ITEMS = [
   { path: "/firma/targeting", label: "Tag-targeting", icon: Target },
   { path: "/firma/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/firma/fakturering", label: "Fakturering", icon: CreditCard },
+  { path: "/firma/indstillinger", label: "Indstillinger", icon: Settings },
 ];
 
 export default function FirmaLayout({ children }: { children: React.ReactNode }) {
   const [location] = useHashLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  const NOTIFICATIONS = [
+    { id: 1, text: "Ny tilmelding til 'Sommertræning i parken'", time: "2 min siden", unread: true },
+    { id: 2, text: "Event 'MTB tur' nåede 2.000 visninger", time: "1 time siden", unread: true },
+    { id: 3, text: "3 nye følgere denne uge", time: "3 timer siden", unread: false },
+    { id: 4, text: "Faktura INV-2026-003 er betalt", time: "1 dag siden", unread: false },
+  ];
+  const unreadCount = NOTIFICATIONS.filter((n) => n.unread).length;
 
   return (
-    <div className="firma-layout">
-      {/* Mobile header */}
-      <header className="firma-mobile-header">
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 rounded-lg hover:bg-white/10">
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
-        <div className="flex items-center gap-2">
-          <Building2 size={20} className="text-primary" />
-          <span className="font-semibold">B-Social Firma</span>
-        </div>
-        <div className="w-9" />
-      </header>
-
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className={`firma-sidebar ${mobileOpen ? "firma-sidebar-open" : ""}`}>
-        <div className="p-6 border-b border-white/10">
-          <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm mb-4">
-            <ChevronLeft size={16} /> Tilbage til B-Social
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-              <Building2 size={20} className="text-primary" />
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-background border-r border-white/10 flex flex-col transform transition-transform duration-200 ${
+        mobileOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0`}>
+        {/* Logo & firma */}
+        <div className="p-5 border-b border-white/10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Building2 size={18} className="text-primary" />
+              </div>
+              <div>
+                <p className="font-bold text-sm leading-tight">AktivNord Padel</p>
+                <p className="text-[10px] text-muted-foreground">Pro plan</p>
+              </div>
             </div>
-            <div>
-              <h2 className="font-semibold text-sm">B-Social Firma</h2>
-              <p className="text-xs text-muted-foreground">Dashboard</p>
-            </div>
+            <button onClick={() => setMobileOpen(false)} className="lg:hidden text-muted-foreground hover:text-foreground">
+              <X size={18} />
+            </button>
           </div>
         </div>
 
-        <nav className="flex-1 p-3">
+        {/* Nav */}
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
-            const isActive = location === item.path || (item.path !== "/firma" && location.startsWith(item.path));
             const Icon = item.icon;
+            const isActive = item.path === "/firma"
+              ? location === "/firma"
+              : location.startsWith(item.path);
             return (
               <Link
                 key={item.path}
                 href={item.path}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors mb-0.5 ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
                   isActive
                     ? "bg-primary/15 text-primary font-medium"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                <Icon size={18} />
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                  isActive ? "bg-primary/20" : ""
+                }`}
+                  style={isActive ? { boxShadow: "0 0 12px rgba(78,205,196,0.25)" } : undefined}
+                >
+                  <Icon size={17} strokeWidth={isActive ? 2.5 : 1.8} />
+                </div>
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-3 border-t border-white/10">
-          <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 w-full">
-            <LogOut size={18} />
+        {/* Bottom */}
+        <div className="p-3 border-t border-white/10 space-y-1">
+          <Link
+            href="/test"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all"
+          >
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <ArrowLeft size={17} strokeWidth={1.8} />
+            </div>
+            Tilbage til app
+          </Link>
+          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <LogOut size={17} strokeWidth={1.8} />
+            </div>
             Log ud
           </button>
         </div>
@@ -89,13 +116,81 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
 
       {/* Overlay for mobile */}
       {mobileOpen && (
-        <div className="firma-overlay" onClick={() => setMobileOpen(false)} />
+        <div
+          className="fixed inset-0 z-30 bg-black/60 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
       )}
 
-      {/* Main content */}
-      <main className="firma-main">
-        {children}
-      </main>
+      {/* Main */}
+      <div className="flex-1 flex flex-col lg:pl-64">
+        {/* Top header */}
+        <header className="sticky top-0 z-20 bg-background/80 backdrop-blur border-b border-white/10 px-4 py-3 flex items-center justify-between">
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="lg:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5"
+          >
+            <Menu size={20} />
+          </button>
+          <div className="hidden lg:flex items-center gap-2 text-sm text-muted-foreground">
+            <Building2 size={14} />
+            <span>AktivNord Padel</span>
+            <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-medium">Pro</span>
+          </div>
+          <div className="flex items-center gap-2 ml-auto">
+            {/* Notifications */}
+            <div className="relative">
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+              >
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary" />
+                )}
+              </button>
+              {notifOpen && (
+                <div className="absolute right-0 top-full mt-2 w-80 glass-card rounded-xl shadow-xl border border-white/10 overflow-hidden z-50">
+                  <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
+                    <span className="font-semibold text-sm">Notifikationer</span>
+                    <button onClick={() => setNotifOpen(false)} className="text-muted-foreground hover:text-foreground">
+                      <X size={14} />
+                    </button>
+                  </div>
+                  <div className="divide-y divide-white/5">
+                    {NOTIFICATIONS.map((n) => (
+                      <div key={n.id} className={`px-4 py-3 hover:bg-white/5 transition-colors ${
+                        n.unread ? "" : "opacity-60"
+                      }`}>
+                        <div className="flex items-start gap-2">
+                          {n.unread && <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />}
+                          {!n.unread && <div className="w-1.5 h-1.5 mt-1.5 shrink-0" />}
+                          <div>
+                            <p className="text-xs leading-snug">{n.text}</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{n.time}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="px-4 py-2 border-t border-white/10">
+                    <button className="text-xs text-primary hover:underline">Marker alle som læst</button>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Avatar */}
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+              AP
+            </div>
+          </div>
+        </header>
+
+        {/* Page content */}
+        <main className="flex-1 p-4 lg:p-6 max-w-7xl w-full mx-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
