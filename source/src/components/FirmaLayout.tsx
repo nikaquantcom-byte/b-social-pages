@@ -14,12 +14,14 @@ import {
   Bell,
   Settings,
   ArrowLeft,
+    Users,
 } from "lucide-react";
 import { useState } from "react";
 
 const NAV_ITEMS = [
   { path: "/firma", label: "Overblik", icon: LayoutDashboard },
   { path: "/firma/events", label: "Events", icon: CalendarPlus },
+    { path: "/firma/rekruttering", label: "Rekruttering", icon: Users },
   { path: "/firma/targeting", label: "Tag-targeting", icon: Target },
   { path: "/firma/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/firma/fakturering", label: "Fakturering", icon: CreditCard },
