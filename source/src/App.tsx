@@ -65,7 +65,6 @@ function AppRouter() {
           <Route path="/noter" component={Noter} />
           <Route path="/historik" component={Historik} />
           <Route path="/indstillinger" component={Indstillinger} />
-          <Route path="/henvisning" component={Henvisning} />
           <Route component={NotFound} />
         </Switch>
       </div>
@@ -75,13 +74,15 @@ function AppRouter() {
 
 function FirmaRouter() {
   return (
-    <Switch>
-      <Route path="/firma" component={FirmaDashboard} />
-      <Route path="/firma/events" component={FirmaEvents} />
-      <Route path="/firma/targeting" component={FirmaTargeting} />
-      <Route path="/firma/analytics" component={FirmaAnalytics} />
-      <Route path="/firma/fakturering" component={FirmaFakturering} />
-    </Switch>
+    <FirmaDashboard>
+      <Switch>
+        <Route path="/firma" component={Overblik} />
+        <Route path="/firma/events" component={FirmaEvents} />
+        <Route path="/firma/targeting" component={FirmaTargeting} />
+        <Route path="/firma/analytics" component={FirmaAnalytics} />
+        <Route path="/firma/fakturering" component={FirmaFakturering} />
+      </Switch>
+    </FirmaDashboard>
   );
 }
 
@@ -104,12 +105,16 @@ function RootRouter() {
   const [location] = useHashLocation();
   const isFirma = location.startsWith("/firma");
   const isTest = location.startsWith("/test");
+  const isHenvisning = location === "/henvisning";
 
   if (isFirma) {
     return <FirmaRouter />;
   }
   if (isTest) {
     return <TestRouter />;
+  }
+  if (isHenvisning) {
+    return <Henvisning />;
   }
   return <AppRouter />;
 }
