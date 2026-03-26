@@ -26,14 +26,14 @@ import Onboarding from "@/pages/Onboarding";
 import CategoryDetail from "@/pages/CategoryDetail";
 import StedDetail from "@/pages/StedDetail";
 import { JoinProvider } from "@/context/JoinContext";
-
+import Henvisning from "@/pages/Henvisning";
+import { useReferralCapture } from "@/hooks/useReferral";
 // Firma pages
 import FirmaDashboard from "@/pages/FirmaDashboard";
 import FirmaEvents from "@/pages/FirmaEvents";
 import FirmaTargeting from "@/pages/FirmaTargeting";
 import FirmaAnalytics from "@/pages/FirmaAnalytics";
 import FirmaFakturering from "@/pages/FirmaFakturering";
-
 // Desktop test pages
 import DesktopAppLayout from "@/components/DesktopAppLayout";
 import TestFeed from "@/pages/TestFeed";
@@ -65,6 +65,7 @@ function AppRouter() {
           <Route path="/noter" component={Noter} />
           <Route path="/historik" component={Historik} />
           <Route path="/indstillinger" component={Indstillinger} />
+          <Route path="/henvisning" component={Henvisning} />
           <Route component={NotFound} />
         </Switch>
       </div>
@@ -114,6 +115,9 @@ function RootRouter() {
 }
 
 function App() {
+  // Capture referral code from URL on first load
+  useReferralCapture();
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
