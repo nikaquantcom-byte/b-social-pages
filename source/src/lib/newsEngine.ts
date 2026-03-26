@@ -1,7 +1,7 @@
 /*
   B-Social News Engine
   Henter nyheder fra RSS feeds og matcher dem med brugerens tags
-  via Superhjernen. Bruger api.codetabs.com som CORS proxy.
+  via Superhjernen. Bruger egen Cloudflare Worker som CORS proxy.
 */
 
 import { TAG_TREE, type TagNode } from "./tagTree";
@@ -50,11 +50,11 @@ const RSS_FEEDS: FeedConfig[] = [
   },
 ];
 
-// --- CORS Proxy ---
-const PROXY = "https://api.codetabs.com/v1/proxy?quest=";
+// --- CORS Proxy (own Cloudflare Worker) ---
+const PROXY = "https://bsocial-rss-proxy.nicbj96.workers.dev/?url=";
 
 // --- Cache ---
-const CACHE_KEY = "bsocial_news_v3";
+const CACHE_KEY = "bsocial_news_v4";
 const CACHE_TTL = 30 * 60 * 1000; // 30 min
 
 interface NewsCache {
