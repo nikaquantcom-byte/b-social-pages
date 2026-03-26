@@ -84,7 +84,7 @@ export default function TestFeed() {
     queryKey: ["/api/events"],
     queryFn: getEvents,
   });
-  const { joinedIds, toggleJoin } = useJoin();
+  const { joinEvent, leaveEvent, isJoined } = useJoin();
   const [searchQuery, setSearchQuery] = useState("");
   const [editorOpen, setEditorOpen] = useState(false);
   const [userTags, setLocalTags] = useState<string[]>(getUserTags());
