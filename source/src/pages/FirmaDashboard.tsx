@@ -10,20 +10,39 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Plus,
+  Megaphone,
+  BarChart3,
+  Clock,
 } from "lucide-react";
 
 const STATS = [
-  { label: "F\u00f8lgere", value: "1.247", change: "+12%", up: true, icon: Users },
+  { label: "Følgere", value: "1.247", change: "+12%", up: true, icon: Users },
   { label: "Event-visninger", value: "8.432", change: "+23%", up: true, icon: Eye },
   { label: "Klik", value: "643", change: "+8%", up: true, icon: MousePointerClick },
   { label: "Tilmeldinger", value: "89", change: "-3%", up: false, icon: UserPlus },
 ];
 
 const CAMPAIGNS = [
-  { id: 1, title: "Sommertr\u00e6ning i parken", status: "aktiv", reach: "2.340", clicks: "187" },
+  { id: 1, title: "Sommertræning i parken", status: "aktiv", reach: "2.340", clicks: "187" },
   { id: 2, title: "MTB tur - Rebild", status: "aktiv", reach: "1.890", clicks: "145" },
-  { id: 3, title: "Yoga p\u00e5 stranden", status: "draft", reach: "-", clicks: "-" },
-  { id: 4, title: "L\u00f8beklub opstart", status: "afsluttet", reach: "4.210", clicks: "312" },
+  { id: 3, title: "Yoga på stranden", status: "draft", reach: "-", clicks: "-" },
+  { id: 4, title: "Løbeklub opstart", status: "afsluttet", reach: "4.210", clicks: "312" },
+];
+
+const WEEKLY = [
+  { day: "Man", views: 890 },
+  { day: "Tir", views: 1240 },
+  { day: "Ons", views: 980 },
+  { day: "Tor", views: 1560 },
+  { day: "Fre", views: 2100 },
+  { day: "Lør", views: 1890 },
+  { day: "Søn", views: 1340 },
+];
+
+const UPCOMING_EVENTS = [
+  { title: "Sommertræning i parken", date: "2026-04-15", daysUntil: 20 },
+  { title: "MTB tur - Rebild", date: "2026-04-20", daysUntil: 25 },
+  { title: "Paddle Tennis turnering", date: "2026-04-28", daysUntil: 33 },
 ];
 
 function StatusBadge({ status }: { status: string }) {
@@ -37,6 +56,53 @@ function StatusBadge({ status }: { status: string }) {
     <span className={`px-2 py-0.5 rounded-full text-xs border ${colors[status] || colors.draft}`}>
       {status}
     </span>
+  );
+}
+
+function WeeklyChart() {
+  const maxViews = Math.max(...WEEKLY.map((d) => d.views));
+  return (
+    <div className="glass-card rounded-xl p-4">
+      <h3 className="font-semibold mb-4 flex items-center gap-2">
+        <BarChart3 size={16} className="text-primary" />
+        Visninger denne uge
+      </h3>
+      <div className="flex items-end gap-2 h-40">
+        {WEEKLY.map((d) => (
+          <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
+            <span className="text-xs text-muted-foreground">{d.views}</span>
+            <div
+              className="w-full rounded-t-md bg-primary/80 hover:bg-primary transition-colors"
+              style={{ height: `${(d.views / maxViews) * 100}%` }}
+            />
+            <span className="text-xs text-muted-foreground">{d.day}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function EngagementRing() {
+  const views = 8432;
+  const clicks = 643;
+  const rate = ((clicks / views) * 100).toFixed(1);
+  const circumference = 2 * Math.PI * 45;
+  const offset = circumference - (parseFloat(rate) / 100) * circumference;
+  return (
+    <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center">
+      <h3 className="font-semibold mb-3">Engagement Rate</h3>
+      <div className="relative w-28 h-28">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+          <circle cx="50" cy="50" r="45" fill="none" stroke="#4ECDC4" strokeWidth="8" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset} />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-2xl font-bold text-primary">{rate}%</span>
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground mt-2">{clicks} klik / {views.toLocaleString()} visninger</p>
+    </div>
   );
 }
 
@@ -78,6 +144,71 @@ export default function FirmaDashboard() {
           })}
         </div>
 
+        {/* Weekly chart + Engagement ring */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <WeeklyChart />
+          </div>
+          <EngagementRing />
+        </div>
+
+        {/* Quick actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Link href="/firma/events" className="glass-card rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition-colors cursor-pointer">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <CalendarPlus size={20} className="text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">Opret event</p>
+              <p className="text-xs text-muted-foreground">Nyt event eller aktivitet</p>
+            </div>
+          </Link>
+          <Link href="/firma/targeting" className="glass-card rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition-colors cursor-pointer">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Megaphone size={20} className="text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">Start kampagne</p>
+              <p className="text-xs text-muted-foreground">Boost dine events</p>
+            </div>
+          </Link>
+          <Link href="/firma/analytics" className="glass-card rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition-colors cursor-pointer">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <BarChart3 size={20} className="text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">Se analytics</p>
+              <p className="text-xs text-muted-foreground">Detaljeret indsigt</p>
+            </div>
+          </Link>
+        </div>
+
+        {/* Upcoming events */}
+        <div className="glass-card rounded-xl p-4">
+          <h3 className="font-semibold mb-3 flex items-center gap-2">
+            <Clock size={16} className="text-primary" />
+            Kommende events
+          </h3>
+          <div className="space-y-3">
+            {UPCOMING_EVENTS.map((event) => (
+              <div key={event.title} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <CalendarPlus size={16} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{event.title}</p>
+                    <p className="text-xs text-muted-foreground">{event.date}</p>
+                  </div>
+                </div>
+                <span className="px-2 py-1 rounded-md text-xs bg-primary/15 text-primary font-medium">
+                  om {event.daysUntil} dage
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Active campaigns */}
         <div className="glass-card rounded-xl">
           <div className="p-4 border-b border-white/10 flex items-center justify-between">
@@ -96,7 +227,7 @@ export default function FirmaDashboard() {
                   <div>
                     <p className="text-sm font-medium">{c.title}</p>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-xs text-muted-foreground">R\u00e6kkevidde: {c.reach}</span>
+                      <span className="text-xs text-muted-foreground">Rækkevidde: {c.reach}</span>
                       <span className="text-xs text-muted-foreground">Klik: {c.clicks}</span>
                     </div>
                   </div>
@@ -115,7 +246,7 @@ export default function FirmaDashboard() {
               Top tags denne uge
             </h3>
             <div className="space-y-2">
-              {["Cykling", "L\u00f8b", "Outdoor", "Yoga", "Vandring"].map((tag, i) => (
+              {["Cykling", "Løb", "Outdoor", "Yoga", "Vandring"].map((tag, i) => (
                 <div key={tag} className="flex items-center justify-between">
                   <span className="text-sm">{tag}</span>
                   <div className="flex items-center gap-2">
@@ -133,10 +264,10 @@ export default function FirmaDashboard() {
             <h3 className="font-semibold mb-3">Seneste aktivitet</h3>
             <div className="space-y-3">
               {[
-                { text: "Ny tilmelding til 'Sommertr\u00e6ning i parken'", time: "2 min siden" },
-                { text: "Event 'MTB tur - Rebild' n\u00e5ede 1.500 visninger", time: "1 time siden" },
-                { text: "3 nye f\u00f8lgere denne uge", time: "3 timer siden" },
-                { text: "Kampagne 'L\u00f8beklub opstart' afsluttet", time: "1 dag siden" },
+                { text: "Ny tilmelding til 'Sommertræning i parken'", time: "2 min siden" },
+                { text: "Event 'MTB tur - Rebild' nåede 1.500 visninger", time: "1 time siden" },
+                { text: "3 nye følgere denne uge", time: "3 timer siden" },
+                { text: "Kampagne 'Løbeklub opstart' afsluttet", time: "1 dag siden" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
