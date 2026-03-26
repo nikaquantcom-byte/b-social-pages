@@ -54,7 +54,7 @@ const RSS_FEEDS: FeedConfig[] = [
 const PROXY = "https://corsproxy.io/?";
 
 // --- Cache ---
-const CACHE_KEY = "bsocial_news_cache";
+const CACHE_KEY = "bsocial_news_v2";
 const CACHE_TTL = 30 * 60 * 1000; // 30 min
 
 interface NewsCache {
@@ -250,8 +250,8 @@ export async function fetchNews(): Promise<NewsItem[]> {
   // Sort by date (newest first)
   allItems.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
 
-  // Cache results
-  setCache(allItems);
+  // Only cache non-empty results
+  if (allItems.length > 0) setCache(allItems);
 
   return allItems;
 }
