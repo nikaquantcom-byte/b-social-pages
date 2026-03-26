@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
-import { Home, Compass, MapPin, MessageCircle, User, Bell, Search, Plus } from "lucide-react";
+import { Home, Compass, MapPin, MessageCircle, User, Bell, Search, Plus, Building2 } from "lucide-react";
 import { useState } from "react";
 
 const NAV = [
@@ -44,7 +44,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   isActive ? "bg-[#4ECDC4]/20" : ""
                 }`}
-                  style={isActive ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}
+                style={isActive ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}
                 >
                   <Icon size={18} strokeWidth={isActive ? 2.5 : 1.8} />
                 </div>
@@ -52,6 +52,27 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
               </Link>
             );
           })}
+
+          {/* Kunde section link */}
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <Link
+              href="/firma"
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mb-0.5 ${
+                location.startsWith("/firma")
+                  ? "bg-[#4ECDC4]/15 text-[#4ECDC4] font-medium"
+                  : "text-white/50 hover:text-white/80 hover:bg-white/5"
+              }`}
+            >
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                location.startsWith("/firma") ? "bg-[#4ECDC4]/20" : ""
+              }`}
+              style={location.startsWith("/firma") ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}
+              >
+                <Building2 size={18} strokeWidth={location.startsWith("/firma") ? 2.5 : 1.8} />
+              </div>
+              Kunde
+            </Link>
+          </div>
         </nav>
 
         <div className="px-3 pb-5">
