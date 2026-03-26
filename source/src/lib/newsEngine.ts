@@ -1,7 +1,7 @@
 /*
   B-Social News Engine
   Henter nyheder fra RSS feeds og matcher dem med brugerens tags
-  via Superhjernen. Bruger allorigins.win som CORS proxy.
+  via Superhjernen. Bruger corsproxy.io som CORS proxy.
 */
 
 import { TAG_TREE, type TagNode } from "./tagTree";
@@ -31,14 +31,14 @@ interface FeedConfig {
 
 const RSS_FEEDS: FeedConfig[] = [
   {
-    url: "https://nordjyske.dk/rss/nyheder/sport",
+    url: "https://nordjyske.dk/rss/sport",
     source: "Nordjyske Sport",
     sourceEmoji: "🏆",
     tags: ["cykling", "løb", "fodbold", "svømning", "fitness", "kampsport", "basketball", "tennis", "golf", "ski", "snowboard", "ridning"],
   },
   {
-    url: "https://nordjyske.dk/rss/nyheder/kultur",
-    source: "Nordjyske Kultur",
+    url: "https://nordjyske.dk/rss/aalborg",
+    source: "Nordjyske Aalborg",
     sourceEmoji: "🎨",
     tags: ["kunst", "musik", "dans", "fotografering", "teater", "stand-up", "festival", "koncert"],
   },
@@ -51,7 +51,7 @@ const RSS_FEEDS: FeedConfig[] = [
 ];
 
 // --- CORS Proxy ---
-const PROXY = "https://api.allorigins.win/raw?url=";
+const PROXY = "https://corsproxy.io/?";
 
 // --- Cache ---
 const CACHE_KEY = "bsocial_news_cache";
