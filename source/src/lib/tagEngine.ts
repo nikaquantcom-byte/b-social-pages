@@ -202,3 +202,51 @@ export function getReferralTagMatch(referrerTags: string[], newUserTags: string[
 }
 
 export { ALL_TAGS };
+
+// --- Trending tags: count tag frequency across events ---
+export function getTrendingTags(events: Event[], limit = 15): { tag: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const ev of events) {
+    for (const t of ev.interest_tags || []) {
+      counts.set(t, (counts.get(t) || 0) + 1);
+    }
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([tag, count]) => ({ tag, count }));
+}
+
+// --- Filter events by tag (with related tag expansion) ---
+export function filterByTag(events: Event[], tag: string): Event[] {
+  const expanded = new Set<string>();
+  expanded.add(tag.toLowerCase());
+  getRelatedTags(tag).forEach(r => expanded.add(r.toLowerCase()));
+  return events.filter(ev => {
+    const eTags = [...(ev.interest_tags || []), ev.category?.toLowerCase()].filter(Boolean);
+    return eTags.some(et => expanded.has(et!.toLowerCase()));
+  });
+}
+
+// --- Unified tagEngine object for convenient imports ---
+export const tagEngine = {
+  getUserTags,
+  setUserTags,
+  getFirmaTags,
+  setFirmaTags,
+  getTagNode,
+  getRelatedTags: (tag: string, events?: Event[], limit?: number) => {
+    const related = getRelatedTags(tag);
+    if (!limit) return related.map(t => ({ tag: t }));
+    return related.slice(0, limit).map(t => ({ tag: t }));
+  },
+  getTrendingTags,
+  filterByTag,
+  buildTagFeed,
+  scoreEvent,
+  searchAllTags,
+  filterEventsForMap,
+  estimateFirmaReach,
+  getReferralTagMatch,
+  buildCoOccurrence,
+};
