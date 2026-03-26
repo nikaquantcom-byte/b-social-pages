@@ -27,6 +27,13 @@ import CategoryDetail from "@/pages/CategoryDetail";
 import StedDetail from "@/pages/StedDetail";
 import { JoinProvider } from "@/context/JoinContext";
 
+// Firma pages
+import FirmaDashboard from "@/pages/FirmaDashboard";
+import FirmaEvents from "@/pages/FirmaEvents";
+import FirmaTargeting from "@/pages/FirmaTargeting";
+import FirmaAnalytics from "@/pages/FirmaAnalytics";
+import FirmaFakturering from "@/pages/FirmaFakturering";
+
 function AppRouter() {
   return (
     <div className="phone-wrapper dark">
@@ -57,6 +64,28 @@ function AppRouter() {
   );
 }
 
+function FirmaRouter() {
+  return (
+    <Switch>
+      <Route path="/firma" component={FirmaDashboard} />
+      <Route path="/firma/events" component={FirmaEvents} />
+      <Route path="/firma/targeting" component={FirmaTargeting} />
+      <Route path="/firma/analytics" component={FirmaAnalytics} />
+      <Route path="/firma/fakturering" component={FirmaFakturering} />
+    </Switch>
+  );
+}
+
+function RootRouter() {
+  const [location] = useHashLocation();
+  const isFirma = location.startsWith("/firma");
+
+  if (isFirma) {
+    return <FirmaRouter />;
+  }
+  return <AppRouter />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -66,7 +95,7 @@ function App() {
             <TooltipProvider>
               <Toaster />
               <Router hook={useHashLocation}>
-                <AppRouter />
+                <RootRouter />
               </Router>
             </TooltipProvider>
           </JoinProvider>
