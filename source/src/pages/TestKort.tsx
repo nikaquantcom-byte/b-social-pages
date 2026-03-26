@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Search, MapPin, Filter, List, Navigation, Layers } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -25,7 +25,7 @@ export default function TestKort() {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
               <input
                 type="search"
-                placeholder="S\u00f8g p\u00e5 kortet..."
+                placeholder={"S\u00f8g p\u00e5 kortet..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
@@ -45,14 +45,13 @@ export default function TestKort() {
       <div className="flex-1 flex">
         {/* Map area */}
         <div className="flex-1 relative bg-[#0a0e23]">
-          {/* Placeholder map with visual styling */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-20 h-20 rounded-full bg-[#4ECDC4]/10 flex items-center justify-center mx-auto mb-4">
                 <MapPin size={32} className="text-[#4ECDC4]" />
               </div>
               <p className="text-white/40 text-sm">Interaktivt kort</p>
-              <p className="text-white/25 text-xs mt-1">Leaflet map indl\u00e6ses her</p>
+              <p className="text-white/25 text-xs mt-1">{"Leaflet map indl\u00e6ses her"}</p>
             </div>
           </div>
           {/* Map controls */}
@@ -72,7 +71,7 @@ export default function TestKort() {
         {showList && (
           <aside className="w-80 border-l border-white/8 bg-[#0a0e23]/90 backdrop-blur-xl overflow-y-auto">
             <div className="p-4">
-              <h3 className="font-semibold text-sm mb-3">Events i n\u00e6rheden ({events.length})</h3>
+              <h3 className="font-semibold text-sm mb-3">{"Events i n\u00e6rheden"} ({events.length})</h3>
               <div className="space-y-2">
                 {events.slice(0, 15).map((event) => (
                   <Link key={event.id} href={`/test/event/${event.id}`} className="flex gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors group">
