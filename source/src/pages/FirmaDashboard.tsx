@@ -153,7 +153,7 @@ export default function FirmaDashboard() {
         </div>
 
         {/* Quick actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <Link href="/firma/events" className="glass-card rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition-colors cursor-pointer">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <CalendarPlus size={20} className="text-primary" />
@@ -181,6 +181,15 @@ export default function FirmaDashboard() {
               <p className="text-xs text-muted-foreground">Detaljeret indsigt</p>
             </div>
           </Link>
+                  <Link href="/firma/rekruttering" className="glass-card rounded-xl p-4 flex items-center gap-3 hover:bg-white/5 transition-colors cursor-pointer">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Users size={20} className="text-primary" />
+          </div>
+          <div>
+            <p className="text-sm font-medium">Rekruttering</p>
+            <p className="text-xs text-muted-foreground">Find frivillige & medarbejdere</p>
+          </div>
+        </Link>
         </div>
 
         {/* Upcoming events */}
