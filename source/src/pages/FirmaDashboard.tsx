@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import FirmaLayout from "@/components/FirmaLayout";
 import { Link } from "wouter";
 import { useAuth } from "@/context/AuthContext";
@@ -185,10 +186,11 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function WeeklyChart({ data }: { data: { day: string; views: number }[] }) {
+  const { t } = useTranslation();
   const maxViews = Math.max(...data.map((d) => d.views), 1);
   return (
     <div className="glass-card p-6 rounded-2xl">
-      <h3 className="text-sm font-semibold text-white/60 mb-6 uppercase tracking-wider">Events denne måned</h3>
+      <h3 className="text-sm font-semibold text-white/60 mb-6 uppercase tracking-wider">{t('events.events_this_month')}</h3>
       <div className="flex items-end justify-between h-32 gap-2">
         {data.map((d) => (
           <div key={d.day} className="flex-1 flex flex-col items-center gap-2 group">
@@ -209,6 +211,7 @@ function WeeklyChart({ data }: { data: { day: string; views: number }[] }) {
 }
 
 function EngagementRing({ eventsCount, signups }: { eventsCount: number; signups: number }) {
+  const { t } = useTranslation();
   const rate = eventsCount > 0 ? ((signups / Math.max(eventsCount, 1)) * 100) : 0;
   const displayRate = rate.toFixed(1);
   const circumference = 2 * Math.PI * 45;
@@ -216,7 +219,7 @@ function EngagementRing({ eventsCount, signups }: { eventsCount: number; signups
 
   return (
     <div className="glass-card p-6 rounded-2xl flex flex-col items-center justify-center">
-      <h3 className="text-sm font-semibold text-white/60 mb-6 uppercase tracking-wider w-full">Tilmeldingsrate</h3>
+      <h3 className="text-sm font-semibold text-white/60 mb-6 uppercase tracking-wider w-full">{t('events.signup_rate')}</h3>
       <div className="relative w-32 h-32 mb-4">
         <svg className="w-full h-full transform -rotate-90">
           <circle cx="64" cy="64" r="45" stroke="currentColor" strokeWidth="10" fill="transparent" className="text-white/5" />
@@ -226,25 +229,26 @@ function EngagementRing({ eventsCount, signups }: { eventsCount: number; signups
           <span className="text-2xl font-bold text-white">{displayRate}%</span>
         </div>
       </div>
-      <p className="text-[10px] text-white/40">{signups} tilmeldinger / {eventsCount} events</p>
+      <p className="text-[10px] text-white/40">{t('events.signups_per_events', { signups, events: eventsCount })}</p>
     </div>
   );
 }
 
 function EmptyCompanyState() {
+  const { t } = useTranslation();
   return (
     <div className="max-w-lg mx-auto py-20 text-center space-y-6">
       <div className="w-20 h-20 mx-auto rounded-2xl bg-[#4ECDC4]/10 flex items-center justify-center">
         <AlertCircle size={36} className="text-[#4ECDC4]" />
       </div>
-      <h2 className="text-2xl font-bold text-white">Opret din virksomhed</h2>
+      <h2 className="text-2xl font-bold text-white">{t('firma.create_company')}</h2>
       <p className="text-white/50 text-sm leading-relaxed">
-        Du har endnu ikke en firmaprofil. Opret en for at begynde at lave events og nå ud til brugere.
+        {t('firma.no_company_desc')}
       </p>
       <Link href="/firma/auth">
         <a className="inline-flex items-center gap-2 bg-[#4ECDC4] hover:bg-[#3dbdb5] text-[#0a1929] px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-[#4ECDC4]/20">
           <Plus size={20} />
-          Opret firmakonto
+          {t('firma.create_company_account')}
         </a>
       </Link>
     </div>
@@ -253,6 +257,7 @@ function EmptyCompanyState() {
 
 /* ── Main Component ── */
 export default function FirmaDashboard() {
+  const { t } = useTranslation();
   const { company, stats, events, activity, weeklyViews, loading } = useFirmaData();
   const [allNews, setAllNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
@@ -267,7 +272,7 @@ export default function FirmaDashboard() {
   const relevantNews = useMemo(() => {
     const targetTags = ["cykling", "løb", "outdoor", "fitness", "sport"];
     return allNews.filter(n =>
-      n.matchedTags?.some(t => targetTags.includes(t.toLowerCase()))
+      n.matchedTags?.some(tag => targetTags.includes(tag.toLowerCase()))
     ).slice(0, 3);
   }, [allNews]);
 
@@ -317,10 +322,10 @@ export default function FirmaDashboard() {
   }
 
   const STAT_CARDS = [
-    { label: "Følgere", value: stats.followers, icon: Users },
+    { label: t('firma.followers'), value: stats.followers, icon: Users },
     { label: "Events", value: stats.eventsCount, icon: CalendarDays },
-    { label: "Tilmeldinger", value: stats.signups, icon: UserPlus },
-    { label: "Event-visninger", value: stats.eventViews, icon: Eye },
+    { label: t('firma.signups'), value: stats.signups, icon: UserPlus },
+    { label: t('firma.event_views'), value: stats.eventViews, icon: Eye },
   ];
 
   return (
@@ -332,15 +337,15 @@ export default function FirmaDashboard() {
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-3xl font-bold text-white tracking-tight">{company.name}</h1>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#4ECDC4]/15 text-[#4ECDC4] border border-[#4ECDC4]/20">
-                {company.plan} plan
+                {company.plan === "vaekst" ? "Vækst" : company.plan === "partner" ? "Partner" : "Starter"} · {company.plan === "vaekst" ? "5%" : company.plan === "partner" ? "3%" : "0%"} {t('firma.revenue_share')}
               </span>
             </div>
-            <p className="text-white/40">Velkommen tilbage. Her er din virksomheds performance.</p>
+            <p className="text-white/40">{t('firma.welcome_back')}</p>
           </div>
           <Link href="/firma/events">
             <a className="bg-[#4ECDC4] hover:bg-[#3dbdb5] text-[#0a1929] px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-[#4ECDC4]/20 flex items-center gap-2 w-fit">
               <Plus size={20} />
-              Opret event
+              {t('firma.create_event')}
             </a>
           </Link>
         </div>
@@ -350,8 +355,8 @@ export default function FirmaDashboard() {
           <div className="p-4 rounded-2xl bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 flex items-start gap-3">
             <TrendingUp size={20} className="text-[#4ECDC4] mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-white text-sm font-semibold">Tip: Del din profil for at få flere visninger</p>
-              <p className="text-white/50 text-xs mt-1">Opret events og del dem med dit netværk for at bygge din følgerskare op.</p>
+              <p className="text-white text-sm font-semibold">{t('firma.tip_share')}</p>
+              <p className="text-white/50 text-xs mt-1">{t('firma.tip_share_desc')}</p>
             </div>
           </div>
         )}
@@ -389,8 +394,8 @@ export default function FirmaDashboard() {
                   <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <CalendarPlus size={20} />
                   </div>
-                  <div className="text-xs font-bold text-white mb-1">Opret event</div>
-                  <div className="text-[10px] text-white/30">Nyt event eller aktivitet</div>
+                  <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.create_event')}</div>
+                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.create_event_desc')}</div>
                 </a>
               </Link>
               <Link href="/firma/targeting">
@@ -398,8 +403,8 @@ export default function FirmaDashboard() {
                   <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <Megaphone size={20} />
                   </div>
-                  <div className="text-xs font-bold text-white mb-1">Målretning</div>
-                  <div className="text-[10px] text-white/30">Nå din målgruppe</div>
+                  <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.targeting')}</div>
+                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.targeting_desc')}</div>
                 </a>
               </Link>
               <Link href="/firma/analytics">
@@ -407,8 +412,8 @@ export default function FirmaDashboard() {
                   <div className="w-10 h-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <BarChart3 size={20} />
                   </div>
-                  <div className="text-xs font-bold text-white mb-1">Se analytics</div>
-                  <div className="text-[10px] text-white/30">Detaljeret indsigt</div>
+                  <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.analytics')}</div>
+                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.analytics_desc')}</div>
                 </a>
               </Link>
               <Link href="/firma/rekruttering">
@@ -416,8 +421,8 @@ export default function FirmaDashboard() {
                   <div className="w-10 h-10 rounded-full bg-orange-500/10 text-orange-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <UserPlus size={20} />
                   </div>
-                  <div className="text-xs font-bold text-white mb-1">Rekruttering</div>
-                  <div className="text-[10px] text-white/30">Find frivillige & medarbejdere</div>
+                  <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.recruitment')}</div>
+                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.recruitment_desc')}</div>
                 </a>
               </Link>
             </div>
@@ -425,9 +430,9 @@ export default function FirmaDashboard() {
             {/* Upcoming events */}
             <div className="glass-card rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
-                <h3 className="font-bold text-white">Kommende events</h3>
+                <h3 className="font-bold text-white">{t('events.upcoming_events')}</h3>
                 <Link href="/firma/events">
-                  <a className="text-[10px] font-bold text-[#4ECDC4] uppercase tracking-wider">Se alle</a>
+                  <a className="text-[10px] font-bold text-[#4ECDC4] uppercase tracking-wider">{t('events.see_all')}</a>
                 </Link>
               </div>
               <div className="divide-y divide-white/5">
@@ -445,7 +450,7 @@ export default function FirmaDashboard() {
                   </div>
                 )) : (
                   <div className="px-6 py-8 text-center text-white/30 text-sm">
-                    Ingen kommende events. <Link href="/firma/events"><a className="text-[#4ECDC4] underline">Opret et nu</a></Link>
+                    {t('events.no_upcoming')} <Link href="/firma/events"><a className="text-[#4ECDC4] underline">{t('events.create_now')}</a></Link>
                   </div>
                 )}
               </div>
@@ -458,22 +463,22 @@ export default function FirmaDashboard() {
             <div className="glass-card p-6 rounded-2xl">
               <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider flex items-center gap-2">
                 <TrendingUp size={16} className="text-[#4ECDC4]" />
-                Dine event-kategorier
+                {t('firma.your_categories')}
               </h3>
               {topTags.length > 0 ? (
                 <div className="space-y-4">
-                  {topTags.map((t, i) => {
+                  {topTags.map((tag, i) => {
                     const maxCount = topTags[0].count;
                     return (
-                      <div key={t.tag} className="space-y-2">
+                      <div key={tag.tag} className="space-y-2">
                         <div className="flex justify-between text-xs font-medium">
-                          <span className="text-white/80 capitalize">{t.tag}</span>
-                          <span className="text-white/40 text-[10px] tracking-widest">{t.count}</span>
+                          <span className="text-white/80 capitalize">{tag.tag}</span>
+                          <span className="text-white/40 text-[10px] tracking-widest">{tag.count}</span>
                         </div>
                         <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-[#4ECDC4] to-[#45B7AF] rounded-full"
-                            style={{ width: `${(t.count / maxCount) * 100}%` }}
+                            style={{ width: `${(tag.count / maxCount) * 100}%` }}
                           />
                         </div>
                       </div>
@@ -481,7 +486,7 @@ export default function FirmaDashboard() {
                   })}
                 </div>
               ) : (
-                <p className="text-white/30 text-xs text-center py-4">Ingen kategorier endnu. Opret events for at se statistik.</p>
+                <p className="text-white/30 text-xs text-center py-4">{t('firma.no_categories')}</p>
               )}
             </div>
 
@@ -490,7 +495,7 @@ export default function FirmaDashboard() {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                   <Newspaper size={16} className="text-[#4ECDC4]" />
-                  Nyheder til din målgruppe
+                  {t('firma.news_for_audience')}
                 </h3>
                 <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#4ECDC4]/10">
                   <span className="w-1 h-1 rounded-full bg-[#4ECDC4] animate-pulse" />
@@ -501,7 +506,7 @@ export default function FirmaDashboard() {
               {newsLoading ? (
                 <div className="py-12 flex flex-col items-center justify-center gap-3 text-white/30 text-xs">
                   <Loader2 className="animate-spin" size={20} />
-                  Henter branche-nyheder...
+                  {t('firma.fetching_news')}
                 </div>
               ) : relevantNews.length > 0 ? (
                 <div className="space-y-4">
@@ -526,14 +531,14 @@ export default function FirmaDashboard() {
                 </div>
               ) : (
                 <div className="py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
-                  <p className="text-white/30 text-[10px]">Ingen aktuelle nyheder til din målgruppe.</p>
+                  <p className="text-white/30 text-[10px]">{t('firma.no_news')}</p>
                 </div>
               )}
             </div>
 
             {/* Activity log */}
             <div className="glass-card p-6 rounded-2xl">
-              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider">Seneste aktivitet</h3>
+              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider">{t('firma.recent_activity')}</h3>
               <div className="space-y-6">
                 {activity.map((item, i) => (
                   <div key={i} className="flex gap-3">

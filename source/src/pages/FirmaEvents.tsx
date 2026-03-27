@@ -1,5 +1,6 @@
 import FirmaLayout from "@/components/FirmaLayout";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import {
   Plus,
   Search,
@@ -46,6 +47,7 @@ const MOCK_EVENTS: FirmaEvent[] = [
 ];
 
 function StatusBadge({ status }: { status: EventStatus }) {
+  const { t } = useTranslation();
   const colors: Record<string, string> = {
     aktiv: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
     draft: "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
@@ -54,43 +56,44 @@ function StatusBadge({ status }: { status: EventStatus }) {
   };
   return (
     <span className={`px-2 py-0.5 rounded-full text-xs border ${colors[status] || colors.draft}`}>
-      {status === "promoted" ? "✨ promoted" : status}
+      {status === "promoted" ? t('firma.events_status_promoted') : status}
     </span>
   );
 }
 
 function BoostModal({ event, onClose }: { event: FirmaEvent; onClose: () => void }) {
+  const { t } = useTranslation();
   const [budget, setBudget] = useState(200);
   const [duration, setDuration] = useState(7);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="glass-card rounded-xl p-6 w-full max-w-md mx-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-lg">Boost: {event.title}</h3>
+          <h3 className="font-semibold text-lg">{t('firma.events_boost_title')}: {event.title}</h3>
           <button onClick={onClose} className="p-1 rounded hover:bg-white/10 text-muted-foreground"><X size={18} /></button>
         </div>
         <div className="space-y-4">
           <div>
-            <label className="text-sm text-muted-foreground mb-2 block">Budget: {budget} kr</label>
+            <label className="text-sm text-muted-foreground mb-2 block">{t('firma.events_budget')}: {budget} {t('firma.events_currency')}</label>
             <input type="range" min={50} max={500} step={50} value={budget} onChange={(e) => setBudget(Number(e.target.value))} className="w-full accent-primary" />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>50 kr</span><span>500 kr</span></div>
+            <div className="flex justify-between text-xs text-muted-foreground mt-1"><span>50 {t('firma.events_currency')}</span><span>500 {t('firma.events_currency')}</span></div>
           </div>
           <div>
-            <label className="text-sm text-muted-foreground mb-2 block">Estimeret rækkevidde</label>
-            <p className="text-2xl font-bold text-primary">{(budget * 8).toLocaleString()} brugere</p>
+            <label className="text-sm text-muted-foreground mb-2 block">{t('firma.events_estimated_reach')}</label>
+            <p className="text-2xl font-bold text-primary">{(budget * 8).toLocaleString()} {t('firma.events_users')}</p>
           </div>
           <div>
-            <label className="text-sm text-muted-foreground mb-2 block">Varighed</label>
+            <label className="text-sm text-muted-foreground mb-2 block">{t('firma.events_duration')}</label>
             <div className="flex gap-2">
               {[3, 7, 14].map((d) => (
                 <button key={d} onClick={() => setDuration(d)} className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${duration === d ? "bg-primary/15 text-primary border border-primary/30" : "bg-white/5 text-muted-foreground border border-white/10"}`}>
-                  {d} dage
+                  {d} {t('firma.events_days')}
                 </button>
               ))}
             </div>
           </div>
           <button className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
-            Start boost
+            {t('firma.events_start_boost')}
           </button>
         </div>
       </div>
@@ -99,6 +102,7 @@ function BoostModal({ event, onClose }: { event: FirmaEvent; onClose: () => void
 }
 
 export default function FirmaEvents() {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("alle");
   const [showCreate, setShowCreate] = useState(false);
@@ -125,8 +129,8 @@ export default function FirmaEvents() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Events</h1>
-            <p className="text-muted-foreground text-sm mt-1">Administrer dine events og kampagner.</p>
+            <h1 className="text-2xl font-bold">{t('firma.events_title')}</h1>
+            <p className="text-muted-foreground text-sm mt-1">{t('firma.events_subtitle')}</p>
           </div>
           <div className="flex gap-2">
             <div className="flex rounded-lg border border-white/10 overflow-hidden">
@@ -134,7 +138,7 @@ export default function FirmaEvents() {
               <button onClick={() => setViewMode("calendar")} className={`p-2 ${viewMode === "calendar" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"}`}><Calendar size={16} /></button>
             </div>
             <button onClick={() => setShowCreate(!showCreate)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
-              <Plus size={16} /> Opret event
+              <Plus size={16} /> {t('firma.events_create')}
             </button>
           </div>
         </div>
@@ -142,33 +146,33 @@ export default function FirmaEvents() {
         {/* Create event form */}
         {showCreate && (
           <div className="glass-card rounded-xl p-4 space-y-4">
-            <h2 className="font-semibold">Nyt event</h2>
+            <h2 className="font-semibold">{t('firma.events_new')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Titel</label>
-                <input type="text" placeholder="Event titel..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
+                <label className="text-sm text-muted-foreground mb-1 block">{t('firma.events_label_title')}</label>
+                <input type="text" placeholder={t('firma.events_placeholder_title')} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Dato</label>
+                <label className="text-sm text-muted-foreground mb-1 block">{t('firma.events_label_date')}</label>
                 <input type="date" className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Lokation</label>
-                <input type="text" placeholder="Adresse..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
+                <label className="text-sm text-muted-foreground mb-1 block">{t('firma.events_label_location')}</label>
+                <input type="text" placeholder={t('firma.events_placeholder_address')} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Tags</label>
-                <input type="text" placeholder="Tilføj tags..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
+                <label className="text-sm text-muted-foreground mb-1 block">{t('firma.events_label_tags')}</label>
+                <input type="text" placeholder={t('firma.events_placeholder_tags')} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
               </div>
               <div className="md:col-span-2">
-                <label className="text-sm text-muted-foreground mb-1 block">Beskrivelse</label>
-                <textarea rows={3} placeholder="Beskriv dit event..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary resize-none" />
+                <label className="text-sm text-muted-foreground mb-1 block">{t('firma.events_label_description')}</label>
+                <textarea rows={3} placeholder={t('firma.events_placeholder_description')} className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary resize-none" />
               </div>
             </div>
             <div className="flex gap-3">
-              <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">Gem som kladde</button>
-              <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium">Publicer event</button>
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-muted-foreground text-sm">Annuller</button>
+              <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">{t('firma.events_save_draft')}</button>
+              <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium">{t('firma.events_publish')}</button>
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-muted-foreground text-sm">{t('firma.events_cancel')}</button>
             </div>
           </div>
         )}
@@ -177,12 +181,12 @@ export default function FirmaEvents() {
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <Search size={16} className="absolute left-3 top-2.5 text-muted-foreground" />
-            <input type="text" placeholder="Søg events..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
+            <input type="text" placeholder={t('firma.events_search_placeholder')} value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-primary" />
           </div>
           <div className="flex gap-2">
             {(["alle", "aktiv", "draft", "promoted", "afsluttet"] as const).map((s) => (
               <button key={s} onClick={() => setFilterStatus(s)} className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${filterStatus === s ? "bg-primary/15 text-primary" : "bg-white/5 text-muted-foreground hover:text-foreground"}`}>
-                {s === "alle" ? "Alle" : s}
+                {s === "alle" ? t('firma.events_filter_all') : s}
               </button>
             ))}
           </div>
@@ -191,9 +195,9 @@ export default function FirmaEvents() {
         {/* Calendar view */}
         {viewMode === "calendar" && (
           <div className="glass-card rounded-xl p-4">
-            <h3 className="font-semibold mb-3">April 2026</h3>
+            <h3 className="font-semibold mb-3">{t('firma.events_calendar_april_2026')}</h3>
             <div className="grid grid-cols-7 gap-1 text-center">
-              {["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"].map((d) => (
+              {[t('firma.events_day_mon'), t('firma.events_day_tue'), t('firma.events_day_wed'), t('firma.events_day_thu'), t('firma.events_day_fri'), t('firma.events_day_sat'), t('firma.events_day_sun')].map((d) => (
                 <div key={d} className="text-xs text-muted-foreground py-1">{d}</div>
               ))}
               {Array.from({ length: firstDay - 1 }).map((_, i) => (<div key={`e${i}`} />))}
@@ -229,7 +233,7 @@ export default function FirmaEvents() {
                         <div>
                           <p className="text-sm font-medium">{event.title}</p>
                           <div className="flex gap-1 mt-1">
-                            {event.tags.map((t) => (<span key={t} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">{t}</span>))}
+                            {event.tags.map((tag) => (<span key={tag} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">{tag}</span>))}
                           </div>
                         </div>
                       </div>
@@ -250,7 +254,7 @@ export default function FirmaEvents() {
                       <p className="text-sm text-muted-foreground mb-3">{event.description}</p>
                       <div className="mb-3">
                         <div className="flex justify-between text-xs mb-1">
-                          <span className="text-muted-foreground">Tilmeldinger</span>
+                          <span className="text-muted-foreground">{t('firma.events_signups')}</span>
                           <span>{event.signups} / {event.maxSignups}</span>
                         </div>
                         <div className="h-2 rounded-full bg-white/10">
@@ -259,18 +263,18 @@ export default function FirmaEvents() {
                       </div>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
                         <span className="flex items-center gap-1"><MapPin size={12} /> {event.location}</span>
-                        <span className="flex items-center gap-1"><Eye size={12} /> {event.views.toLocaleString()} visninger</span>
+                        <span className="flex items-center gap-1"><Eye size={12} /> {event.views.toLocaleString()} {t('firma.events_views')}</span>
                       </div>
                       <div className="flex gap-2">
-                        <button className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-white/10 flex items-center gap-1"><Edit size={12} /> Redigér</button>
-                        <button className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-white/10 flex items-center gap-1"><Copy size={12} /> Dupliker</button>
+                        <button className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-white/10 flex items-center gap-1"><Edit size={12} /> {t('firma.events_edit')}</button>
+                        <button className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-white/10 flex items-center gap-1"><Copy size={12} /> {t('firma.events_duplicate')}</button>
                         {confirmDelete === event.id ? (
                           <>
-                            <button onClick={() => setConfirmDelete(null)} className="px-3 py-1.5 rounded-lg text-xs bg-red-500/15 text-red-400 border border-red-500/20">Bekræft slet</button>
-                            <button onClick={() => setConfirmDelete(null)} className="px-3 py-1.5 rounded-lg text-xs text-muted-foreground">Annuller</button>
+                            <button onClick={() => setConfirmDelete(null)} className="px-3 py-1.5 rounded-lg text-xs bg-red-500/15 text-red-400 border border-red-500/20">{t('firma.events_confirm_delete')}</button>
+                            <button onClick={() => setConfirmDelete(null)} className="px-3 py-1.5 rounded-lg text-xs text-muted-foreground">{t('firma.events_cancel')}</button>
                           </>
                         ) : (
-                          <button onClick={() => setConfirmDelete(event.id)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-red-500/10 hover:text-red-400 flex items-center gap-1"><Trash2 size={12} /> Slet</button>
+                          <button onClick={() => setConfirmDelete(event.id)} className="px-3 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 hover:bg-red-500/10 hover:text-red-400 flex items-center gap-1"><Trash2 size={12} /> {t('firma.events_delete')}</button>
                         )}
                       </div>
                     </div>

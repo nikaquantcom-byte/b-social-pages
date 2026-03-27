@@ -3,6 +3,7 @@ import { ArrowLeft, User, Bell, Shield, Globe, LogOut, ChevronRight } from "luci
 import { useLocation } from "wouter";
 import { useAuth } from "@/context/AuthContext";
 import { CalmBottomNav } from "@/components/CalmBottomNav";
+import { useTranslation } from 'react-i18next';
 
 function SettingsGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -62,12 +63,13 @@ function ToggleRow({ icon: Icon, label, enabled, onToggle }: {
 }
 
 export default function Indstillinger() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { signOut, user, profile } = useAuth();
   const [notifikationer, setNotifikationer] = useState(true);
   const [privatProfil, setPrivatProfil] = useState(false);
 
-  const displayName = profile?.name || user?.email?.split("@")[0] || "Bruger";
+  const displayName = profile?.name || user?.email?.split("@")[0] || t('settings.default_user');
   const userEmail = profile?.email || user?.email || "";
 
   return (
@@ -78,7 +80,7 @@ export default function Indstillinger() {
     >
       <div className="sticky top-0 z-30 pt-12 pb-3 px-5 flex items-center gap-3" style={{ background: "linear-gradient(to bottom, rgba(10,14,35,0.95) 60%, transparent)" }}>
         <button onClick={() => setLocation("/min-side")} className="w-9 h-9 rounded-full glass-card flex items-center justify-center"><ArrowLeft size={18} className="text-white" /></button>
-        <h1 className="text-white text-xl font-bold">Indstillinger</h1>
+        <h1 className="text-white text-xl font-bold">{t('settings.title')}</h1>
       </div>
 
       <div className="px-5 mt-2 space-y-5">
@@ -94,26 +96,26 @@ export default function Indstillinger() {
         </div>
 
         {/* Account */}
-        <SettingsGroup title="Konto">
-          <SettingsRow icon={User} label="Rediger profil" value={displayName} />
-          <ToggleRow icon={Bell} label="Notifikationer" enabled={notifikationer} onToggle={() => setNotifikationer(!notifikationer)} />
-          <ToggleRow icon={Shield} label="Privat profil" enabled={privatProfil} onToggle={() => setPrivatProfil(!privatProfil)} />
+        <SettingsGroup title={t('settings.account')}>
+          <SettingsRow icon={User} label={t('settings.edit_profile')} value={displayName} />
+          <ToggleRow icon={Bell} label={t('settings.notifications')} enabled={notifikationer} onToggle={() => setNotifikationer(!notifikationer)} />
+          <ToggleRow icon={Shield} label={t('settings.private_profile')} enabled={privatProfil} onToggle={() => setPrivatProfil(!privatProfil)} />
         </SettingsGroup>
 
         {/* Preferences */}
-        <SettingsGroup title="Præferencer">
-          <SettingsRow icon={Globe} label="Sprog" value="Dansk" />
+        <SettingsGroup title={t('settings.preferences')}>
+          <SettingsRow icon={Globe} label={t('settings.language')} value={t('settings.danish')} />
         </SettingsGroup>
 
         {/* Danger zone */}
         <SettingsGroup title="">
-          <SettingsRow icon={LogOut} label="Log ud" onClick={signOut} danger />
+          <SettingsRow icon={LogOut} label={t('settings.log_out')} onClick={signOut} danger />
         </SettingsGroup>
 
         {/* App info */}
         <div className="text-center pt-4 pb-8">
-          <p className="text-white/20 text-[10px]">B-Social v1.0</p>
-          <p className="text-white/15 text-[10px]">Lavet med kærlighed i Danmark</p>
+          <p className="text-white/20 text-[10px]">{t('settings.app_version', { version: '1.0' })}</p>
+          <p className="text-white/15 text-[10px]">{t('settings.made_with_love')}</p>
         </div>
       </div>
       <CalmBottomNav />

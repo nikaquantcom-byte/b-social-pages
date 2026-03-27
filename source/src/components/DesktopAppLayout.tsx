@@ -2,17 +2,19 @@ import { Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import { Home, Compass, MapPin, MessageCircle, User, Bell, Search, Plus, Building2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNotifications } from "@/context/NotificationContext";
 
 const NAV = [
-  { label: "Feed", icon: Home, href: "/" },
-  { label: "Udforsk", icon: Compass, href: "/udforsk" },
-  { label: "Kort", icon: MapPin, href: "/kort" },
-  { label: "Beskeder", icon: MessageCircle, href: "/beskeder" },
-  { label: "Min Side", icon: User, href: "/min-side" },
+  { key: "nav.feed", icon: Home, href: "/" },
+  { key: "nav.udforsk", icon: Compass, href: "/udforsk" },
+  { key: "nav.kort", icon: MapPin, href: "/kort" },
+  { key: "nav.beskeder", icon: MessageCircle, href: "/beskeder" },
+  { key: "nav.min_side", icon: User, href: "/min-side" },
 ];
 
 export default function DesktopAppLayout({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
   const [location] = useHashLocation();
   const { unreadCount } = useNotifications();
 
@@ -50,7 +52,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
                 >
                   <Icon size={18} />
                 </div>
-                {item.label}
+                {t(item.key)}
               </Link>
             );
           })}
@@ -73,7 +75,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
                 </span>
               )}
             </div>
-            Notifikationer
+            {t('nav.notifications')}
           </Link>
 
           {/* Kunde section link */}
@@ -88,7 +90,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
             <div className="w-8 h-8 rounded-lg flex items-center justify-center">
               <Building2 size={18} />
             </div>
-            Kunde
+            {t('nav.kunde')}
           </Link>
         </nav>
 
@@ -117,7 +119,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
                 }`}
               >
                 <Icon size={20} />
-                <span>{item.label}</span>
+                <span>{t(item.key)}</span>
                 {isActive && <div className="w-1 h-1 rounded-full bg-[#4ECDC4] mt-0.5" />}
               </Link>
             );

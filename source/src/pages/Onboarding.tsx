@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "wouter";
 import { useTags } from "@/context/TagContext";
 import { useAuth } from "@/context/AuthContext";
@@ -270,6 +271,7 @@ function SearchResultChip({ node, isSelected, onToggle }: {
 }
 
 export default function Onboarding() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { setCity, setCities, setOnboardingInterests, setSelectedTags: setContextTags, setRadius } = useTags();
   const { user, refreshProfile } = useAuth();
@@ -348,7 +350,7 @@ export default function Onboarding() {
   const selectAllTags = useCallback((tags: string[]) => {
     setSelectedTags(prev => {
       const next = new Set(prev);
-      for (const t of tags) next.add(t);
+      for (const tag of tags) next.add(tag);
       return next;
     });
   }, []);
@@ -357,7 +359,7 @@ export default function Onboarding() {
     setSaving(true);
     const tagArray = [...selectedTags];
     const vibeKeys = [...new Set(
-      tagArray.map(t => getOverkategoriForTag(t)).filter(Boolean) as string[]
+      tagArray.map(tag => getOverkategoriForTag(tag)).filter(Boolean) as string[]
     )];
     const primaryCity = selectedCities[0] || "";
 
@@ -389,7 +391,7 @@ export default function Onboarding() {
   };
 
   const tagCount = selectedTags.size;
-  const radiusLabel = selectedRadius === 0 ? "Hele DK" : `${selectedRadius} km`;
+  const radiusLabel = selectedRadius === 0 ? t('onboarding.all_dk') : `${selectedRadius} km`;
   const radiusCircleSize = selectedRadius === 0 ? 200 : Math.min(80 + (selectedRadius / 200) * 120, 200);
 
   return (
@@ -404,7 +406,7 @@ export default function Onboarding() {
         ))}
       </div>
       <div className="px-8 pb-1">
-        <span className="text-white/25 text-[10px] font-medium">Trin {step} af {totalSteps}</span>
+        <span className="text-white/25 text-[10px] font-medium">{t('common.step_of', { step, total: totalSteps })}</span>
       </div>
 
       <div className="flex-1 px-6 pt-3 pb-8 flex flex-col overflow-hidden">
@@ -416,8 +418,8 @@ export default function Onboarding() {
                 <MapPin size={20} className="text-[#4ECDC4]" />
               </div>
               <div>
-                <h1 className="text-white text-xl font-bold">Hvor vil du opleve?</h1>
-                <p className="text-white/40 text-sm">Vælg en eller flere byer</p>
+                <h1 className="text-white text-xl font-bold">{t('onboarding.where_experience')}</h1>
+                <p className="text-white/40 text-sm">{t('onboarding.select_cities')}</p>
               </div>
             </div>
 
@@ -430,7 +432,7 @@ export default function Onboarding() {
                 value={citySearch}
                 onChange={e => { setCitySearch(e.target.value); setShowCityDropdown(true); }}
                 onFocus={() => citySearch && setShowCityDropdown(true)}
-                placeholder="Skriv by eller postnummer..."
+                placeholder={t('onboarding.city_or_zip')}
                 className="w-full pl-10 pr-10 py-3.5 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
                 data-testid="input-city-search"
               />
@@ -460,14 +462,14 @@ export default function Onboarding() {
                   <div key={city} className="px-3 py-1.5 rounded-full bg-[#4ECDC4]/15 border border-[#4ECDC4]/30 flex items-center gap-1.5 animate-in fade-in duration-200">
                     <MapPin size={12} className="text-[#4ECDC4]" />
                     <span className="text-[#4ECDC4] text-sm font-medium">{city}</span>
-                    {i === 0 && <span className="text-[#4ECDC4]/40 text-[9px]">primær</span>}
+                    {i === 0 && <span className="text-[#4ECDC4]/40 text-[9px]">{t('onboarding.primary')}</span>}
                     <button onClick={() => removeCity(city)} className="ml-0.5 text-[#4ECDC4]/60 hover:text-[#4ECDC4]"><X size={12} /></button>
                   </div>
                 ))}
               </div>
             )}
 
-            <p className="text-white/30 text-xs font-medium uppercase tracking-wider mb-3">Populære byer</p>
+            <p className="text-white/30 text-xs font-medium uppercase tracking-wider mb-3">{t('onboarding.popular_cities')}</p>
             <div className="grid grid-cols-3 gap-2.5">
               {POPULAR_CITIES.map(c => {
                 const active = selectedCities.includes(c.name);
@@ -496,7 +498,7 @@ export default function Onboarding() {
               className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#3dbdb5] active:scale-[0.98] transition-all shadow-lg mt-4"
               data-testid="button-next-step-1"
             >
-              Fortsæt
+              {t('common.continue')}
             </button>
           </>
         )}
@@ -508,8 +510,8 @@ export default function Onboarding() {
                 <Sparkles size={20} className="text-[#4ECDC4]" />
               </div>
               <div>
-                <h1 className="text-white text-xl font-bold">Hvad interesserer dig?</h1>
-                <p className="text-white/40 text-sm">Vælg dine interesser</p>
+                <h1 className="text-white text-xl font-bold">{t('onboarding.what_interests')}</h1>
+                <p className="text-white/40 text-sm">{t('onboarding.select_interests')}</p>
               </div>
             </div>
 
@@ -520,7 +522,7 @@ export default function Onboarding() {
                 type="text"
                 value={tagSearch}
                 onChange={e => setTagSearch(e.target.value)}
-                placeholder="Søg i tags..."
+                placeholder={t('tags.search')}
                 className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-white/8 border border-white/12 text-white text-xs placeholder:text-white/30 focus:outline-none focus:border-[#4ECDC4]/40 transition-all"
                 data-testid="input-tag-search"
               />
@@ -531,8 +533,8 @@ export default function Onboarding() {
 
             {tagCount > 0 && (
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[#4ECDC4] text-[10px] font-bold">{tagCount} valgt</span>
-                <button onClick={() => setSelectedTags(new Set())} className="text-white/30 text-[10px]">Nulstil</button>
+                <span className="text-[#4ECDC4] text-[10px] font-bold">{t('tags.selected_count', { count: tagCount })}</span>
+                <button onClick={() => setSelectedTags(new Set())} className="text-white/30 text-[10px]">{t('tags.reset')}</button>
               </div>
             )}
 
@@ -550,7 +552,7 @@ export default function Onboarding() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-white/25 text-xs text-center py-4">Ingen tags matcher "{tagSearch}"</p>
+                  <p className="text-white/25 text-xs text-center py-4">{t('tags.no_match', { query: tagSearch })}</p>
                 )
               ) : (
                 getOverkategorier().map(over => (
@@ -567,14 +569,14 @@ export default function Onboarding() {
 
             <div className="flex gap-3 mt-3">
               <button onClick={() => setStep(1)} className="px-5 py-3.5 rounded-2xl bg-white/8 text-white/60 font-medium text-sm">
-                Tilbage
+                {t('common.back')}
               </button>
               <button
                 onClick={() => setStep(3)}
                 className="flex-1 py-3.5 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-sm hover:bg-[#3dbdb5] active:scale-[0.98] transition-all shadow-lg"
                 data-testid="button-next-step-2"
               >
-                Fortsæt {tagCount > 0 ? `(${tagCount} valgt)` : "(spring over)"}
+                {tagCount > 0 ? t('onboarding.continue_with', { count: tagCount }) : t('common.continue')}
               </button>
             </div>
           </>
@@ -587,8 +589,8 @@ export default function Onboarding() {
                 <Compass size={20} className="text-[#4ECDC4]" />
               </div>
               <div>
-                <h1 className="text-white text-xl font-bold">Hvor langt vil du rejse?</h1>
-                <p className="text-white/40 text-sm">Sæt din søgeradius</p>
+                <h1 className="text-white text-xl font-bold">{t('onboarding.how_far')}</h1>
+                <p className="text-white/40 text-sm">{t('onboarding.set_radius')}</p>
               </div>
             </div>
 
@@ -599,7 +601,7 @@ export default function Onboarding() {
               >
                 <div className="text-center">
                   <p className="text-[#4ECDC4] font-bold text-2xl">{radiusLabel}</p>
-                  <p className="text-white/30 text-xs">radius</p>
+                  <p className="text-white/30 text-xs">{t('onboarding.radius')}</p>
                 </div>
               </div>
 
@@ -614,7 +616,7 @@ export default function Onboarding() {
                   data-testid="radius-slider"
                 />
                 <div className="flex justify-between mt-2">
-                  <span className="text-white/30 text-xs">Hele DK</span>
+                  <span className="text-white/30 text-xs">{t('onboarding.all_dk')}</span>
                   <span className="text-white/30 text-xs">250 km</span>
                 </div>
               </div>
@@ -624,7 +626,7 @@ export default function Onboarding() {
                   const active = selectedRadius === p.km;
                   return (
                     <button key={p.km} onClick={() => setSelectedRadius(p.km)} className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all flex flex-col items-center min-w-[60px] ${active ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20" : "bg-white/5 text-white/40 border border-white/8 hover:bg-white/10"}`}>
-                      <span>{p.label}</span>
+                      <span>{p.km === 0 ? t('onboarding.all_dk') : p.label}</span>
                       <span className={`text-[9px] mt-0.5 ${active ? "text-white/70" : "text-white/25"}`}>{p.desc}</span>
                     </button>
                   );
@@ -633,10 +635,10 @@ export default function Onboarding() {
             </div>
 
             <div className="rounded-xl bg-white/4 border border-white/8 px-4 py-3 mb-3 mt-4">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider font-semibold mb-2">Din profil</p>
+              <p className="text-white/30 text-[10px] uppercase tracking-wider font-semibold mb-2">{t('onboarding.your_profile')}</p>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="px-2 py-1 rounded-lg bg-white/8 text-white/60 text-[10px] flex items-center gap-1"><MapPin size={10} /> {selectedCities.join(", ")}</span>
-                <span className="px-2 py-1 rounded-lg bg-[#4ECDC4]/15 text-[#4ECDC4] text-[10px] font-semibold">{tagCount} tags</span>
+                <span className="px-2 py-1 rounded-lg bg-[#4ECDC4]/15 text-[#4ECDC4] text-[10px] font-semibold">{t('onboarding.tags_count', { count: tagCount })}</span>
                 <span className="px-2 py-1 rounded-lg bg-white/8 text-white/60 text-[10px]">{radiusLabel}</span>
               </div>
             </div>
@@ -644,9 +646,9 @@ export default function Onboarding() {
             <div className="flex flex-col gap-3">
               <button onClick={handleFinish} disabled={saving} className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg flex items-center justify-center gap-2 disabled:opacity-60" data-testid="button-kom-i-gang-onboarding">
                 {saving && <Loader2 size={18} className="animate-spin" />}
-                {saving ? "Sætter op..." : "Start mit feed"}
+                {saving ? t('onboarding.setting_up') : t('onboarding.start_feed')}
               </button>
-              <button onClick={() => setStep(2)} className="text-white/40 text-sm hover:text-white/60 transition-colors">Tilbage</button>
+              <button onClick={() => setStep(2)} className="text-white/40 text-sm hover:text-white/60 transition-colors">{t('common.back')}</button>
             </div>
           </>
         )}

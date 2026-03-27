@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Building2, CreditCard, Users, FileText, Bell, Globe, Shield, BarChart3, Target, ChevronRight, CheckCircle2, XCircle } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/context/AuthContext";
@@ -64,6 +65,7 @@ function ToggleRow({ icon: Icon, label, enabled, onToggle }: {
 }
 
 export default function FirmaIndstillinger() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { user, profile } = useAuth();
   
@@ -86,7 +88,7 @@ export default function FirmaIndstillinger() {
         <button onClick={() => setLocation("/firma")} className="w-9 h-9 rounded-full glass-card flex items-center justify-center">
           <ArrowLeft size={18} className="text-white" />
         </button>
-        <h1 className="text-white text-xl font-bold">Firma Indstillinger</h1>
+        <h1 className="text-white text-xl font-bold">{t('firma.settings_title')}</h1>
       </div>
 
       <div className="px-5 mt-2 space-y-5">
@@ -101,89 +103,89 @@ export default function FirmaIndstillinger() {
                 <h3 className="text-white font-semibold text-base">{companyName}</h3>
                 {verified && <CheckCircle2 size={16} className="text-[#4ECDC4]" />}
               </div>
-              <p className="text-white/40 text-xs mt-0.5">CVR: 12345678 · Aalborg, Danmark</p>
+              <p className="text-white/40 text-xs mt-0.5">{t('firma.settings_cvr_info')}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#4ECDC4]/15 text-[#4ECDC4]">
                   {subscription}
                 </span>
-                <span className="text-white/30 text-[10px]">· 45 events udgivet</span>
+                <span className="text-white/30 text-[10px]">{t('firma.settings_events_published', { count: 45 })}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Company Settings */}
-        <SettingsGroup title="Firma">
-          <SettingsRow 
-            icon={Building2} 
-            label="Firma oplysninger" 
-            value="Rediger" 
+        <SettingsGroup title={t('firma.settings_group_company')}>
+          <SettingsRow
+            icon={Building2}
+            label={t('firma.settings_company_info')}
+            value={t('firma.settings_edit')}
           />
-          <SettingsRow 
-            icon={Shield} 
-            label="Verifikation" 
-            badge={{ text: "Verificeret", color: "bg-[#4ECDC4]/15 text-[#4ECDC4]" }}
+          <SettingsRow
+            icon={Shield}
+            label={t('firma.settings_verification')}
+            badge={{ text: t('firma.settings_verified'), color: "bg-[#4ECDC4]/15 text-[#4ECDC4]" }}
           />
-          <SettingsRow 
-            icon={Users} 
-            label="Team medlemmer" 
-            value="3 brugere" 
+          <SettingsRow
+            icon={Users}
+            label={t('firma.settings_team_members')}
+            value={t('firma.settings_users_count', { count: 3 })}
           />
         </SettingsGroup>
 
         {/* Subscription & Billing */}
-        <SettingsGroup title="Abonnement & Betaling">
-          <SettingsRow 
-            icon={CreditCard} 
-            label="Abonnement" 
-            value={subscription} 
+        <SettingsGroup title={t('firma.settings_group_subscription')}>
+          <SettingsRow
+            icon={CreditCard}
+            label={t('firma.settings_subscription')}
+            value={subscription}
           />
-          <SettingsRow 
-            icon={FileText} 
-            label="Betalingshistorik" 
+          <SettingsRow
+            icon={FileText}
+            label={t('firma.settings_payment_history')}
           />
-          <SettingsRow 
-            icon={CreditCard} 
-            label="Betalingsmetode" 
-            value="Visa ···· 4242" 
+          <SettingsRow
+            icon={CreditCard}
+            label={t('firma.settings_payment_method')}
+            value="Visa ···· 4242"
           />
         </SettingsGroup>
 
         {/* Features & Automation */}
-        <SettingsGroup title="Funktioner">
-          <ToggleRow 
-            icon={Target} 
-            label="Auto-publicer events" 
-            enabled={autoPublish} 
-            onToggle={() => setAutoPublish(!autoPublish)} 
+        <SettingsGroup title={t('firma.settings_group_features')}>
+          <ToggleRow
+            icon={Target}
+            label={t('firma.settings_auto_publish')}
+            enabled={autoPublish}
+            onToggle={() => setAutoPublish(!autoPublish)}
           />
-          <ToggleRow 
-            icon={BarChart3} 
-            label="Avanceret analytics" 
-            enabled={analyticsEnabled} 
-            onToggle={() => setAnalyticsEnabled(!analyticsEnabled)} 
+          <ToggleRow
+            icon={BarChart3}
+            label={t('firma.settings_advanced_analytics')}
+            enabled={analyticsEnabled}
+            onToggle={() => setAnalyticsEnabled(!analyticsEnabled)}
           />
-          <ToggleRow 
-            icon={Bell} 
-            label="Email notifikationer" 
-            enabled={emailNotifications} 
-            onToggle={() => setEmailNotifications(!emailNotifications)} 
+          <ToggleRow
+            icon={Bell}
+            label={t('firma.settings_email_notifications')}
+            enabled={emailNotifications}
+            onToggle={() => setEmailNotifications(!emailNotifications)}
           />
         </SettingsGroup>
 
         {/* Preferences */}
-        <SettingsGroup title="Præferencer">
-          <SettingsRow 
-            icon={Globe} 
-            label="Sprog" 
-            value="Dansk" 
+        <SettingsGroup title={t('firma.settings_group_preferences')}>
+          <SettingsRow
+            icon={Globe}
+            label={t('firma.settings_language')}
+            value={t('firma.settings_language_danish')}
           />
         </SettingsGroup>
 
         {/* App info */}
         <div className="text-center pt-4 pb-8">
           <p className="text-white/20 text-[10px]">B-Social Business v1.0</p>
-          <p className="text-white/15 text-[10px]">Lavet med kærlighed i Danmark</p>
+          <p className="text-white/15 text-[10px]">{t('firma.settings_made_with_love')}</p>
         </div>
       </div>
     </div>

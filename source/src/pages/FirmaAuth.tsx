@@ -1,39 +1,58 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "wouter";
-import { ArrowLeft, Loader2, Building2, Check } from "lucide-react";
+import { ArrowLeft, Loader2, Building2, Check, Heart, Zap, Crown, Sparkles, Gift } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 
-type Plan = "free" | "starter" | "pro" | "enterprise";
+type Plan = "starter" | "vaekst" | "partner";
 
-const PLANS: { id: Plan; name: string; price: string; features: string[] }[] = [
-  {
-    id: "free",
-    name: "Gratis",
-    price: "0 kr/md",
-    features: ["1 aktiv event", "Basis synlighed", "Firmaprofil"],
-  },
+const PLANS: {
+  id: Plan;
+  nameKey: string;
+  revenueShare: string;
+  revenueSharePct: number;
+  features: string[];
+  idealForKey: string;
+  icon: typeof Heart;
+  color: string;
+  highlight?: boolean;
+}[] = [
   {
     id: "starter",
-    name: "Starter",
-    price: "299 kr/md",
-    features: ["5 events", "Målretning", "Statistik", "Prioriteret support"],
+    nameKey: "pricing.starter",
+    revenueShare: "0%",
+    revenueSharePct: 0,
+    icon: Heart,
+    color: "text-emerald-400",
+    features: ["Op til 3 aktive events", "Basis statistik", "Firmaprofil", "Tag-targeting (basis)"],
+    idealForKey: "Små foreninger, klubber, frivillige",
   },
   {
-    id: "pro",
-    name: "Pro",
-    price: "799 kr/md",
-    features: ["Ubegrænsede events", "Avanceret målretning", "API-adgang", "Kampagneværktøjer"],
+    id: "vaekst",
+    nameKey: "pricing.vaekst",
+    revenueShare: "5%",
+    revenueSharePct: 5,
+    highlight: true,
+    icon: Zap,
+    color: "text-[#4ECDC4]",
+    features: ["Ubegrænsede events", "Fuld analytics", "Avanceret tag-targeting", "Promoted events", "Email support"],
+    idealForKey: "Voksende virksomheder, padel-centre, yoga-studier",
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    price: "Kontakt os",
-    features: ["Alt i Pro", "Dedikeret kontakt", "SLA-garanti", "Brugerdefinerede integrationer"],
+    id: "partner",
+    nameKey: "pricing.partner",
+    revenueShare: "3%",
+    revenueSharePct: 3,
+    icon: Crown,
+    color: "text-purple-400",
+    features: ["Alt i Vækst", "Dedicated account manager", "Custom integrationer", "API-adgang", "Multi-lokation"],
+    idealForKey: "Større arrangører, festivaler, kæder",
   },
 ];
 
 export default function FirmaAuth() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { user, isLoggedIn, refreshProfile } = useAuth();
 
@@ -41,7 +60,7 @@ export default function FirmaAuth() {
   const [cvr, setCvr] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState<Plan>("free");
+  const [selectedPlan, setSelectedPlan] = useState<Plan>("starter");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -86,9 +105,9 @@ export default function FirmaAuth() {
 
       if (companyError) {
         if (companyError.message.includes("duplicate") || companyError.message.includes("unique")) {
-          setError("Et firma med dette CVR-nummer findes allerede.");
+          setError(t('firma.duplicate_cvr'));
         } else {
-          setError("Kunne ikke oprette firma: " + companyError.message);
+          setError(t('firma.create_error', { message: companyError.message }));
         }
         setLoading(false);
         return;
@@ -123,7 +142,7 @@ export default function FirmaAuth() {
       // 5. Redirect to firma dashboard
       setLocation("/firma");
     } catch (err) {
-      setError("Der opstod en uventet fejl. Prøv igen.");
+      setError(t('firma.unexpected_error'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -145,7 +164,7 @@ export default function FirmaAuth() {
       {/* Back button */}
       <div className="pt-12 px-5">
         <button
-          onClick={() => window.history.back()}
+          onClick={() => setLocation("/feed")}
           className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/15 transition-colors"
         >
           <ArrowLeft size={18} className="text-white" />
@@ -158,20 +177,24 @@ export default function FirmaAuth() {
           <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4">
             <Building2 size={28} className="text-[#4ECDC4]" />
           </div>
-          <h1 className="text-white text-2xl font-bold">Bliv firma på B-Social</h1>
+          <h1 className="text-white text-2xl font-bold">{t('firma.become_firma')}</h1>
           <p className="text-white/50 text-sm mt-1 text-center">
-            Opret din virksomhedsprofil og nå ud til aktive brugere
+            {t('firma.start_free')}
           </p>
+          <div className="flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <Gift size={12} className="text-emerald-400" />
+            <span className="text-emerald-400 text-xs font-bold">{t('firma.all_plans_free_badge')}</span>
+          </div>
         </div>
 
         {!isLoggedIn() && (
           <div className="p-4 rounded-2xl bg-yellow-500/15 border border-yellow-500/25 text-yellow-300 text-sm text-center mb-6">
-            Du skal være logget ind for at oprette en firmakonto.{" "}
+            {t('auth.must_be_logged_in')}{" "}
             <span
               className="underline cursor-pointer font-semibold"
               onClick={() => setLocation("/auth")}
             >
-              Log ind her
+              {t('auth.login_here')}
             </span>
           </div>
         )}
@@ -186,10 +209,10 @@ export default function FirmaAuth() {
 
           {/* Company info */}
           <div className="space-y-4">
-            <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider">Firmaoplysninger</h2>
+            <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider">{t('firma.company_info')}</h2>
 
             <div className="space-y-1">
-              <label className="text-white/60 text-xs font-medium pl-1">Firmanavn</label>
+              <label className="text-white/60 text-xs font-medium pl-1">{t('firma.company_name')}</label>
               <input
                 type="text"
                 value={companyName}
@@ -201,7 +224,7 @@ export default function FirmaAuth() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-white/60 text-xs font-medium pl-1">CVR-nummer</label>
+              <label className="text-white/60 text-xs font-medium pl-1">{t('firma.cvr')}</label>
               <input
                 type="text"
                 value={cvr}
@@ -215,7 +238,7 @@ export default function FirmaAuth() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-white/60 text-xs font-medium pl-1">Firma-e-mail</label>
+                <label className="text-white/60 text-xs font-medium pl-1">{t('firma.company_email')}</label>
                 <input
                   type="email"
                   value={email}
@@ -226,7 +249,7 @@ export default function FirmaAuth() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-white/60 text-xs font-medium pl-1">Telefon (valgfrit)</label>
+                <label className="text-white/60 text-xs font-medium pl-1">{t('firma.phone_optional')}</label>
                 <input
                   type="tel"
                   value={phone}
@@ -238,37 +261,61 @@ export default function FirmaAuth() {
             </div>
           </div>
 
-          {/* Plan selection */}
+          {/* Plan selection — 3 new tiers */}
           <div className="space-y-3">
-            <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider">Vælg plan</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {PLANS.map((plan) => (
-                <button
-                  key={plan.id}
-                  type="button"
-                  onClick={() => setSelectedPlan(plan.id)}
-                  className={`relative p-4 rounded-2xl border text-left transition-all ${
-                    selectedPlan === plan.id
-                      ? "bg-[#4ECDC4]/15 border-[#4ECDC4]/50 ring-1 ring-[#4ECDC4]/30"
-                      : "bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20"
-                  }`}
-                >
-                  {selectedPlan === plan.id && (
-                    <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#4ECDC4] flex items-center justify-center">
-                      <Check size={12} className="text-white" />
+            <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider">{t('firma.choose_plan')}</h2>
+            <p className="text-white/30 text-xs">{t('firma.all_plans_free')}</p>
+            <div className="grid grid-cols-1 gap-3">
+              {PLANS.map((plan) => {
+                const Icon = plan.icon;
+                return (
+                  <button
+                    key={plan.id}
+                    type="button"
+                    onClick={() => setSelectedPlan(plan.id)}
+                    className={`relative p-4 rounded-2xl border text-left transition-all ${
+                      selectedPlan === plan.id
+                        ? "bg-[#4ECDC4]/15 border-[#4ECDC4]/50 ring-1 ring-[#4ECDC4]/30"
+                        : "bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20"
+                    }`}
+                  >
+                    {selectedPlan === plan.id && (
+                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#4ECDC4] flex items-center justify-center">
+                        <Check size={12} className="text-white" />
+                      </div>
+                    )}
+                    {plan.highlight && (
+                      <div className="absolute top-3 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold uppercase">
+                        {t('pricing.popular')}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 mb-1">
+                      <Icon size={16} className={plan.color} />
+                      <span className="text-white font-semibold text-sm">{t(plan.nameKey)}</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                        {t('pricing.free_badge')}
+                      </span>
                     </div>
-                  )}
-                  <div className="text-white font-semibold text-sm">{plan.name}</div>
-                  <div className="text-[#4ECDC4] text-xs font-medium mt-0.5">{plan.price}</div>
-                  <ul className="mt-2 space-y-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="text-white/40 text-xs">
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </button>
-              ))}
+                    <div className="flex items-center gap-2 mt-1 mb-2">
+                      <Sparkles size={12} className={plan.color} />
+                      <span className="text-white/70 text-xs font-medium">
+                        {plan.revenueSharePct === 0
+                          ? t('pricing.no_revenue_share')
+                          : t('pricing.revenue_share_of', { pct: plan.revenueShare })}
+                      </span>
+                    </div>
+                    <ul className="space-y-1">
+                      {plan.features.map((f) => (
+                        <li key={f} className="text-white/40 text-xs flex items-center gap-1.5">
+                          <Check size={10} className="text-[#4ECDC4] shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-white/25 text-[10px] mt-2">{t('pricing.ideal_for', { audience: plan.idealForKey })}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -279,12 +326,12 @@ export default function FirmaAuth() {
             className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 size={18} className="animate-spin" />}
-            {loading ? "Opretter firma..." : "Opret firmakonto"}
+            {loading ? t('firma.creating_company') : t('firma.create_account_free')}
           </button>
         </form>
 
         <p className="text-center text-white/30 text-xs mt-6 leading-relaxed">
-          Ved at oprette en firmakonto accepterer du vores{" "}
+          {t('auth.terms')}{" "}
           <span
             className="text-white/50 underline cursor-pointer"
             onClick={() => setLocation("/vilkaar")}
@@ -296,7 +343,7 @@ export default function FirmaAuth() {
             className="text-white/50 underline cursor-pointer"
             onClick={() => setLocation("/privatlivspolitik")}
           >
-            privatlivspolitik
+            {t('auth.privacy')}
           </span>
         </p>
       </div>

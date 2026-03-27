@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { ArrowLeft, MapPin, Star, Share2, Bookmark, ExternalLink, Navigation, Clock, Accessibility, Info, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { CalmBottomNav } from "@/components/CalmBottomNav";
 import { supabase, type Place } from "@/lib/supabase";
 
@@ -53,7 +54,7 @@ function getHeroImage(place: Place): string {
     ...(place.tags || []),
     ...(place.main_categories || []),
     (place.metadata as any)?.facility_type || "",
-  ].map(t => t.toLowerCase());
+  ].map(item => item.toLowerCase());
 
   for (const term of allTerms) {
     for (const [key, url] of Object.entries(HERO_IMAGES)) {
@@ -64,6 +65,7 @@ function getHeroImage(place: Place): string {
 }
 
 export default function StedDetail() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/sted/:id");
   const rawId = params?.id || "";
@@ -99,8 +101,8 @@ export default function StedDetail() {
       <div className="relative min-h-svh pb-24 flex items-center justify-center" style={{ background: "#0D1220" }}>
         <div className="text-center">
           <span className="text-4xl mb-3 block">🔍</span>
-          <p className="text-white/60 text-sm mb-4">Stedet blev ikke fundet</p>
-          <button onClick={() => setLocation("/kort")} className="text-[#4ECDC4] text-sm font-medium">Tilbage til Kort</button>
+          <p className="text-white/60 text-sm mb-4">{t('place.not_found')}</p>
+          <button onClick={() => setLocation("/kort")} className="text-[#4ECDC4] text-sm font-medium">{t('place.back_to_map')}</button>
         </div>
         <CalmBottomNav />
       </div>
@@ -162,7 +164,7 @@ export default function StedDetail() {
           )}
           {meta.handicap && meta.handicap.includes("Handicapegnet") && (
             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-white/60 text-xs">
-              <Accessibility size={12} /> Handicapvenlig
+              <Accessibility size={12} /> {t('place.accessible')}
             </span>
           )}
           {meta.facility_type && (
@@ -180,8 +182,8 @@ export default function StedDetail() {
         {/* Tags */}
         {place.tags && place.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-5">
-            {place.tags.filter(t => t !== place.city).slice(0, 8).map(t => (
-              <span key={t} className="px-2.5 py-1 rounded-full bg-[#4ECDC4]/10 text-[#4ECDC4] text-[11px] font-medium">{t}</span>
+            {place.tags.filter(tag => tag !== place.city).slice(0, 8).map(tag => (
+              <span key={tag} className="px-2.5 py-1 rounded-full bg-[#4ECDC4]/10 text-[#4ECDC4] text-[11px] font-medium">{tag}</span>
             ))}
           </div>
         )}
@@ -189,7 +191,7 @@ export default function StedDetail() {
         {/* Action buttons */}
         <div className="flex gap-3 mb-6">
           <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#4ECDC4] text-white font-semibold text-sm hover:bg-[#0ea572] transition-colors shadow-lg shadow-[#4ECDC4]/30">
-            <Navigation size={16} /> Vis rute
+            <Navigation size={16} /> {t('place.show_route')}
           </a>
           <button className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl glass-card text-white/70 font-semibold text-sm hover:bg-white/10 transition-colors">
             <Bookmark size={16} />
@@ -201,13 +203,13 @@ export default function StedDetail() {
           <div className="space-y-2 mb-6">
             {meta.booking_link && meta.booking_link.trim() && (
               <a href={meta.booking_link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-4 py-3 rounded-xl glass-card hover:bg-white/10 transition-colors">
-                <span className="text-white/70 text-sm font-medium">Book overnatning</span>
+                <span className="text-white/70 text-sm font-medium">{t('place.book_accommodation')}</span>
                 <ExternalLink size={14} className="text-white/40" />
               </a>
             )}
             {meta.external_link && meta.external_link.trim() && (
               <a href={meta.external_link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-4 py-3 rounded-xl glass-card hover:bg-white/10 transition-colors">
-                <span className="text-white/70 text-sm font-medium">Læs mere</span>
+                <span className="text-white/70 text-sm font-medium">{t('place.read_more')}</span>
                 <ExternalLink size={14} className="text-white/40" />
               </a>
             )}
@@ -234,7 +236,7 @@ export default function StedDetail() {
         {/* Organization info */}
         {meta.organization && meta.organization.trim() && (
           <div className="glass-card rounded-xl p-4 mb-6">
-            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Ansvarlig</p>
+            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">{t('place.responsible')}</p>
             <p className="text-white/70 text-sm">{meta.organization}</p>
           </div>
         )}

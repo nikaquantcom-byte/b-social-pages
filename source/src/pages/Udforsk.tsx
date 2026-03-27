@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef } from "react";
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from "wouter";
 import { Search, MapPin, ChevronRight, X, Users, Heart, TrendingUp, Star, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -29,6 +30,7 @@ const BRUGERE = [
 
 /* ── Horizontal scroll event card ── */
 function PopularCard({ event }: { event: Event }) {
+  const { t } = useTranslation();
   const isGratis = !event.price || event.price === 0;
   return (
     <Link href={`/event/${event.id}`}>
@@ -37,7 +39,7 @@ function PopularCard({ event }: { event: Event }) {
           <img src={getEventImage(event)} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${isGratis ? "bg-[#4ECDC4]/80 text-white" : "bg-amber-500/80 text-white"}`}>
-            {isGratis ? "Gratis" : `${event.price} kr`}
+            {isGratis ? t('events.free') : `${event.price} kr`}
           </span>
         </div>
         <div className="p-2.5">
@@ -53,6 +55,7 @@ function PopularCard({ event }: { event: Event }) {
 
 /* ── Wide card for "Sker snart" calendar list ── */
 function CalendarListCard({ event }: { event: Event }) {
+  const { t } = useTranslation();
   const isGratis = !event.price || event.price === 0;
   return (
     <Link href={`/event/${event.id}`}>
@@ -64,7 +67,7 @@ function CalendarListCard({ event }: { event: Event }) {
           <div className="flex items-center gap-1.5 mb-0.5">
             <span className="text-[10px] text-white/50">{getCategoryEmoji(event.category || "")} {event.category}</span>
             <span className={`px-1.5 py-0 rounded-full text-[10px] font-semibold ${isGratis ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" : "bg-amber-500/20 text-amber-400"}`}>
-              {isGratis ? "Gratis" : `${event.price} kr`}
+              {isGratis ? t('events.free') : `${event.price} kr`}
             </span>
           </div>
           <h3 className="text-white text-sm font-semibold line-clamp-1">{event.title}</h3>
@@ -84,6 +87,7 @@ function CalendarListCard({ event }: { event: Event }) {
 
 /* ── Trending social item ── */
 function TrendingCard({ activity }: { activity: SocialActivity }) {
+  const { t } = useTranslation();
   return (
     <Link href={`/social/${activity.id}`}>
       <div className="glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/8 transition-all">
@@ -97,7 +101,7 @@ function TrendingCard({ activity }: { activity: SocialActivity }) {
             <span className="flex items-center gap-0.5 text-white/40 text-[10px]"><Users size={8} />{activity.spots.current}/{activity.spots.total}</span>
           </div>
         </div>
-        <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4] text-white text-[9px] font-bold flex-shrink-0">Gratis</span>
+        <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4] text-white text-[9px] font-bold flex-shrink-0">{t('events.free')}</span>
       </div>
     </Link>
   );
@@ -140,8 +144,8 @@ function PlaceCard({ place }: { place: Place }) {
           </div>
           {place.tags && place.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1.5">
-              {place.tags.slice(0, 3).map(t => (
-                <span key={t} className="px-1.5 py-0.5 rounded-full bg-white/8 text-white/40 text-[8px]">{t}</span>
+              {place.tags.slice(0, 3).map(tag => (
+                <span key={tag} className="px-1.5 py-0.5 rounded-full bg-white/8 text-white/40 text-[8px]">{tag}</span>
               ))}
             </div>
           )}
@@ -168,6 +172,7 @@ const PLACE_CAT_EMOJI: Record<string, string> = {
 };
 
 function SupabasePlacesSection() {
+  const { t } = useTranslation();
   const [dbFilter, setDbFilter] = useState<string | null>(null);
   const { data: places, isLoading } = useQuery<Place[]>({
     queryKey: ["supabase-places-50"],
@@ -180,9 +185,9 @@ function SupabasePlacesSection() {
     if (!dbFilter) return places;
     return places.filter(p => {
       const cats = (p.main_categories || []).map(c => c.toLowerCase());
-      const tags = (p.tags || []).map(t => t.toLowerCase());
+      const tags = (p.tags || []).map(tag => tag.toLowerCase());
       const all = [...cats, ...tags];
-      return all.some(t => t.includes(dbFilter));
+      return all.some(item => item.includes(dbFilter));
     });
   }, [places, dbFilter]);
 
@@ -190,10 +195,10 @@ function SupabasePlacesSection() {
     <section className="px-5">
       <div className="flex items-center gap-2 mb-3">
         <span className="text-sm">📍</span>
-        <h2 className="text-white font-semibold text-sm">Steder i dit område</h2>
+        <h2 className="text-white font-semibold text-sm">{t('udforsk.places_in_area')}</h2>
       </div>
       <div className="flex items-center gap-2 text-white/40 text-xs">
-        <Loader2 size={14} className="animate-spin" /> Henter steder...
+        <Loader2 size={14} className="animate-spin" /> {t('udforsk.fetching_places')}
       </div>
     </section>
   );
@@ -205,12 +210,12 @@ function SupabasePlacesSection() {
       <div className="flex items-center justify-between px-5 mb-2">
         <div className="flex items-center gap-2">
           <span className="text-sm">📍</span>
-          <h2 className="text-white font-semibold text-sm">Steder i dit område</h2>
+          <h2 className="text-white font-semibold text-sm">{t('udforsk.places_in_area')}</h2>
           <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold">{places.length}</span>
         </div>
         <Link href="/kort">
           <span className="text-white/30 text-xs flex items-center gap-0.5 hover:text-white/60 transition-colors cursor-pointer">
-            Kort <ChevronRight size={12} />
+            {t('nav.kort')} <ChevronRight size={12} />
           </span>
         </Link>
       </div>
@@ -259,7 +264,7 @@ function SupabasePlacesSection() {
       </div>
       {filteredPlaces.length === 0 && (
         <div className="px-5 py-4 text-center">
-          <span className="text-white/40 text-xs">Ingen steder i denne kategori</span>
+          <span className="text-white/40 text-xs">{t('udforsk.no_places_category')}</span>
         </div>
       )}
     </section>
@@ -268,6 +273,7 @@ function SupabasePlacesSection() {
 
 /* ═══════════════════ UDFORSK ═══════════════════ */
 export default function Udforsk() {
+  const { t } = useTranslation();
   const { selectedTags } = useTags();
   const [, setLocation] = useLocation();
   const [search, setSearch] = useState("");
@@ -289,7 +295,7 @@ export default function Udforsk() {
     let expandedTerms: string[] = q ? [q] : [];
     if (q) {
       const tagResults = searchTags(q);
-      expandedTerms = [q, ...tagResults.map(t => t.tag.toLowerCase()), ...tagResults.map(t => t.label.toLowerCase())];
+      expandedTerms = [q, ...tagResults.map(tr => tr.tag.toLowerCase()), ...tagResults.map(tr => tr.label.toLowerCase())];
     }
     
     return allEvents.filter((e) => {
@@ -298,11 +304,11 @@ export default function Udforsk() {
           (e.title || "").toLowerCase().includes(term) ||
           (e.description || "").toLowerCase().includes(term) ||
           (e.location || "").toLowerCase().includes(term) ||
-          (e.interest_tags || []).some(t => t.toLowerCase().includes(term)) ||
+          (e.interest_tags || []).some(tag => tag.toLowerCase().includes(term)) ||
           (e.category || "").toLowerCase().includes(term)
         );
       const matchCat = !activeCategory ||
-        (e.interest_tags || []).some(t => t.toLowerCase().includes(activeCategory)) ||
+        (e.interest_tags || []).some(tag => tag.toLowerCase().includes(activeCategory)) ||
         (e.category || "").toLowerCase().includes(activeCategory);
       return matchSearch && matchCat;
     });
@@ -333,8 +339,8 @@ export default function Udforsk() {
       {/* ── Header ── */}
       <div className="sticky top-0 z-30 pt-12 pb-3 px-5" style={{ background: "linear-gradient(to bottom, #0D1220 80%, transparent)" }}>
         <div className="mb-3">
-          <h1 className="text-white text-2xl font-bold">Udforsk</h1>
-          <p className="text-white/50 text-sm">Find din næste oplevelse</p>
+          <h1 className="text-white text-2xl font-bold">{t('udforsk.title')}</h1>
+          <p className="text-white/50 text-sm">{t('udforsk.subtitle')}</p>
         </div>
 
         {/* Big search bar */}
@@ -343,7 +349,7 @@ export default function Udforsk() {
           <input
             ref={searchRef}
             type="search"
-            placeholder="Søg events, steder, tags..."
+            placeholder={t('udforsk.search_placeholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setSearchFocused(true)}
@@ -361,7 +367,7 @@ export default function Udforsk() {
       {/* ═══ SEARCH OVERLAY: tags when focused ═══ */}
       {searchFocused && !search && (
         <div className="px-5 pb-4">
-          <p className="text-white/50 text-[11px] uppercase tracking-wider font-semibold mb-2.5">Hvad fanger dig?</p>
+          <p className="text-white/50 text-[11px] uppercase tracking-wider font-semibold mb-2.5">{t('udforsk.what_catches_you')}</p>
           <div className="flex flex-wrap gap-2">
             {getParentCategories().map((dt) => (
               <button key={dt.tag} onClick={() => pickTag(dt.tag)}
@@ -383,17 +389,17 @@ export default function Udforsk() {
             if (results.length === 0) return null;
             return (
               <div>
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">Kategorier</p>
+                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.categories')}</p>
                 <div className="flex flex-wrap gap-2">
-                  {results.slice(0, 6).map((t) => {
-                    const isParentCat = TAG_TREE.some(p => p.tag === t.tag);
+                  {results.slice(0, 6).map((tr) => {
+                    const isParentCat = TAG_TREE.some(p => p.tag === tr.tag);
                     return (
-                      <button key={t.tag} onClick={() => pickTag(t.tag)}
+                      <button key={tr.tag} onClick={() => pickTag(tr.tag)}
                         className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium hover:bg-white/15 transition-all ${
                           isParentCat ? "glass-card text-white/90 border-white/20" : "bg-white/5 text-white/70 hover:text-white"
                         }`}>
-                        <span>{t.emoji}</span>
-                        <span>{t.label}</span>
+                        <span>{tr.emoji}</span>
+                        <span>{tr.label}</span>
                       </button>
                     );
                   })}
@@ -405,12 +411,12 @@ export default function Udforsk() {
           {/* Events */}
           {filtered.length > 0 && (
             <div>
-              <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">Events</p>
+              <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_events')}</p>
               <div className="space-y-2">
                 {filtered.slice(0, 3).map(e => <CalendarListCard key={e.id} event={e} />)}
               </div>
               {filtered.length > 3 && (
-                <button className="text-[#4ECDC4] text-xs font-medium mt-2">Se alle {filtered.length} events →</button>
+                <button className="text-[#4ECDC4] text-xs font-medium mt-2">{t('events.see_all_events', {count: filtered.length})}</button>
               )}
             </div>
           )}
@@ -419,13 +425,13 @@ export default function Udforsk() {
           {(() => {
             const q = search.toLowerCase();
             const tagResults = searchTags(q);
-            const expandedPlaceTerms = [q, ...tagResults.map(t => t.tag.toLowerCase()), ...tagResults.map(t => t.label.toLowerCase())];
-            const matchedPlaces = ALL_PINS.filter(p => expandedPlaceTerms.some(term => p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term) || (p.tags && p.tags.some(t => t.toLowerCase().includes(term))))).slice(0, 3);
+            const expandedPlaceTerms = [q, ...tagResults.map(tr => tr.tag.toLowerCase()), ...tagResults.map(tr => tr.label.toLowerCase())];
+            const matchedPlaces = ALL_PINS.filter(p => expandedPlaceTerms.some(term => p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term) || (p.tags && p.tags.some(tag => tag.toLowerCase().includes(term))))).slice(0, 3);
             if (matchedPlaces.length === 0) return null;
             const catEmoji: Record<string, string> = { sport: "⚽", kultur: "🎭", natur: "🌿", musik: "🎵", mad: "🍽️", spil: "🎲", events: "🎉", mtb: "🚵", vandring: "🥾", loeb: "🏃", hund: "🐕", fiskeri: "🎣", badning: "🏊", shelter: "⛺", dyrespot: "🦌", kreativt: "🖌️", fitness: "💪", outdoor: "🌲", socialt: "❤️", karriere: "💼", tech: "💻", rejser: "🚆", logi: "🏕️", wellness: "🧘", communities: "👥", ture: "🥾", aktiv: "⚽" };
             return (
               <div>
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">Steder</p>
+                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_places')}</p>
                 <div className="space-y-2">
                   {matchedPlaces.map(p => (
                     <Link key={p.id} href="/kort">
@@ -451,7 +457,7 @@ export default function Udforsk() {
             if (matchedUsers.length === 0) return null;
             return (
               <div>
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">Brugere</p>
+                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_users')}</p>
                 <div className="space-y-2">
                   {matchedUsers.map(b => (
                     <div key={b.name} className="flex items-center gap-3 p-2.5 rounded-xl glass-card hover:bg-white/8 transition-colors cursor-pointer">
@@ -468,7 +474,7 @@ export default function Udforsk() {
           {filtered.length === 0 && searchTags(search).length === 0 && (
             <div className="text-center py-8">
               <span className="text-3xl">🔍</span>
-              <p className="text-white/50 text-sm mt-2">Ingen resultater for "{search}"</p>
+              <p className="text-white/50 text-sm mt-2">{t('udforsk.no_results', {query: search})}</p>
             </div>
           )}
         </div>
@@ -481,8 +487,8 @@ export default function Udforsk() {
           {/* Active category indicator */}
           {activeCategory && (
             <div className="mx-5 flex items-center justify-between glass-card rounded-2xl px-4 py-2.5">
-              <span className="text-white text-sm font-medium">{getCategoryEmoji(activeCategory)} Viser: {activeCategory}</span>
-              <button onClick={() => setActiveCategory(null)} className="text-[#4ECDC4] text-xs font-medium">Vis alle ×</button>
+              <span className="text-white text-sm font-medium">{getCategoryEmoji(activeCategory)} {t('events.showing', {category: activeCategory})}</span>
+              <button onClick={() => setActiveCategory(null)} className="text-[#4ECDC4] text-xs font-medium">{t('events.show_all')}</button>
             </div>
           )}
 
@@ -491,7 +497,7 @@ export default function Udforsk() {
             <section className="px-5">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm">🗂️</span>
-                <h2 className="text-white font-semibold text-sm">Kategorier</h2>
+                <h2 className="text-white font-semibold text-sm">{t('udforsk.categories')}</h2>
               </div>
               <div className="flex flex-wrap gap-2">
                 {ALL_CATEGORIES.map((cat) => (
@@ -516,7 +522,7 @@ export default function Udforsk() {
           <section className="px-5">
             <div className="flex items-center gap-2 mb-3">
               <TrendingUp size={14} className="text-[#4ECDC4]" />
-              <h2 className="text-white font-semibold text-sm">Trending nær dig</h2>
+              <h2 className="text-white font-semibold text-sm">{t('udforsk.trending_nearby')}</h2>
             </div>
             <div className="space-y-2">
               {trendingSocial.map((s) => <TrendingCard key={s.id} activity={s} />)}
@@ -527,8 +533,8 @@ export default function Udforsk() {
           {popular.length > 0 && (
             <section>
               <div className="flex items-center justify-between px-5 mb-2.5">
-                <h2 className="text-white font-semibold text-sm">🔥 Populære oplevelser</h2>
-                <span className="text-white/30 text-xs flex items-center gap-0.5">Se alle <ChevronRight size={12} /></span>
+                <h2 className="text-white font-semibold text-sm">🔥 {t('events.popular_experiences')}</h2>
+                <span className="text-white/30 text-xs flex items-center gap-0.5">{t('events.see_all')} <ChevronRight size={12} /></span>
               </div>
               <div className="flex gap-3 overflow-x-auto px-5 pb-1" style={{ scrollbarWidth: "none" }}>
                 {popular.map(e => <PopularCard key={e.id} event={e} />)}
@@ -539,7 +545,7 @@ export default function Udforsk() {
           {/* ── Sker snart: calendar-style list ── */}
           {comingSoon.length > 0 && (
             <section className="px-5">
-              <h2 className="text-white font-semibold text-sm mb-3">📅 Sker snart</h2>
+              <h2 className="text-white font-semibold text-sm mb-3">📅 {t('events.coming_soon')}</h2>
               <div className="space-y-2">
                 {comingSoon.map(e => <CalendarListCard key={e.id} event={e} />)}
               </div>
@@ -550,8 +556,8 @@ export default function Udforsk() {
           {activeCategory && filtered.length === 0 && (
             <div className="flex flex-col items-center py-16 text-center px-5">
               <span className="text-4xl mb-3">🔍</span>
-              <p className="text-white/60 text-sm">Ingen oplevelser fundet</p>
-              <button onClick={() => setActiveCategory(null)} className="mt-2 text-[#4ECDC4] text-sm font-medium">Vis alle kategorier</button>
+              <p className="text-white/60 text-sm">{t('events.no_experiences_found')}</p>
+              <button onClick={() => setActiveCategory(null)} className="mt-2 text-[#4ECDC4] text-sm font-medium">{t('events.show_all_categories')}</button>
             </div>
           )}
         </div>

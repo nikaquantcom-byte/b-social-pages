@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/context/AuthContext";
 import { bindReferral } from "@/hooks/useReferral";
 import { supabase } from "@/lib/supabase";
 
 export default function Auth() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { signIn, signUp } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -26,19 +28,19 @@ export default function Auth() {
     if (mode === "login") {
       const { error: authError } = await signIn(email, password);
       if (authError) {
-        setError("Forkert e-mail eller adgangskode. Prøv igen.");
+        setError(t('auth.error_wrong_credentials'));
         setLoading(false);
       } else {
         setLocation("/feed");
       }
     } else {
       if (!name.trim()) {
-        setError("Skriv dit navn");
+        setError(t('auth.error_name_required'));
         setLoading(false);
         return;
       }
       if (password.length < 6) {
-        setError("Adgangskode skal være mindst 6 tegn");
+        setError(t('auth.error_password'));
         setLoading(false);
         return;
       }
@@ -47,13 +49,13 @@ export default function Auth() {
       if (authError) {
         const msg = authError.message;
         if (msg.includes("already registered")) {
-          setError("Denne e-mail er allerede registreret. Prøv at logge ind.");
+          setError(t('auth.error_already_registered'));
         } else {
           setError(msg);
         }
         setLoading(false);
       } else if (needsConfirmation) {
-        setSuccessMsg("Tjek din e-mail for at bekræfte din konto, og log derefter ind.");
+        setSuccessMsg(t('auth.verify_email'));
         setMode("login");
         setLoading(false);
       } else {
@@ -104,12 +106,12 @@ export default function Auth() {
             </svg>
           </div>
           <h1 className="text-white text-2xl font-bold">
-            {mode === "login" ? "Log ind" : "Opret konto"}
+            {mode === "login" ? t('auth.login') : t('auth.signup')}
           </h1>
           <p className="text-white/50 text-sm mt-1">
             {mode === "login"
-              ? "Velkommen tilbage til B-Social"
-              : "Bliv en del af B-Social"}
+              ? t('auth.welcome_back')
+              : t('auth.join_bsocial')}
           </p>
         </div>
 
@@ -128,12 +130,12 @@ export default function Auth() {
 
           {mode === "signup" && (
             <div className="space-y-1">
-              <label className="text-white/60 text-xs font-medium pl-1">Navn</label>
+              <label className="text-white/60 text-xs font-medium pl-1">{t('auth.name')}</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Dit navn"
+                placeholder={t('auth.your_name')}
                 required
                 className="w-full px-4 py-3.5 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
                 data-testid="input-name"
@@ -142,7 +144,7 @@ export default function Auth() {
           )}
 
           <div className="space-y-1">
-            <label className="text-white/60 text-xs font-medium pl-1">E-mail</label>
+            <label className="text-white/60 text-xs font-medium pl-1">{t('auth.email')}</label>
             <input
               type="email"
               value={email}
@@ -155,13 +157,13 @@ export default function Auth() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-white/60 text-xs font-medium pl-1">Adgangskode</label>
+            <label className="text-white/60 text-xs font-medium pl-1">{t('auth.password')}</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
+                placeholder="••••••••"
                 required
                 minLength={6}
                 className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
@@ -177,7 +179,7 @@ export default function Auth() {
               </button>
             </div>
             {mode === "signup" && (
-              <p className="text-white/30 text-xs pl-1">Mindst 6 tegn</p>
+              <p className="text-white/30 text-xs pl-1">{t('auth.min_password')}</p>
             )}
           </div>
 
@@ -189,14 +191,14 @@ export default function Auth() {
           >
             {loading && <Loader2 size={18} className="animate-spin" />}
             {loading
-              ? (mode === "login" ? "Logger ind..." : "Opretter...")
-              : (mode === "login" ? "Log ind" : "Opret konto")}
+              ? (mode === "login" ? t('auth.logging_in') : t('auth.creating'))
+              : (mode === "login" ? t('auth.login') : t('auth.signup'))}
           </button>
         </form>
 
         {/* Toggle mode */}
         <p className="text-center text-white/50 text-sm mt-5">
-          {mode === "login" ? "Har du ikke en konto? " : "Har du allerede en konto? "}
+          {mode === "login" ? t('auth.no_account') + " " : t('auth.has_account') + " "}
           <span
             className="text-[#4ECDC4] font-semibold cursor-pointer hover:underline"
             onClick={() => {
@@ -206,14 +208,14 @@ export default function Auth() {
             }}
             data-testid="link-toggle-mode"
           >
-            {mode === "login" ? "Opret konto" : "Log ind"}
+            {mode === "login" ? t('auth.signup') : t('auth.login')}
           </span>
         </p>
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-5">
           <div className="flex-1 h-px bg-white/10" />
-          <span className="text-white/30 text-xs">eller</span>
+          <span className="text-white/30 text-xs">{t('auth.or')}</span>
           <div className="flex-1 h-px bg-white/10" />
         </div>
 
@@ -236,7 +238,7 @@ export default function Auth() {
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          Fortsæt med Google
+          {t('auth.google')}
         </button>
 
         {/* Continue without login */}
@@ -245,13 +247,13 @@ export default function Auth() {
           className="w-full py-3.5 rounded-2xl glass-card text-white/60 font-medium text-sm hover:text-white hover:bg-white/10 transition-all"
           data-testid="button-continue-without-login"
         >
-          Fortsæt uden login
+          {t('auth.guest')}
         </button>
 
         <p className="text-center text-white/30 text-xs mt-6 leading-relaxed">
-          Ved at oprette en konto accepterer du vores{" "}
-          <span className="text-white/50 underline cursor-pointer">vilkår</span> og{" "}
-          <span className="text-white/50 underline cursor-pointer">privatlivspolitik</span>
+          {t('auth.terms_agree')}{" "}
+          <span className="text-white/50 underline cursor-pointer">{t('auth.terms')}</span> og{" "}
+          <span className="text-white/50 underline cursor-pointer">{t('auth.privacy')}</span>
         </p>
       </div>
     </div>

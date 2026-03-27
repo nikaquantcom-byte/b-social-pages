@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowLeft, Plus, Search, X } from "lucide-react";
 import { useLocation } from "wouter";
+import { useTranslation } from 'react-i18next';
 import { CalmBottomNav } from "@/components/CalmBottomNav";
 
 interface Note {
@@ -79,13 +80,14 @@ const DEMO_NOTES: Note[] = [
   },
 ];
 
-const TYPE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
-  event: { bg: "bg-[#4ECDC4]/15", text: "text-[#4ECDC4]", label: "Oplevelse" },
-  person: { bg: "bg-blue-500/15", text: "text-blue-400", label: "Person" },
-  ide: { bg: "bg-amber-500/15", text: "text-amber-400", label: "Ide" },
+const TYPE_COLORS: Record<string, { bg: string; text: string; labelKey: string }> = {
+  event: { bg: "bg-[#4ECDC4]/15", text: "text-[#4ECDC4]", labelKey: "notes.type_experience" },
+  person: { bg: "bg-blue-500/15", text: "text-blue-400", labelKey: "notes.type_person" },
+  ide: { bg: "bg-amber-500/15", text: "text-amber-400", labelKey: "notes.type_idea" },
 };
 
 export default function Noter() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<string | null>(null);
@@ -106,7 +108,7 @@ export default function Noter() {
     >
       <div className="sticky top-0 z-30 pt-12 pb-3 px-5 flex items-center gap-3" style={{ background: "linear-gradient(to bottom, rgba(10,14,35,0.95) 60%, transparent)" }}>
         <button onClick={() => setLocation("/min-side")} className="w-9 h-9 rounded-full glass-card flex items-center justify-center"><ArrowLeft size={18} className="text-white" /></button>
-        <h1 className="text-white text-xl font-bold flex-1">Noter</h1>
+        <h1 className="text-white text-xl font-bold flex-1">{t('notes.title')}</h1>
         <button className="w-9 h-9 rounded-full bg-[#4ECDC4] flex items-center justify-center">
           <Plus size={18} className="text-white" />
         </button>
@@ -118,7 +120,7 @@ export default function Noter() {
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
           <input
             type="text"
-            placeholder="Søg i noter..."
+            placeholder={t('notes.search_placeholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-white/8 border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
@@ -134,10 +136,10 @@ export default function Noter() {
         {/* Type filters */}
         <div className="flex gap-2">
           {[
-            { key: null, label: "Alle", count: DEMO_NOTES.length },
-            { key: "event", label: "Oplevelser", count: DEMO_NOTES.filter(n => n.type === "event").length },
-            { key: "person", label: "Personer", count: DEMO_NOTES.filter(n => n.type === "person").length },
-            { key: "ide", label: "Ideer", count: DEMO_NOTES.filter(n => n.type === "ide").length },
+            { key: null, labelKey: "notes.filter_all", count: DEMO_NOTES.length },
+            { key: "event", labelKey: "notes.filter_experiences", count: DEMO_NOTES.filter(n => n.type === "event").length },
+            { key: "person", labelKey: "notes.filter_persons", count: DEMO_NOTES.filter(n => n.type === "person").length },
+            { key: "ide", labelKey: "notes.filter_ideas", count: DEMO_NOTES.filter(n => n.type === "ide").length },
           ].map((f) => (
             <button
               key={f.key || "alle"}
@@ -148,7 +150,7 @@ export default function Noter() {
                   : "glass-card text-white/50 hover:text-white"
               }`}
             >
-              {f.label} ({f.count})
+              {t(f.labelKey)} ({f.count})
             </button>
           ))}
         </div>
@@ -167,7 +169,7 @@ export default function Noter() {
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-white text-sm font-semibold">{note.title}</h3>
                       <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${colors.bg} ${colors.text}`}>
-                        {colors.label}
+                        {t(colors.labelKey)}
                       </span>
                     </div>
                     <p className="text-white/50 text-xs leading-relaxed">{note.content}</p>
@@ -181,7 +183,7 @@ export default function Noter() {
           {filtered.length === 0 && (
             <div className="glass-card rounded-2xl p-8 text-center">
               <span className="text-3xl">📝</span>
-              <p className="text-white/50 text-sm mt-2">Ingen noter fundet</p>
+              <p className="text-white/50 text-sm mt-2">{t('notes.no_notes_found')}</p>
             </div>
           )}
         </div>

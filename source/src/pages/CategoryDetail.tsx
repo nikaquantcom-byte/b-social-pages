@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useLocation, useRoute, Link } from "wouter";
 import { ArrowLeft, MapPin, Users, Star, ChevronDown, ChevronRight, Search, X, Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
 import { getEvents } from "@/lib/data";
 import { getCategoryEmoji, getEventImage, formatDanishDate } from "@/lib/eventHelpers";
@@ -73,7 +74,7 @@ function getSmartSuggestions(query: string, categoryKey: string): TagNode[] {
     // Check parent match
     if (parent.tag.includes(q) || parent.label.toLowerCase().includes(q)) {
       // Only show if relevant to this category
-      if (relatedTags.includes(parent.tag) || relatedTags.some(t => parent.children?.some(c => c.tag === t))) {
+      if (relatedTags.includes(parent.tag) || relatedTags.some(item => parent.children?.some(c => c.tag === item))) {
         if (!seen.has(parent.tag)) {
           results.push({ tag: parent.tag, emoji: parent.emoji, label: parent.label });
           seen.add(parent.tag);
@@ -113,6 +114,7 @@ function getSmartSuggestions(query: string, categoryKey: string): TagNode[] {
    ═══════════════════════════════════════════════ */
 
 function SpotsBar({ current, total }: { current: number; total: number }) {
+  const { t } = useTranslation();
   const remaining = total - current;
   const pct = Math.round((current / total) * 100);
   const almostFull = remaining <= 2;
@@ -121,7 +123,7 @@ function SpotsBar({ current, total }: { current: number; total: number }) {
       <div className="flex items-center justify-between mb-0.5">
         <span className="text-[10px] text-white/50 flex items-center gap-1"><Users size={9} />{current}/{total}</span>
         <span className={`text-[10px] font-semibold ${almostFull ? "text-orange-400" : "text-[#4ECDC4]"}`}>
-          {remaining} tilbage
+          {t('category.spots_remaining', { count: remaining })}
         </span>
       </div>
       <div className="h-1 rounded-full bg-white/10 overflow-hidden">
@@ -132,13 +134,14 @@ function SpotsBar({ current, total }: { current: number; total: number }) {
 }
 
 /* ── Compact card — used for both steder and aktiviteter in the grid ── */
-function CompactCard({ 
-  image, title, subtitle, badge, rating, distance, tags, spots, onJoin, isJoined, emoji 
-}: { 
-  image: string; title: string; subtitle: string; badge?: { text: string; color: string }; 
-  rating?: number; distance?: string; tags?: string[]; 
+function CompactCard({
+  image, title, subtitle, badge, rating, distance, tags, spots, onJoin, isJoined, emoji
+}: {
+  image: string; title: string; subtitle: string; badge?: { text: string; color: string };
+  rating?: number; distance?: string; tags?: string[];
   spots?: { current: number; total: number }; onJoin?: () => void; isJoined?: boolean; emoji?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="glass-card rounded-2xl overflow-hidden">
       <div className="relative h-28">
@@ -171,8 +174,8 @@ function CompactCard({
         </div>
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
-            {tags.slice(0, 2).map(t => (
-              <span key={t} className="px-1.5 py-0.5 rounded-full bg-white/6 text-white/35 text-[9px]">{t}</span>
+            {tags.slice(0, 2).map(tag => (
+              <span key={tag} className="px-1.5 py-0.5 rounded-full bg-white/6 text-white/35 text-[9px]">{tag}</span>
             ))}
           </div>
         )}
@@ -188,7 +191,7 @@ function CompactCard({
                 : "bg-[#4ECDC4]/15 text-[#4ECDC4] hover:bg-[#4ECDC4]/25"
             }`}
           >
-            {isJoined ? "Afmeld" : "Deltag"}
+            {isJoined ? t('category.unsubscribe') : t('category.join')}
           </button>
         )}
       </div>
@@ -198,6 +201,7 @@ function CompactCard({
 
 /* ── Event mini-card ── */
 function EventMiniCard({ event }: { event: Event }) {
+  const { t } = useTranslation();
   const isGratis = !event.price || event.price === 0;
   return (
     <Link href={`/event/${event.id}`}>
@@ -210,7 +214,7 @@ function EventMiniCard({ event }: { event: Event }) {
           <div className="flex items-center gap-1.5 mt-0.5">
             <span className="text-white/40 text-[10px]">{formatDanishDate(event.date)}</span>
             <span className={`px-1 py-0 rounded text-[9px] font-semibold ${isGratis ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" : "bg-amber-500/20 text-amber-400"}`}>
-              {isGratis ? "Gratis" : `${event.price} kr`}
+              {isGratis ? t('events.free') : `${event.price} ${t('events.currency')}`}
             </span>
           </div>
         </div>
@@ -221,6 +225,7 @@ function EventMiniCard({ event }: { event: Event }) {
 
 /* ── Supabase place card (improved) ── */
 function SupabasePlaceCard({ place }: { place: Place }) {
+  const { t } = useTranslation();
   const isFree = place.smart_tags?.includes("gratis");
   return (
     <div className="glass-card rounded-2xl overflow-hidden">
@@ -228,7 +233,7 @@ function SupabasePlaceCard({ place }: { place: Place }) {
         <div className="flex items-start justify-between mb-1">
           <h3 className="text-white text-[13px] font-semibold line-clamp-2 flex-1 pr-2">{place.name}</h3>
           {isFree && (
-            <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold whitespace-nowrap">Gratis</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold whitespace-nowrap">{t('events.free')}</span>
           )}
         </div>
         <div className="flex items-center gap-1.5 mb-1.5">
@@ -248,8 +253,8 @@ function SupabasePlaceCard({ place }: { place: Place }) {
         <p className="text-white/30 text-[10px] line-clamp-2 mb-1.5">{place.description}</p>
         {place.tags && place.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
-            {place.tags.slice(0, 3).map(t => (
-              <span key={t} className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/8 text-[#4ECDC4]/60 text-[8px]">{t}</span>
+            {place.tags.slice(0, 3).map(tag => (
+              <span key={tag} className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/8 text-[#4ECDC4]/60 text-[8px]">{tag}</span>
             ))}
           </div>
         )}
@@ -310,6 +315,7 @@ const AVATARS = [
 ];
 
 function ActiveUsers({ count }: { count: number }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center gap-1.5">
       <div className="flex -space-x-2">
@@ -317,7 +323,7 @@ function ActiveUsers({ count }: { count: number }) {
           <img key={i} src={a} alt="" className="w-5 h-5 rounded-full border-2 border-[#0d1117] object-cover" />
         ))}
       </div>
-      <span className="text-white/40 text-[10px]">+{count} aktive</span>
+      <span className="text-white/40 text-[10px]">+{count} {t('category.active_users')}</span>
     </div>
   );
 }
@@ -340,6 +346,7 @@ function SuggestionChip({ node, onClick }: { node: TagNode; onClick: () => void 
    CATEGORY DETAIL PAGE — Smart Search Redesign
    ═══════════════════════════════════════════════ */
 export default function CategoryDetail() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [, params] = useRoute("/kategori/:category");
   const category = params?.category || "";
@@ -395,24 +402,24 @@ export default function CategoryDetail() {
     
     return evts.filter(e => {
       const eCat = (e.category || "").toLowerCase();
-      const tags = (e.interest_tags || []).map(t => t.toLowerCase());
+      const tags = (e.interest_tags || []).map(item => item.toLowerCase());
       const title = (e.title || "").toLowerCase();
       const desc = (e.description || "").toLowerCase();
       
       // Category match (broad)
-      const matchesCat = eCat.includes(catLower) || tags.some(t => t.includes(catLower));
+      const matchesCat = eCat.includes(catLower) || tags.some(item => item.includes(catLower));
       
       if (!matchesCat) return false;
       
       // Search filter
       if (q) {
-        const matchesQ = title.includes(q) || desc.includes(q) || tags.some(t => t.includes(q)) || eCat.includes(q);
+        const matchesQ = title.includes(q) || desc.includes(q) || tags.some(item => item.includes(q)) || eCat.includes(q);
         if (!matchesQ) return false;
       }
       
       // Sub filter
       if (subLower) {
-        return eCat.includes(subLower) || tags.some(t => t.includes(subLower)) || title.includes(subLower) || desc.includes(subLower);
+        return eCat.includes(subLower) || tags.some(item => item.includes(subLower)) || title.includes(subLower) || desc.includes(subLower);
       }
       
       return true;
@@ -427,8 +434,8 @@ export default function CategoryDetail() {
     
     return supabasePlaces.filter(p => {
       const cats = (p.main_categories || []).map(c => c.toLowerCase());
-      const tags = (p.tags || []).map(t => t.toLowerCase());
-      const smartTags = (p.smart_tags || []).map(t => t.toLowerCase());
+      const tags = (p.tags || []).map(item => item.toLowerCase());
+      const smartTags = (p.smart_tags || []).map(item => item.toLowerCase());
       const name = p.name.toLowerCase();
       const desc = (p.description || "").toLowerCase();
       const allText = [...cats, ...tags, ...smartTags, name, desc];
@@ -441,20 +448,20 @@ export default function CategoryDetail() {
         const catLabel = (catData?.label || "").toLowerCase();
         if (catLabel && c.includes(catLabel)) return true;
         return false;
-      }) || tags.some(t => relatedTags.includes(t)) || smartTags.some(t => relatedTags.includes(t));
+      }) || tags.some(item => relatedTags.includes(item)) || smartTags.some(item => relatedTags.includes(item));
       
       if (!matchesCat) return false;
       
       // Search filter — smart: expand query through tag tree
       if (q) {
         // Direct text match
-        const directMatch = allText.some(t => t.includes(q));
+        const directMatch = allText.some(item => item.includes(q));
         if (directMatch) return true;
         
         // Tag tree expansion: if user types "jazz", also match "musik", "koncert" etc.
         const tagResults = searchTags(q);
-        const expandedTerms = tagResults.map(t => t.tag.toLowerCase());
-        return tags.some(t => expandedTerms.includes(t)) || smartTags.some(t => expandedTerms.includes(t));
+        const expandedTerms = tagResults.map(item => item.tag.toLowerCase());
+        return tags.some(item => expandedTerms.includes(item)) || smartTags.some(item => expandedTerms.includes(item));
       }
       
       // Price filter
@@ -490,13 +497,13 @@ export default function CategoryDetail() {
     if (q) {
       // Smart search: expand through tag tree
       const tagResults = searchTags(q);
-      const expandedTerms = [q, ...tagResults.map(t => t.tag.toLowerCase()), ...tagResults.map(t => t.label.toLowerCase())];
-      
+      const expandedTerms = [q, ...tagResults.map(item => item.tag.toLowerCase()), ...tagResults.map(item => item.label.toLowerCase())];
+
       result = result.filter(p =>
         expandedTerms.some(term =>
           p.name.toLowerCase().includes(term) ||
           p.description.toLowerCase().includes(term) ||
-          p.tags.some(t => t.toLowerCase().includes(term))
+          p.tags.some(tag => tag.toLowerCase().includes(term))
         )
       );
     }
@@ -510,13 +517,13 @@ export default function CategoryDetail() {
     const q = searchQuery.toLowerCase().trim();
     if (q) {
       const tagResults = searchTags(q);
-      const expandedTerms = [q, ...tagResults.map(t => t.tag.toLowerCase()), ...tagResults.map(t => t.label.toLowerCase())];
-      
+      const expandedTerms = [q, ...tagResults.map(item => item.tag.toLowerCase()), ...tagResults.map(item => item.label.toLowerCase())];
+
       result = result.filter(a =>
         expandedTerms.some(term =>
           a.title.toLowerCase().includes(term) ||
           a.description.toLowerCase().includes(term) ||
-          a.tags.some(t => t.toLowerCase().includes(term))
+          a.tags.some(tag => tag.toLowerCase().includes(term))
         )
       );
     }
@@ -583,7 +590,7 @@ export default function CategoryDetail() {
             <>
               <h1 className="text-white text-xl font-bold">{emoji} {label}</h1>
               <div className="flex items-center gap-3 mt-1">
-                <span className="text-white/50 text-xs">{totalContent} oplevelser</span>
+                <span className="text-white/50 text-xs">{totalContent} {t('category.experiences')}</span>
                 <ActiveUsers count={subcats.length * 15 + 20} />
               </div>
             </>
@@ -596,7 +603,7 @@ export default function CategoryDetail() {
         <div className="px-5 mt-3 mb-2">
           <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
             <SubChip
-              label="Alle"
+              label={t('category.all')}
               emoji={emoji}
               active={!activeSub}
               count={places.length + activities.length}
@@ -627,7 +634,7 @@ export default function CategoryDetail() {
               value={searchQuery}
               onChange={e => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
               onFocus={() => searchQuery.length > 0 && setShowSuggestions(true)}
-              placeholder={`Søg i ${label}...`}
+              placeholder={t('category.search_in', { label })}
               className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#4ECDC4]/40 focus:bg-white/8 transition-all"
               data-testid="search-input"
             />
@@ -649,7 +656,7 @@ export default function CategoryDetail() {
             }`}
             data-testid="btn-gratis"
           >
-            Gratis
+            {t('events.free')}
           </button>
           <button
             onClick={() => setPriceFilter(priceFilter === "premium" ? "alle" : "premium")}
@@ -660,7 +667,7 @@ export default function CategoryDetail() {
             }`}
             data-testid="btn-premium"
           >
-            Premium
+            {t('category.premium')}
           </button>
         </div>
 
@@ -669,7 +676,7 @@ export default function CategoryDetail() {
           <div className="absolute left-5 right-5 mt-1.5 z-20 glass-card rounded-xl border border-white/10 p-2.5 shadow-xl shadow-black/40">
             <div className="flex items-center gap-1.5 mb-2">
               <Sparkles size={12} className="text-[#4ECDC4]" />
-              <span className="text-white/40 text-[10px] font-medium">Forslag i {label}</span>
+              <span className="text-white/40 text-[10px] font-medium">{t('category.suggestions_in', { label })}</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {suggestions.map(s => (
@@ -681,13 +688,13 @@ export default function CategoryDetail() {
 
         {hasActiveFilter && (
           <div className="flex items-center justify-between mt-2">
-            <span className="text-white/40 text-xs">{totalContent} resultater</span>
+            <span className="text-white/40 text-xs">{totalContent} {t('category.results')}</span>
             <button
               onClick={() => { setSearchQuery(""); setPriceFilter("alle"); setShowSuggestions(false); }}
               className="text-[#4ECDC4] text-xs font-medium"
               data-testid="clear-filter-btn"
             >
-              Nulstil
+              {t('category.reset')}
             </button>
           </div>
         )}
@@ -698,7 +705,7 @@ export default function CategoryDetail() {
 
         {/* ── Supabase steder (real data first!) ── */}
         {matchingSupabasePlaces.length > 0 && (
-          <Section title="Steder i Danmark" icon="📍" count={matchingSupabasePlaces.length} badge={{ text: `${matchingSupabasePlaces.length}`, color: "bg-[#4ECDC4]/20 text-[#4ECDC4]" }} defaultOpen={true}>
+          <Section title={t('category.places_in_denmark')} icon="📍" count={matchingSupabasePlaces.length} badge={{ text: `${matchingSupabasePlaces.length}`, color: "bg-[#4ECDC4]/20 text-[#4ECDC4]" }} defaultOpen={true}>
             <div className="grid grid-cols-2 gap-2.5 px-5">
               {matchingSupabasePlaces.slice(0, 12).map(p => (
                 <SupabasePlaceCard key={p.id} place={p} />
@@ -707,7 +714,7 @@ export default function CategoryDetail() {
             {matchingSupabasePlaces.length > 12 && (
               <div className="px-5 mt-2">
                 <button className="w-full py-2 rounded-xl bg-white/5 text-white/40 text-xs hover:bg-white/10 transition-colors">
-                  Vis alle {matchingSupabasePlaces.length} steder
+                  {t('category.show_all_places', { count: matchingSupabasePlaces.length })}
                 </button>
               </div>
             )}
@@ -716,7 +723,7 @@ export default function CategoryDetail() {
 
         {/* ── Hardcoded steder — 2-column compact grid ── */}
         {filteredPlaces.length > 0 && (
-          <Section title="Steder" icon="🏟️" count={filteredPlaces.length} defaultOpen={true}>
+          <Section title={t('category.places')} icon="🏟️" count={filteredPlaces.length} defaultOpen={true}>
             <div className="grid grid-cols-2 gap-2.5 px-5">
               {filteredPlaces.map(p => (
                 <CompactCard
@@ -724,7 +731,7 @@ export default function CategoryDetail() {
                   image={p.image}
                   title={p.name}
                   subtitle={p.description}
-                  badge={p.isFree ? { text: "Gratis", color: "bg-[#4ECDC4]/80" } : p.price ? { text: `${p.price} kr`, color: "bg-amber-500/80" } : undefined}
+                  badge={p.isFree ? { text: t('events.free'), color: "bg-[#4ECDC4]/80" } : p.price ? { text: `${p.price} ${t('events.currency')}`, color: "bg-amber-500/80" } : undefined}
                   rating={p.rating}
                   distance={p.distance}
                   tags={p.tags}
@@ -736,7 +743,7 @@ export default function CategoryDetail() {
 
         {/* ── Gratis aktiviteter — compact grid ── */}
         {freeActivities.length > 0 && (
-          <Section title="Gratis" icon="🎯" count={freeActivities.length} badge={{ text: `${freeActivities.length}`, color: "bg-[#4ECDC4]/20 text-[#4ECDC4]" }} defaultOpen={true}>
+          <Section title={t('events.free')} icon="🎯" count={freeActivities.length} badge={{ text: `${freeActivities.length}`, color: "bg-[#4ECDC4]/20 text-[#4ECDC4]" }} defaultOpen={true}>
             <div className="grid grid-cols-2 gap-2.5 px-5">
               {freeActivities.map(a => (
                 <CompactCard
@@ -745,7 +752,7 @@ export default function CategoryDetail() {
                   title={a.title}
                   subtitle={a.description}
                   emoji={a.emoji}
-                  badge={{ text: "Gratis", color: "bg-[#4ECDC4]/80" }}
+                  badge={{ text: t('events.free'), color: "bg-[#4ECDC4]/80" }}
                   distance={a.distance}
                   spots={a.spots}
                   onJoin={() => isJoined(a.id) ? leaveEvent(a.id) : joinEvent(a.id, a.title)}
@@ -758,7 +765,7 @@ export default function CategoryDetail() {
 
         {/* ── Betalte oplevelser — compact grid ── */}
         {paidActivities.length > 0 && (
-          <Section title="Oplevelser" icon="💎" count={paidActivities.length} badge={{ text: `${paidActivities.length}`, color: "bg-amber-500/20 text-amber-400" }} defaultOpen={true}>
+          <Section title={t('category.paid_experiences')} icon="💎" count={paidActivities.length} badge={{ text: `${paidActivities.length}`, color: "bg-amber-500/20 text-amber-400" }} defaultOpen={true}>
             <div className="grid grid-cols-2 gap-2.5 px-5">
               {paidActivities.map(a => (
                 <CompactCard
@@ -767,7 +774,7 @@ export default function CategoryDetail() {
                   title={a.title}
                   subtitle={a.description}
                   emoji={a.emoji}
-                  badge={{ text: `${a.price} kr`, color: "bg-amber-500/80" }}
+                  badge={{ text: `${a.price} ${t('events.currency')}`, color: "bg-amber-500/80" }}
                   distance={a.distance}
                   spots={a.spots}
                   onJoin={() => isJoined(a.id) ? leaveEvent(a.id) : joinEvent(a.id, a.title)}
@@ -780,7 +787,7 @@ export default function CategoryDetail() {
 
         {/* ── Events from events.json ── */}
         {matchingEvents.length > 0 && (
-          <Section title="Kommende events" icon="🎪" count={matchingEvents.length} defaultOpen={matchingEvents.length <= 4}>
+          <Section title={t('category.upcoming_events')} icon="🎪" count={matchingEvents.length} defaultOpen={matchingEvents.length <= 4}>
             <div className="space-y-2 px-5">
               {matchingEvents.map(e => <EventMiniCard key={e.id} event={e} />)}
             </div>
@@ -792,18 +799,18 @@ export default function CategoryDetail() {
           <div className="flex flex-col items-center py-16 text-center px-5">
             <span className="text-4xl mb-3">🔍</span>
             <p className="text-white/60 text-sm">
-              {hasActiveFilter ? "Ingen resultater med valgte filtre" : "Ingen oplevelser fundet endnu"}
+              {hasActiveFilter ? t('category.no_results_with_filters') : t('category.no_experiences_yet')}
             </p>
             <p className="text-white/30 text-xs mt-1">
-              {hasActiveFilter ? "Prøv at ændre søgning eller filter" : "Vær den første — opret en aktivitet"}
+              {hasActiveFilter ? t('category.try_changing_filters') : t('category.be_first_create_activity')}
             </p>
             {hasActiveFilter ? (
               <button onClick={() => { setSearchQuery(""); setPriceFilter("alle"); }} className="mt-3 text-[#4ECDC4] text-sm font-medium">
-                Nulstil filtre
+                {t('category.reset_filters')}
               </button>
             ) : (
               <button onClick={() => setActiveSub(null)} className="mt-3 text-[#4ECDC4] text-sm font-medium">
-                Vis alle i {label}
+                {t('category.show_all_in', { label })}
               </button>
             )}
           </div>

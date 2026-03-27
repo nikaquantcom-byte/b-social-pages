@@ -17,27 +17,29 @@ import {
     Users,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const NAV_ITEMS = [
-  { path: "/firma", label: "Overblik", icon: LayoutDashboard },
-  { path: "/firma/events", label: "Events", icon: CalendarPlus },
-    { path: "/firma/rekruttering", label: "Rekruttering", icon: Users },
-  { path: "/firma/targeting", label: "Tag-targeting", icon: Target },
-  { path: "/firma/analytics", label: "Analytics", icon: BarChart3 },
-  { path: "/firma/fakturering", label: "Fakturering", icon: CreditCard },
-  { path: "/firma/indstillinger", label: "Indstillinger", icon: Settings },
+  { path: "/firma", labelKey: "firma.nav_overview", icon: LayoutDashboard },
+  { path: "/firma/events", labelKey: "firma.nav_events", icon: CalendarPlus },
+    { path: "/firma/rekruttering", labelKey: "firma.nav_recruitment", icon: Users },
+  { path: "/firma/targeting", labelKey: "firma.nav_tag_targeting", icon: Target },
+  { path: "/firma/analytics", labelKey: "firma.nav_analytics", icon: BarChart3 },
+  { path: "/firma/fakturering", labelKey: "firma.nav_billing", icon: CreditCard },
+  { path: "/firma/indstillinger", labelKey: "firma.nav_settings", icon: Settings },
 ];
 
 export default function FirmaLayout({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
   const [location] = useHashLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 
   const NOTIFICATIONS = [
-    { id: 1, text: "Ny tilmelding til 'Sommertræning i parken'", time: "2 min siden", unread: true },
-    { id: 2, text: "Event 'MTB tur' nåede 2.000 visninger", time: "1 time siden", unread: true },
-    { id: 3, text: "3 nye følgere denne uge", time: "3 timer siden", unread: false },
-    { id: 4, text: "Faktura INV-2026-003 er betalt", time: "1 dag siden", unread: false },
+    { id: 1, text: t('firma.notif_new_signup'), time: t('firma.notif_time_2min'), unread: true },
+    { id: 2, text: t('firma.notif_event_views'), time: t('firma.notif_time_1hour'), unread: true },
+    { id: 3, text: t('firma.notif_new_followers'), time: t('firma.notif_time_3hours'), unread: false },
+    { id: 4, text: t('firma.notif_invoice_paid'), time: t('firma.notif_time_1day'), unread: false },
   ];
   const unreadCount = NOTIFICATIONS.filter((n) => n.unread).length;
 
@@ -56,7 +58,7 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
               </div>
               <div>
                 <p className="font-bold text-sm leading-tight">AktivNord Padel</p>
-                <p className="text-[10px] text-muted-foreground">Pro plan</p>
+                <p className="text-[10px] text-muted-foreground">{t('firma.pro_plan')}</p>
               </div>
             </div>
             <button onClick={() => setMobileOpen(false)} className="lg:hidden text-muted-foreground hover:text-foreground">
@@ -90,7 +92,7 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
                 >
                   <Icon size={17} strokeWidth={isActive ? 2.5 : 1.8} />
                 </div>
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             );
           })}
@@ -105,13 +107,13 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
             <div className="w-8 h-8 rounded-lg flex items-center justify-center">
               <ArrowLeft size={17} strokeWidth={1.8} />
             </div>
-            Tilbage til app
+            {t('firma.back_to_app')}
           </Link>
           <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center">
               <LogOut size={17} strokeWidth={1.8} />
             </div>
-            Log ud
+            {t('firma.log_out')}
           </button>
         </div>
       </aside>
@@ -154,7 +156,7 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
               {notifOpen && (
                 <div className="absolute right-0 top-full mt-2 w-80 glass-card rounded-xl shadow-xl border border-white/10 overflow-hidden z-50">
                   <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
-                    <span className="font-semibold text-sm">Notifikationer</span>
+                    <span className="font-semibold text-sm">{t('firma.notifications')}</span>
                     <button onClick={() => setNotifOpen(false)} className="text-muted-foreground hover:text-foreground">
                       <X size={14} />
                     </button>
@@ -176,7 +178,7 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
                     ))}
                   </div>
                   <div className="px-4 py-2 border-t border-white/10">
-                    <button className="text-xs text-primary hover:underline">Marker alle som læst</button>
+                    <button className="text-xs text-primary hover:underline">{t('firma.mark_all_read')}</button>
                   </div>
                 </div>
               )}

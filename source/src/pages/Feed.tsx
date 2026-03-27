@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import { Search, Bell, MapPin, ChevronRight, Users, Heart, X, Plus, Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
 import { getEvents } from "@/lib/data";
 import { fetchNewestPlaces, type Place } from "@/lib/supabase";
@@ -11,6 +12,7 @@ import { FeedTagEditor } from "@/components/FeedTagEditor";
 import { CalmBottomNav } from "@/components/CalmBottomNav";
 import { searchTags } from "@/lib/tagTree";
 import { ALL_CATEGORIES } from "@/data/categories";
+import i18n from "@/lib/i18n";
 
 import { OPLEVELSER_NAER_DIG, AMBASSADORS } from "@/data/feedData";
 import type { SocialActivity, Ambassador } from "@/data/feedData";
@@ -23,13 +25,14 @@ import { toast } from "@/hooks/use-toast";
 
 function getGreeting(): string {
   const h = new Date().getHours();
-  if (h >= 5 && h < 12) return "God morgen";
-  if (h >= 12 && h < 18) return "God eftermiddag";
-  return "God aften";
+  if (h >= 5 && h < 12) return i18n.t("greeting.morning");
+  if (h >= 12 && h < 18) return i18n.t("greeting.afternoon");
+  return i18n.t("greeting.evening");
 }
 
 /* ── Horizontal event card (compact, for scroll rows) ── */
 function HorizontalEventCard({ activity }: { activity: SocialActivity }) {
+  const { t } = useTranslation();
   const { joinEvent, leaveEvent, isJoined } = useJoin();
   const joined = isJoined(activity.id);
 
@@ -40,7 +43,7 @@ function HorizontalEventCard({ activity }: { activity: SocialActivity }) {
           <img src={activity.image} alt={activity.title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <span className={`absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full text-white text-[10px] font-bold ${activity.price ? "bg-amber-500/90" : "bg-[#4ECDC4]"}`}>
-            {activity.price ? `${activity.price} kr` : "Gratis"}
+            {activity.price ? `${activity.price} kr` : t('events.free')}
           </span>
           <div className="absolute bottom-2.5 left-3 right-3">
             <h3 className="text-white text-sm font-bold leading-tight line-clamp-2">{activity.title}</h3>
@@ -69,7 +72,7 @@ function HorizontalEventCard({ activity }: { activity: SocialActivity }) {
                 : "bg-[#4ECDC4]/20 text-[#4ECDC4] hover:bg-[#4ECDC4]/30"
             }`}
           >
-            {joined ? "Tilmeldt ✓" : "Deltag"}
+            {joined ? t('events.joined') : t('events.join')}
           </button>
         </div>
       </div>
@@ -79,6 +82,7 @@ function HorizontalEventCard({ activity }: { activity: SocialActivity }) {
 
 /* ── Premium event card (horizontal scroll) ── */
 function PremiumEventCard({ event }: { event: Event }) {
+  const { t } = useTranslation();
   const price = event.price || 0;
   return (
     <Link href={`/event/${event.id}`}>
@@ -87,7 +91,7 @@ function PremiumEventCard({ event }: { event: Event }) {
           <img src={getEventImage(event)} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
           <span className={`absolute top-2 right-2 px-2 py-0.5 rounded-full text-[9px] font-bold text-white ${price > 0 ? "bg-amber-500/90" : "bg-[#4ECDC4]"}`}>
-            {price > 0 ? `${price} kr` : "Gratis"}
+            {price > 0 ? `${price} kr` : t('events.free')}
           </span>
           <div className="absolute bottom-0 left-0 right-0 p-2.5">
             <h3 className="text-white text-xs font-bold line-clamp-2 leading-tight">{event.title}</h3>
@@ -103,6 +107,7 @@ function PremiumEventCard({ event }: { event: Event }) {
 
 /* ── Newest place row ── */
 function NewPlaceRow({ place }: { place: Place }) {
+  const { t } = useTranslation();
   const catEmoji: Record<string, string> = {
     natur: "🌿", aktiv_sport: "🏃", mad_hangout: "🍽️", sport: "⚽",
     kultur: "🎭", musik: "🎵", strand: "🏖️", badning: "🏊",
@@ -122,7 +127,7 @@ function NewPlaceRow({ place }: { place: Place }) {
             <span className="text-white/35 text-[10px] flex items-center gap-0.5"><Star size={7} className="text-amber-400 fill-amber-400" />{place.rating_avg?.toFixed(1)}</span>
           </div>
         </div>
-        <span className="px-1.5 py-0.5 rounded bg-[#4ECDC4]/15 text-[#4ECDC4] text-[8px] font-bold flex-shrink-0">Ny</span>
+        <span className="px-1.5 py-0.5 rounded bg-[#4ECDC4]/15 text-[#4ECDC4] text-[8px] font-bold flex-shrink-0">{t('events.new_badge')}</span>
       </div>
     </Link>
   );
@@ -133,6 +138,7 @@ const KAT_OPTIONS = ["Sport", "Kultur", "Natur", "Musik", "Mad & Drikke", "Spil"
 const KAT_EMOJI: Record<string, string> = { Sport: "⚽", Kultur: "🎭", Natur: "🌿", Musik: "🎵", "Mad & Drikke": "🍽️", Spil: "🎲" };
 
 function CreateModal({ onClose, onCreate }: { onClose: () => void; onCreate: (a: SocialActivity) => void }) {
+  const { t } = useTranslation();
   const [titel, setTitel] = useState("");
   const [kategori, setKategori] = useState("Sport");
   const [sted, setSted] = useState("");
@@ -156,7 +162,7 @@ function CreateModal({ onClose, onCreate }: { onClose: () => void; onCreate: (a:
       category: kategori,
     };
     onCreate(newActivity);
-    toast({ title: "Din oplevelse er oprettet!" });
+    toast({ title: t('events.experience_created') });
     onClose();
   }
 
@@ -165,19 +171,19 @@ function CreateModal({ onClose, onCreate }: { onClose: () => void; onCreate: (a:
       <div className="absolute inset-0 bg-black/60" />
       <div className="relative w-full max-w-[430px] rounded-t-3xl p-5 pb-8" style={{ background: "linear-gradient(to bottom, #1a1f2e, #0D1220)" }} onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-white text-lg font-bold">Opret oplevelse</h2>
+          <h2 className="text-white text-lg font-bold">{t('events.create_experience')}</h2>
           <button onClick={onClose} className="p-1"><X size={20} className="text-white/50" /></button>
         </div>
         <div className="space-y-3">
-          <input value={titel} onChange={e => setTitel(e.target.value)} placeholder="Titel" className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
+          <input value={titel} onChange={e => setTitel(e.target.value)} placeholder={t('events.title')} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
           <select value={kategori} onChange={e => setKategori(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm focus:outline-none appearance-none">
             {KAT_OPTIONS.map(k => <option key={k} value={k} className="bg-[#1a1f2e] text-white">{KAT_EMOJI[k]} {k}</option>)}
           </select>
-          <input value={sted} onChange={e => setSted(e.target.value)} placeholder="Sted" className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
+          <input value={sted} onChange={e => setSted(e.target.value)} placeholder={t('events.location')} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
           <input type="number" value={maxDelt} onChange={e => setMaxDelt(Math.max(1, Number(e.target.value)))} min={1} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm focus:outline-none" />
-          <textarea value={beskrivelse} onChange={e => setBeskrivelse(e.target.value)} placeholder="Beskrivelse (valgfri)" rows={2} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none resize-none" />
+          <textarea value={beskrivelse} onChange={e => setBeskrivelse(e.target.value)} placeholder={t('events.description_optional')} rows={2} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none resize-none" />
           <button onClick={handleSubmit} disabled={!canSubmit} className={`w-full py-3.5 rounded-xl font-semibold text-sm transition-all ${canSubmit ? "bg-[#4ECDC4] text-white" : "bg-white/10 text-white/30 cursor-not-allowed"}`}>
-            Opret
+            {t('common.create')}
           </button>
         </div>
       </div>
@@ -188,6 +194,7 @@ function CreateModal({ onClose, onCreate }: { onClose: () => void; onCreate: (a:
 
 /* ═══════════════════ FEED ═══════════════════ */
 export default function Feed() {
+  const { t } = useTranslation();
   const { selectedTags, priceTier, city } = useTags();
   const [tagEditorOpen, setTagEditorOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
@@ -268,7 +275,7 @@ export default function Feed() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <h1 className="text-white text-xl font-bold">{getGreeting()}</h1>
-            <p className="text-white/40 text-xs mt-0.5">Udforsk oplevelser i dag</p>
+            <p className="text-white/40 text-xs mt-0.5">{t('events.explore_today')}</p>
           </div>
           <div className="flex items-center gap-2">
             <button className="relative w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white/15 transition-colors" data-testid="button-notifications">
@@ -285,7 +292,7 @@ export default function Feed() {
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Søg efter oplevelser..."
+            placeholder={t('udforsk.search_experiences')}
             className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/8 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/40 transition-all"
             data-testid="feed-search"
           />
@@ -323,9 +330,9 @@ export default function Feed() {
           <div className="flex items-center justify-between px-5 mb-3">
             <div className="flex items-center gap-2">
               <Heart size={14} className="text-[#4ECDC4]" />
-              <h2 className="text-white font-semibold text-sm">Gratis oplevelser</h2>
+              <h2 className="text-white font-semibold text-sm">{t('events.free_experiences')}</h2>
             </div>
-            <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4]/15 text-[#4ECDC4] text-[10px] font-bold">{filteredSocial.length} aktive</span>
+            <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4]/15 text-[#4ECDC4] text-[10px] font-bold">{t('events.active_count', { count: filteredSocial.length })}</span>
           </div>
           {filteredSocial.length > 0 ? (
             <div className="flex gap-3 overflow-x-auto px-5 pb-2" style={{ scrollbarWidth: "none" }}>
@@ -335,7 +342,7 @@ export default function Feed() {
             <div className="px-5">
               <div className="glass-card rounded-2xl p-6 text-center">
                 <p className="text-white/40 text-xs">
-                  {searchQuery ? `Ingen resultater for "${searchQuery}"` : "Ingen oplevelser matcher dine tags"}
+                  {searchQuery ? t('events.no_results_for', { query: searchQuery }) : t('events.no_match_tags')}
                 </p>
               </div>
             </div>
@@ -348,11 +355,11 @@ export default function Feed() {
             <div className="flex items-center justify-between px-5 mb-3">
               <div className="flex items-center gap-2">
                 <Star size={14} className="text-amber-400 fill-amber-400" />
-                <h2 className="text-white font-semibold text-sm">Populære nær dig</h2>
+                <h2 className="text-white font-semibold text-sm">{t('events.popular_nearby')}</h2>
               </div>
               <Link href="/udforsk">
                 <span className="text-white/30 text-xs flex items-center gap-0.5 hover:text-white/60 cursor-pointer">
-                  Se alle <ChevronRight size={12} />
+                  {t('events.see_all')} <ChevronRight size={12} />
                 </span>
               </Link>
             </div>
@@ -367,7 +374,7 @@ export default function Feed() {
           <section className="px-5">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs">🆕</span>
-              <h2 className="text-white font-semibold text-sm">Nyt i dit område</h2>
+              <h2 className="text-white font-semibold text-sm">{t('events.new_in_area')}</h2>
             </div>
             <div className="glass-card rounded-2xl divide-y divide-white/5">
               {newestPlaces.map(place => <NewPlaceRow key={place.id} place={place} />)}

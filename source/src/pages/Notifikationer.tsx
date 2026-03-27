@@ -4,6 +4,7 @@ import {
 } from "lucide-react";
 import { useNotifications, type Notification, type NotificationType } from "@/context/NotificationContext";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from 'react-i18next';
 
 /* ── Icon + color per notification type ── */
 const TYPE_META: Record<NotificationType, { icon: typeof Bell; color: string; bg: string }> = {
@@ -20,37 +21,37 @@ function startOfDay(d: Date): number {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 }
 
-function groupLabel(dateStr: string): string {
+function groupLabel(dateStr: string, t: (key: string) => string): string {
   const now = new Date();
   const d = new Date(dateStr);
   const todayStart = startOfDay(now);
   const dStart = startOfDay(d);
   const diff = todayStart - dStart;
 
-  if (diff <= 0) return "I dag";
-  if (diff <= 86400000) return "I går";
-  if (diff <= 7 * 86400000) return "Denne uge";
-  return "Ældre";
+  if (diff <= 0) return t('notifications.today');
+  if (diff <= 86400000) return t('notifications.yesterday');
+  if (diff <= 7 * 86400000) return t('notifications.this_week');
+  return t('notifications.older');
 }
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: (key: string, options?: Record<string, unknown>) => string): string {
   const now = Date.now();
   const d = new Date(dateStr).getTime();
   const s = Math.floor((now - d) / 1000);
-  if (s < 60) return "Lige nu";
-  if (s < 3600) return `${Math.floor(s / 60)} min siden`;
-  if (s < 86400) return `${Math.floor(s / 3600)} t siden`;
-  if (s < 172800) return "I går";
+  if (s < 60) return t('notifications.just_now');
+  if (s < 3600) return t('notifications.minutes_ago', { count: Math.floor(s / 60) });
+  if (s < 86400) return t('notifications.hours_ago', { count: Math.floor(s / 3600) });
+  if (s < 172800) return t('notifications.yesterday');
   return new Date(dateStr).toLocaleDateString("da-DK", { day: "numeric", month: "short" });
 }
 
 type GroupedNotifications = { label: string; items: Notification[] }[];
 
-function groupNotifications(notifications: Notification[]): GroupedNotifications {
-  const order = ["I dag", "I går", "Denne uge", "Ældre"];
+function groupNotifications(notifications: Notification[], t: (key: string) => string): GroupedNotifications {
+  const order = [t('notifications.today'), t('notifications.yesterday'), t('notifications.this_week'), t('notifications.older')];
   const groups: Record<string, Notification[]> = {};
   for (const n of notifications) {
-    const label = groupLabel(n.created_at);
+    const label = groupLabel(n.created_at, t);
     (groups[label] ??= []).push(n);
   }
   return order.filter(l => groups[l]?.length).map(label => ({ label, items: groups[label] }));
@@ -58,6 +59,7 @@ function groupNotifications(notifications: Notification[]): GroupedNotifications
 
 /* ── Single notification row ── */
 function NotificationRow({ n, onClick }: { n: Notification; onClick: () => void }) {
+  const { t } = useTranslation();
   const meta = TYPE_META[n.type] || TYPE_META.event_invite;
   const Icon = meta.icon;
 
@@ -81,7 +83,7 @@ function NotificationRow({ n, onClick }: { n: Notification; onClick: () => void 
           )}
         </div>
         <p className="text-xs text-white/40 truncate mt-0.5">{n.body}</p>
-        <p className="text-[10px] text-white/25 mt-1">{timeAgo(n.created_at)}</p>
+        <p className="text-[10px] text-white/25 mt-1">{timeAgo(n.created_at, t)}</p>
       </div>
       <ChevronRight size={14} className="text-white/20 flex-shrink-0 mt-3" />
     </button>
@@ -90,11 +92,12 @@ function NotificationRow({ n, onClick }: { n: Notification; onClick: () => void 
 
 /* ── Page ── */
 export default function Notifikationer() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { isLoggedIn } = useAuth();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications();
 
-  const grouped = groupNotifications(notifications);
+  const grouped = groupNotifications(notifications, t);
 
   function handleClick(n: Notification) {
     if (!n.is_read) markAsRead(n.id);
@@ -106,12 +109,12 @@ export default function Notifikationer() {
     return (
       <div className="min-h-screen bg-[#0a0e23] flex flex-col items-center justify-center px-6">
         <Inbox size={48} className="text-white/20 mb-4" />
-        <p className="text-white/50 text-sm">Log ind for at se dine notifikationer</p>
+        <p className="text-white/50 text-sm">{t('notifications.login_to_see')}</p>
         <button
           onClick={() => setLocation("/auth")}
           className="mt-4 px-6 py-2.5 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-sm"
         >
-          Log ind
+          {t('notifications.log_in')}
         </button>
       </div>
     );
@@ -122,9 +125,9 @@ export default function Notifikationer() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-6 pb-4">
         <div>
-          <h1 className="text-2xl font-bold">Notifikationer</h1>
+          <h1 className="text-2xl font-bold">{t('notifications.title')}</h1>
           {unreadCount > 0 && (
-            <p className="text-white/40 text-xs mt-0.5">{unreadCount} ulæste</p>
+            <p className="text-white/40 text-xs mt-0.5">{unreadCount} {t('notifications.unread')}</p>
           )}
         </div>
         {unreadCount > 0 && (
@@ -133,7 +136,7 @@ export default function Notifikationer() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/8 text-white/60 text-xs hover:bg-white/12 transition-all"
           >
             <CheckCheck size={14} />
-            Markér alle som læst
+            {t('notifications.mark_all_read')}
           </button>
         )}
       </div>
@@ -149,8 +152,8 @@ export default function Notifikationer() {
             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4">
               <Bell size={28} className="text-white/20" />
             </div>
-            <p className="text-white/40 text-sm font-medium">Ingen notifikationer endnu</p>
-            <p className="text-white/25 text-xs mt-1">Vi giver dig besked når der sker noget nyt</p>
+            <p className="text-white/40 text-sm font-medium">{t('notifications.no_notifications')}</p>
+            <p className="text-white/25 text-xs mt-1">{t('notifications.we_will_notify')}</p>
           </div>
         ) : (
           grouped.map(group => (

@@ -1,5 +1,6 @@
 import FirmaLayout from "@/components/FirmaLayout";
 import { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import {
   Users,
   UserPlus,
@@ -38,11 +39,11 @@ interface Position {
   created_at: string;
 }
 
-const EMPLOYMENT_LABELS: Record<EmploymentType, string> = {
-  volunteer: "Frivillig",
-  part_time: "Deltid",
-  full_time: "Fuldtid",
-  project: "Projektbaseret",
+const EMPLOYMENT_LABEL_KEYS: Record<EmploymentType, string> = {
+  volunteer: "recruitment.employmentType.volunteer",
+  part_time: "recruitment.employmentType.partTime",
+  full_time: "recruitment.employmentType.fullTime",
+  project: "recruitment.employmentType.project",
 };
 
 const EMPLOYMENT_COLORS: Record<EmploymentType, string> = {
@@ -100,6 +101,7 @@ function TagCategorySelector({
   selectedTags: string[];
   onToggle: (tag: string) => void;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const visibleTags = expanded ? tags : tags.slice(0, 5);
   return (
@@ -109,13 +111,13 @@ function TagCategorySelector({
         {title}
       </div>
       <div className="flex flex-wrap gap-1.5">
-        {visibleTags.map((t) => (
+        {visibleTags.map((item) => (
           <TagChip
-            key={t.tag}
-            label={t.label}
-            emoji={t.emoji}
-            selected={selectedTags.includes(t.tag)}
-            onClick={() => onToggle(t.tag)}
+            key={item.tag}
+            label={item.label}
+            emoji={item.emoji}
+            selected={selectedTags.includes(item.tag)}
+            onClick={() => onToggle(item.tag)}
           />
         ))}
         {tags.length > 5 && (
@@ -123,7 +125,7 @@ function TagCategorySelector({
             onClick={() => setExpanded(!expanded)}
             className="px-2.5 py-1 rounded-full text-xs text-primary hover:bg-primary/10 transition-colors"
           >
-            {expanded ? "Vis færre" : `+${tags.length - 5} mere`}
+            {expanded ? t('recruitment.showLess') : `+${tags.length - 5} ${t('recruitment.more')}`}
           </button>
         )}
       </div>
@@ -153,7 +155,7 @@ function MatchRing({ score }: { score: number }) {
 function scoreCandidateMatch(candidateTags: string[], positionTags: string[]): number {
   if (positionTags.length === 0 || candidateTags.length === 0) return 0;
 
-  const candidateSet = new Set(candidateTags.map((t) => t.toLowerCase()));
+  const candidateSet = new Set(candidateTags.map((item) => item.toLowerCase()));
   let score = 0;
   const maxScore = positionTags.length * 10;
 
@@ -177,6 +179,7 @@ function scoreCandidateMatch(candidateTags: string[], positionTags: string[]): n
 }
 
 export default function FirmaRekruttering() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<"positions" | "candidates" | "create">("positions");
   const [positions, setPositions] = useState<Position[]>([]);
@@ -245,11 +248,11 @@ export default function FirmaRekruttering() {
   }, [activeTab, selectedPosition]);
 
   const toggleTag = (tag: string) => {
-    setNewTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : prev.length < 8 ? [...prev, tag] : prev);
+    setNewTags((prev) => prev.includes(tag) ? prev.filter((item) => item !== tag) : prev.length < 8 ? [...prev, tag] : prev);
   };
 
   const toggleSearchTag = (tag: string) => {
-    setSearchTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : prev.length < 8 ? [...prev, tag] : prev);
+    setSearchTags((prev) => prev.includes(tag) ? prev.filter((item) => item !== tag) : prev.length < 8 ? [...prev, tag] : prev);
   };
 
   const filteredPositions = positions.filter((p) => {
@@ -279,16 +282,16 @@ export default function FirmaRekruttering() {
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <Users size={24} className="text-primary" />
-              Rekruttering
+              {t('recruitment.title')}
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">Find frivillige og lønnede medarbejdere via tag-matching</p>
+            <p className="text-muted-foreground text-sm mt-1">{t('recruitment.subtitle')}</p>
           </div>
           <button
             onClick={() => setActiveTab("create")}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
           >
             <Plus size={16} />
-            Opret rolle
+            {t('recruitment.createRole')}
           </button>
         </div>
 
@@ -296,19 +299,19 @@ export default function FirmaRekruttering() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="glass-card rounded-xl p-4 text-center">
             <div className="text-2xl font-bold text-primary">{positions.filter((p) => p.status === "open").length}</div>
-            <div className="text-xs text-muted-foreground mt-1">Åbne roller</div>
+            <div className="text-xs text-muted-foreground mt-1">{t('recruitment.stats.openRoles')}</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center">
             <div className="text-2xl font-bold text-purple-400">{positions.filter((p) => p.is_volunteer).length}</div>
-            <div className="text-xs text-muted-foreground mt-1">Frivillige</div>
+            <div className="text-xs text-muted-foreground mt-1">{t('recruitment.stats.volunteers')}</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center">
             <div className="text-2xl font-bold text-blue-400">{positions.reduce((a, p) => a + p.applicants, 0)}</div>
-            <div className="text-xs text-muted-foreground mt-1">Ansøgere</div>
+            <div className="text-xs text-muted-foreground mt-1">{t('recruitment.stats.applicants')}</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center">
             <div className="text-2xl font-bold text-emerald-400">{allProfiles.length}</div>
-            <div className="text-xs text-muted-foreground mt-1">Brugerprofiler</div>
+            <div className="text-xs text-muted-foreground mt-1">{t('recruitment.stats.userProfiles')}</div>
           </div>
         </div>
 
@@ -322,7 +325,7 @@ export default function FirmaRekruttering() {
                 activeTab === tab ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab === "positions" ? "Dine roller" : tab === "candidates" ? "Find kandidater" : "Opret rolle"}
+              {tab === "positions" ? t('recruitment.tabs.yourRoles') : tab === "candidates" ? t('recruitment.tabs.findCandidates') : t('recruitment.tabs.createRole')}
             </button>
           ))}
         </div>
@@ -344,7 +347,7 @@ export default function FirmaRekruttering() {
                     <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       type="text"
-                      placeholder="Søg i roller..."
+                      placeholder={t('recruitment.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-primary/50"
@@ -361,7 +364,7 @@ export default function FirmaRekruttering() {
                             : "bg-white/5 text-muted-foreground border-white/10 hover:border-white/20"
                         }`}
                       >
-                        {type === "all" ? "Alle" : EMPLOYMENT_LABELS[type]}
+                        {type === "all" ? t('recruitment.filterAll') : t(EMPLOYMENT_LABEL_KEYS[type])}
                       </button>
                     ))}
                   </div>
@@ -371,7 +374,7 @@ export default function FirmaRekruttering() {
                 {filteredPositions.length === 0 && (
                   <div className="text-center py-12 text-muted-foreground text-sm">
                     <Briefcase size={28} className="mx-auto mb-3 opacity-40" />
-                    Ingen roller fundet. Opret en ny rolle for at komme i gang.
+                    {t('recruitment.noRolesFound')}
                   </div>
                 )}
 
@@ -389,7 +392,7 @@ export default function FirmaRekruttering() {
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="font-semibold text-sm">{pos.title}</h3>
                             <span className={`px-2 py-0.5 rounded-full text-xs border ${EMPLOYMENT_COLORS[pos.employment_type]}`}>
-                              {EMPLOYMENT_LABELS[pos.employment_type]}
+                              {t(EMPLOYMENT_LABEL_KEYS[pos.employment_type])}
                             </span>
                             <span className={`px-2 py-0.5 rounded-full text-xs border ${STATUS_COLORS[pos.status]}`}>
                               {pos.status}
@@ -409,7 +412,7 @@ export default function FirmaRekruttering() {
                           </div>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             {pos.city && <span className="flex items-center gap-1"><MapPin size={12} />{pos.city}</span>}
-                            <span className="flex items-center gap-1"><UserPlus size={12} />{pos.applicants} ansøgere</span>
+                            <span className="flex items-center gap-1"><UserPlus size={12} />{pos.applicants} {t('recruitment.applicantsLabel')}</span>
                             <span className="flex items-center gap-1"><Clock size={12} />{new Date(pos.created_at).toLocaleDateString("da-DK")}</span>
                           </div>
                         </div>
@@ -421,17 +424,17 @@ export default function FirmaRekruttering() {
                         <div className="mt-4 pt-4 border-t border-white/10">
                           <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
                             <Sparkles size={14} className="text-primary" />
-                            Bedste kandidat-matches
+                            {t('recruitment.bestCandidateMatches')}
                           </h4>
                           {loadingProfiles ? (
                             <div className="flex items-center gap-2 text-xs text-muted-foreground py-2">
-                              <Loader2 size={14} className="animate-spin" /> Henter profiler...
+                              <Loader2 size={14} className="animate-spin" /> {t('recruitment.loadingProfiles')}
                             </div>
                           ) : (
                             <div className="space-y-2">
                               {getMatchedCandidates(pos.tags).slice(0, 5).map((c) => {
-                                const sharedTags = (c.interests || []).filter((t) =>
-                                  pos.tags.some((pt) => pt.toLowerCase() === t.toLowerCase())
+                                const sharedTags = (c.interests || []).filter((item) =>
+                                  pos.tags.some((pt) => pt.toLowerCase() === item.toLowerCase())
                                 );
                                 return (
                                   <div key={c.id} className="flex items-center justify-between p-2 rounded-lg bg-white/3 hover:bg-white/5 transition-colors">
@@ -444,7 +447,7 @@ export default function FirmaRekruttering() {
                                         </div>
                                       )}
                                       <div>
-                                        <p className="text-sm font-medium">{c.name || "Anonym"}</p>
+                                        <p className="text-sm font-medium">{c.name || t('recruitment.anonymous')}</p>
                                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                           {c.city && <span className="flex items-center gap-0.5"><MapPin size={10} />{c.city}</span>}
                                         </div>
@@ -452,11 +455,11 @@ export default function FirmaRekruttering() {
                                     </div>
                                     <div className="flex items-center gap-3">
                                       <div className="flex flex-wrap gap-1 max-w-[200px]">
-                                        {sharedTags.slice(0, 3).map((t) => {
-                                          const node = getTagNode(t);
+                                        {sharedTags.slice(0, 3).map((item) => {
+                                          const node = getTagNode(item);
                                           return (
-                                            <span key={t} className="px-1.5 py-0.5 rounded text-[10px] bg-primary/15 text-primary">
-                                              {node?.emoji} {node?.label || t}
+                                            <span key={item} className="px-1.5 py-0.5 rounded text-[10px] bg-primary/15 text-primary">
+                                              {node?.emoji} {node?.label || item}
                                             </span>
                                           );
                                         })}
@@ -470,7 +473,7 @@ export default function FirmaRekruttering() {
                                 );
                               })}
                               {getMatchedCandidates(pos.tags).length === 0 && (
-                                <p className="text-xs text-muted-foreground py-2">Ingen matches fundet for disse tags.</p>
+                                <p className="text-xs text-muted-foreground py-2">{t('recruitment.noMatchesForTags')}</p>
                               )}
                             </div>
                           )}
@@ -490,9 +493,9 @@ export default function FirmaRekruttering() {
             <div className="glass-card rounded-xl p-4">
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <Search size={16} className="text-primary" />
-                Søg efter kandidater via tags
+                {t('recruitment.searchCandidatesTitle')}
               </h3>
-              <p className="text-xs text-muted-foreground mb-4">Vælg tags fra B-Social's tag-hierarki for at finde de bedste matches</p>
+              <p className="text-xs text-muted-foreground mb-4">{t('recruitment.searchCandidatesDescription')}</p>
               <div className="space-y-4">
                 {TAG_CATEGORIES.map((cat) => (
                   <TagCategorySelector
@@ -508,8 +511,8 @@ export default function FirmaRekruttering() {
               {searchTags.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-white/10">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Valgte tags ({searchTags.length}/8)</span>
-                    <button onClick={() => setSearchTags([])} className="text-xs text-muted-foreground hover:text-foreground">Ryd alle</button>
+                    <span className="text-sm font-medium">{t('recruitment.selectedTags', { count: searchTags.length })}</span>
+                    <button onClick={() => setSearchTags([])} className="text-xs text-muted-foreground hover:text-foreground">{t('recruitment.clearAll')}</button>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {searchTags.map((tag) => {
@@ -535,9 +538,9 @@ export default function FirmaRekruttering() {
                 <div className="p-4 border-b border-white/10">
                   <h3 className="font-semibold flex items-center gap-2">
                     <Sparkles size={16} className="text-primary" />
-                    Matchede kandidater
+                    {t('recruitment.matchedCandidates')}
                     <span className="text-xs text-muted-foreground font-normal">
-                      ({loadingProfiles ? "..." : candidateResults.length} fundet)
+                      ({loadingProfiles ? "..." : candidateResults.length} {t('recruitment.found')})
                     </span>
                   </h3>
                 </div>
@@ -548,14 +551,14 @@ export default function FirmaRekruttering() {
                 ) : (
                   <div className="divide-y divide-white/5">
                     {candidateResults.slice(0, 20).map((c) => {
-                      const sharedTags = (c.interests || []).filter((t) =>
-                        searchTags.some((st) => st.toLowerCase() === t.toLowerCase())
+                      const sharedTags = (c.interests || []).filter((item) =>
+                        searchTags.some((st) => st.toLowerCase() === item.toLowerCase())
                       );
-                      const relatedMatches = (c.interests || []).filter((t) => {
-                        const tLower = t.toLowerCase();
+                      const relatedMatches = (c.interests || []).filter((item) => {
+                        const itemLower = item.toLowerCase();
                         return searchTags.some((st) =>
-                          getRelatedTags(st).some((rt) => rt.toLowerCase() === tLower)
-                        ) && !sharedTags.some((s) => s.toLowerCase() === tLower);
+                          getRelatedTags(st).some((rt) => rt.toLowerCase() === itemLower)
+                        ) && !sharedTags.some((s) => s.toLowerCase() === itemLower);
                       });
 
                       return (
@@ -569,24 +572,24 @@ export default function FirmaRekruttering() {
                               </div>
                             )}
                             <div>
-                              <p className="text-sm font-medium">{c.name || "Anonym"}</p>
+                              <p className="text-sm font-medium">{c.name || t('recruitment.anonymous')}</p>
                               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                 {c.city && <span className="flex items-center gap-0.5"><MapPin size={10} />{c.city}</span>}
                               </div>
                               <div className="flex flex-wrap gap-1 mt-1">
-                                {sharedTags.slice(0, 4).map((t) => {
-                                  const node = getTagNode(t);
+                                {sharedTags.slice(0, 4).map((item) => {
+                                  const node = getTagNode(item);
                                   return (
-                                    <span key={t} className="px-1.5 py-0.5 rounded text-[10px] bg-primary/15 text-primary font-medium">
-                                      {node?.emoji} {node?.label || t}
+                                    <span key={item} className="px-1.5 py-0.5 rounded text-[10px] bg-primary/15 text-primary font-medium">
+                                      {node?.emoji} {node?.label || item}
                                     </span>
                                   );
                                 })}
-                                {relatedMatches.slice(0, 2).map((t) => {
-                                  const node = getTagNode(t);
+                                {relatedMatches.slice(0, 2).map((item) => {
+                                  const node = getTagNode(item);
                                   return (
-                                    <span key={t} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">
-                                      {node?.emoji} {node?.label || t}
+                                    <span key={item} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">
+                                      {node?.emoji} {node?.label || item}
                                     </span>
                                   );
                                 })}
@@ -595,7 +598,7 @@ export default function FirmaRekruttering() {
                           </div>
                           <div className="flex items-center gap-2">
                             <MatchRing score={c.matchScore} />
-                            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors" title="Kontakt">
+                            <button className="p-2 rounded-lg hover:bg-white/10 transition-colors" title={t('recruitment.contact')}>
                               <MessageSquare size={16} className="text-muted-foreground" />
                             </button>
                           </div>
@@ -604,7 +607,7 @@ export default function FirmaRekruttering() {
                     })}
                     {candidateResults.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground text-sm">
-                        Ingen brugere matcher de valgte tags.
+                        {t('recruitment.noUsersMatchTags')}
                       </div>
                     )}
                   </div>
@@ -620,23 +623,23 @@ export default function FirmaRekruttering() {
             <div className="glass-card rounded-xl p-6">
               <h3 className="font-semibold mb-4 flex items-center gap-2">
                 <Plus size={16} className="text-primary" />
-                Opret ny rolle
+                {t('recruitment.createNewRole')}
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium mb-1.5 block">Titel</label>
+                  <label className="text-sm font-medium mb-1.5 block">{t('recruitment.form.titleLabel')}</label>
                   <input
                     type="text"
-                    placeholder="F.eks. 'Frivillig turleder' eller 'Yoga-instruktør'"
+                    placeholder={t('recruitment.form.titlePlaceholder')}
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-primary/50"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-1.5 block">Beskrivelse</label>
+                  <label className="text-sm font-medium mb-1.5 block">{t('recruitment.form.descriptionLabel')}</label>
                   <textarea
-                    placeholder="Beskriv rollen og hvad I søger..."
+                    placeholder={t('recruitment.form.descriptionPlaceholder')}
                     value={newDesc}
                     onChange={(e) => setNewDesc(e.target.value)}
                     rows={3}
@@ -645,9 +648,9 @@ export default function FirmaRekruttering() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium mb-1.5 block">Type</label>
+                    <label className="text-sm font-medium mb-1.5 block">{t('recruitment.form.typeLabel')}</label>
                     <div className="grid grid-cols-2 gap-2">
-                      {(Object.keys(EMPLOYMENT_LABELS) as EmploymentType[]).map((type) => (
+                      {(Object.keys(EMPLOYMENT_LABEL_KEYS) as EmploymentType[]).map((type) => (
                         <button
                           key={type}
                           onClick={() => setNewType(type)}
@@ -659,16 +662,16 @@ export default function FirmaRekruttering() {
                         >
                           {type === "volunteer" && <Heart size={12} className="inline mr-1" />}
                           {type !== "volunteer" && <Briefcase size={12} className="inline mr-1" />}
-                          {EMPLOYMENT_LABELS[type]}
+                          {t(EMPLOYMENT_LABEL_KEYS[type])}
                         </button>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-1.5 block">By</label>
+                    <label className="text-sm font-medium mb-1.5 block">{t('recruitment.form.cityLabel')}</label>
                     <input
                       type="text"
-                      placeholder="F.eks. Aalborg"
+                      placeholder={t('recruitment.form.cityPlaceholder')}
                       value={newCity}
                       onChange={(e) => setNewCity(e.target.value)}
                       className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-primary/50"
@@ -680,7 +683,7 @@ export default function FirmaRekruttering() {
                 <div>
                   <label className="text-sm font-medium mb-3 block flex items-center gap-2">
                     <Tag size={14} className="text-primary" />
-                    Tags (vælg op til 8)
+                    {t('recruitment.form.tagsLabel')}
                   </label>
                   <div className="space-y-4">
                     {TAG_CATEGORIES.map((cat) => (
@@ -717,7 +720,7 @@ export default function FirmaRekruttering() {
                   <div className="p-4 rounded-xl bg-primary/5 border border-primary/10">
                     <h4 className="text-sm font-medium mb-2 flex items-center gap-2">
                       <Sparkles size={14} className="text-primary" />
-                      Estimeret match: {loadingProfiles ? "..." : getMatchedCandidates(newTags).length} kandidater
+                      {t('recruitment.estimatedMatch', { count: loadingProfiles ? "..." : getMatchedCandidates(newTags).length })}
                     </h4>
                     {!loadingProfiles && (
                       <div className="flex -space-x-2">
@@ -754,7 +757,7 @@ export default function FirmaRekruttering() {
                     }}
                     className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
                   >
-                    Publicer rolle
+                    {t('recruitment.publishRole')}
                   </button>
                   <button
                     onClick={async () => {
@@ -774,7 +777,7 @@ export default function FirmaRekruttering() {
                     }}
                     className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
                   >
-                    Gem som kladde
+                    {t('recruitment.saveAsDraft')}
                   </button>
                 </div>
               </div>
@@ -784,4 +787,4 @@ export default function FirmaRekruttering() {
       </div>
     </FirmaLayout>
   );
-        }
+}

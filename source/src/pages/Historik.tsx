@@ -1,5 +1,6 @@
 import { ArrowLeft, MapPin } from "lucide-react";
 import { useLocation } from "wouter";
+import { useTranslation } from 'react-i18next';
 import { CalmBottomNav } from "@/components/CalmBottomNav";
 
 interface HistoryEvent {
@@ -46,13 +47,14 @@ const HISTORY: { period: string; events: HistoryEvent[] }[] = [
   },
 ];
 
-const TYPE_BADGE: Record<string, { bg: string; text: string; label: string }> = {
-  deltog: { bg: "bg-[#4ECDC4]/15", text: "text-[#4ECDC4]", label: "Deltog" },
-  arrangerede: { bg: "bg-blue-500/15", text: "text-blue-400", label: "Arrangeret" },
-  ambassadør: { bg: "bg-amber-500/15", text: "text-amber-400", label: "Ambassadør" },
+const TYPE_BADGE: Record<string, { bg: string; text: string; labelKey: string }> = {
+  deltog: { bg: "bg-[#4ECDC4]/15", text: "text-[#4ECDC4]", labelKey: "history.badge_attended" },
+  arrangerede: { bg: "bg-blue-500/15", text: "text-blue-400", labelKey: "history.badge_organized" },
+  ambassadør: { bg: "bg-amber-500/15", text: "text-amber-400", labelKey: "history.badge_ambassador" },
 };
 
 export default function Historik() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
 
   const totalEvents = HISTORY.reduce((sum, g) => sum + g.events.length, 0);
@@ -66,7 +68,7 @@ export default function Historik() {
     >
       <div className="sticky top-0 z-30 pt-12 pb-3 px-5 flex items-center gap-3" style={{ background: "linear-gradient(to bottom, rgba(10,14,35,0.95) 60%, transparent)" }}>
         <button onClick={() => setLocation("/min-side")} className="w-9 h-9 rounded-full glass-card flex items-center justify-center"><ArrowLeft size={18} className="text-white" /></button>
-        <h1 className="text-white text-xl font-bold">Historik</h1>
+        <h1 className="text-white text-xl font-bold">{t('history.title')}</h1>
       </div>
 
       <div className="px-5 mt-2 space-y-5">
@@ -74,17 +76,17 @@ export default function Historik() {
         <div className="glass-card-strong rounded-2xl p-4 flex gap-4">
           <div className="flex-1 text-center">
             <p className="text-white text-xl font-bold">{totalEvents}</p>
-            <p className="text-white/40 text-[10px]">Oplevelser</p>
+            <p className="text-white/40 text-[10px]">{t('history.experiences')}</p>
           </div>
           <div className="w-px bg-white/10" />
           <div className="flex-1 text-center">
             <p className="text-white text-xl font-bold">{totalPeople}</p>
-            <p className="text-white/40 text-[10px]">Mennesker mødt</p>
+            <p className="text-white/40 text-[10px]">{t('history.people_met')}</p>
           </div>
           <div className="w-px bg-white/10" />
           <div className="flex-1 text-center">
             <p className="text-white text-xl font-bold">{HISTORY.length}</p>
-            <p className="text-white/40 text-[10px]">Aktive måneder</p>
+            <p className="text-white/40 text-[10px]">{t('history.active_months')}</p>
           </div>
         </div>
 
@@ -94,7 +96,7 @@ export default function Historik() {
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-[#4ECDC4]" />
               <h2 className="text-white font-semibold text-sm">{group.period}</h2>
-              <span className="text-white/30 text-[10px]">{group.events.length} oplevelser</span>
+              <span className="text-white/30 text-[10px]">{group.events.length} {t('history.experiences_count')}</span>
             </div>
 
             <div className="ml-3 border-l border-white/10 pl-4 space-y-2">
@@ -109,14 +111,14 @@ export default function Historik() {
                       <div className="flex items-center gap-2 mb-0.5">
                         <h3 className="text-white text-sm font-semibold">{event.title}</h3>
                         <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${badge.bg} ${badge.text}`}>
-                          {badge.label}
+                          {t(badge.labelKey)}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="flex items-center gap-0.5 text-white/40 text-[10px]">
                           <MapPin size={8} />{event.location}
                         </span>
-                        <span className="text-white/30 text-[10px]">· {event.people} personer</span>
+                        <span className="text-white/30 text-[10px]">· {event.people} {t('history.persons')}</span>
                       </div>
                     </div>
                   </div>
