@@ -11,7 +11,7 @@ const STORAGE_KEY = "bsocial_user_tags";
 const FIRMA_TAGS_KEY = "bsocial_firma_tags";
 
 // Default tags shown to new users before they customize their feed
-const DEFAULT_TAGS = ["cykling", "løb", "fitness", "outdoor", "yoga", "teamsport"];
+const DEFAULT_TAGS = ["musik", "fitness", "sport", "natur", "kultur", "mad", "cykling", "outdoor"];
 
 export function getUserTags(): string[] {
   try {
