@@ -10,13 +10,14 @@ import type { Event } from "./data";
 const STORAGE_KEY = "bsocial_user_tags";
 const FIRMA_TAGS_KEY = "bsocial_firma_tags";
 
+// Default tags shown to new users before they customize their feed
+const DEFAULT_TAGS = ["cykling", "løb", "fitness", "outdoor", "yoga", "teamsport"];
+
 export function getUserTags(): string[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch { return []; }
-}
-
+    return raw ? JSON.parse(raw) : DEFAULT_TAGS;
+    } catch { return DEFAULT_TAGS; }
 export function setUserTags(tags: string[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tags));
   window.dispatchEvent(new CustomEvent("bsocial-tags-changed", { detail: tags }));
