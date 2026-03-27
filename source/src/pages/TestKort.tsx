@@ -85,7 +85,8 @@ export default function TestKort() {
     geoEvents.forEach(event => {
       const icon = L.divIcon({
         html: '<div style="width:14px;height:14px;background:#4ECDC4;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.3)"></div>',        className: "",
-        iconSize: [18, 18],        iconAnchor: [9, 9],
+        iconSize: [12, 12],
+                iconAnchor: [6, 6],
       const marker = L.marker([event.latitude, event.longitude], { icon })
         .addTo(map)
         .on("click", () => setSelectedEvent(event));
