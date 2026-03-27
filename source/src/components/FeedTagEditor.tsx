@@ -3,6 +3,8 @@ import { X, Search, ChevronDown, Check, Sparkles } from "lucide-react";
 import { useTags } from "@/context/TagContext";
 import type { PriceTier } from "@/context/TagContext";
 import { TAG_TREE, type TagNode } from "@/lib/tagTree";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/context/AuthContext";
 
 interface FeedTagEditorProps {
   open: boolean;
@@ -107,6 +109,7 @@ function TagTreeRow({ parent, selectedTags, onToggle, forceExpand }: {
 
 export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
   const { selectedTags: contextTags, setSelectedTags, priceTier, setPriceTier, city, radius } = useTags();
+  const { user } = useAuth();
   const [localTags, setLocalTags] = useState<Set<string>>(new Set());
   const [localPrice, setLocalPrice] = useState<PriceTier>(priceTier);
   const [tagSearch, setTagSearch] = useState("");
@@ -139,9 +142,23 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
     });
   }, []);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setSelectedTags([...localTags]);
     setPriceTier(localPrice);
+
+    // Persist to Supabase if user is logged in
+    if (user) {
+      const tagArray = [...localTags];
+      const parentTagSet = new Set(TAG_TREE.map(p => p.tag));
+      const vibeKeys = tagArray.filter(t => parentTagSet.has(t));
+
+      await supabase.from("profiles").update({
+        interests: tagArray,
+        vibe_tags: vibeKeys,
+        updated_at: new Date().toISOString(),
+      }).eq("id", user.id);
+    }
+
     onClose();
   };
 
