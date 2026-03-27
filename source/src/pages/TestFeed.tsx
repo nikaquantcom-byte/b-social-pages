@@ -30,7 +30,6 @@ export default function TestFeed() {
 
   const greeting = getTimeBasedGreeting();
 
-  // Group events by category
   const eventsByCategory: Record<string, typeof events> = {};
   events.forEach(event => {
     const cat = event.category || "Andet";
@@ -51,16 +50,14 @@ export default function TestFeed() {
   return (
     <div className="min-h-screen bg-[#0a0f1a] text-white font-sans">
       <div className="flex gap-6 max-w-7xl mx-auto px-4 py-6">
-        {/* Main Feed */}
         <div className="flex-1 min-w-0">
-          {/* Header */}
           <div className="flex items-start gap-4 mb-6">
             <div>
               <h1 className="text-3xl font-bold">{greeting}</h1>
               <p className="text-white/50 text-sm mt-1">Her er hvad der sker i dine netværk</p>
             </div>
             <div className="ml-auto flex items-center gap-2">
-              <div className="relative flex-1">
+              <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" size={16} />
                 <input
                   type="text"
@@ -74,7 +71,6 @@ export default function TestFeed() {
             </div>
           </div>
 
-          {/* Friends */}
           <div className="flex gap-6 mb-8">
             {FRIENDS.map(f => (
               <div key={f.name} className="flex flex-col items-center gap-2">
@@ -86,7 +82,6 @@ export default function TestFeed() {
             ))}
           </div>
 
-          {/* Categories */}
           {categories.length === 0 ? (
             <div className="text-white/40 text-center py-12">Ingen events fundet</div>
           ) : (
@@ -107,19 +102,22 @@ export default function TestFeed() {
                   {eventsByCategory[category].slice(0, 4).map(event => (
                     <Link key={event.id} href={`/event/${event.id}`}>
                       <div className="flex-shrink-0 w-52 bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition-colors cursor-pointer">
-                        <div className="relative h-32 bg-white/10">
+                        <div className="h-32 bg-white/10 overflow-hidden">
                           <img
                             src={getEventImage(event)}
                             alt={event.title}
                             className="w-full h-full object-cover"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&auto=format&fit=crop";
+                            }}
                           />
                         </div>
                         <div className="p-3">
                           <p className="text-cyan-400 text-xs mb-1">{formatDanishDate(event.date)}</p>
                           <h3 className="font-semibold text-sm line-clamp-2 mb-2">{event.title}</h3>
-                          {event.tags && event.tags.slice(0, 2).map((tag: string) => (
-                            <span key={tag} className="text-xs text-white/40">#{tag} </span>
+                          {event.interest_tags && event.interest_tags.slice(0, 2).map((tag: string) => (
+                            <span key={tag} className="text-xs text-white/40 mr-1">#{tag}</span>
                           ))}
                         </div>
                       </div>
@@ -131,9 +129,7 @@ export default function TestFeed() {
           )}
         </div>
 
-        {/* Right Sidebar */}
         <div className="w-72 flex-shrink-0 hidden lg:block">
-          {/* News */}
           <div className="bg-white/5 rounded-2xl p-4 mb-4">
             <div className="flex items-center gap-2 mb-4">
               <Bell size={14} className="text-cyan-400" />
@@ -146,14 +142,18 @@ export default function TestFeed() {
                     <p className="text-[10px] text-white/40 mb-1">{item.source} • {item.time}</p>
                     <p className="text-xs font-medium leading-tight line-clamp-2">{item.title}</p>
                   </div>
-                  <img src={item.img} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  <img
+                    src={item.img}
+                    alt=""
+                    className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
                 </div>
               ))}
             </div>
             <button className="w-full mt-3 py-2 text-xs text-white/50 bg-white/5 rounded-xl hover:bg-white/10">Se alle nyheder</button>
           </div>
 
-          {/* Popular Tags */}
           <div className="bg-white/5 rounded-2xl p-4">
             <p className="text-xs font-bold tracking-widest text-white/60 uppercase mb-3">Populære Tags</p>
             <div className="flex flex-wrap gap-2">
