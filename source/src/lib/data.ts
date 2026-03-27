@@ -22,6 +22,7 @@ export type Event = {
   weather_suitable: string[] | null;
   indoor_outdoor: string | null;
   category_level: number | null;
+    min_required_participants: number | null;
 };
 
 // The JSON is already sorted by created_at; sort by date ascending for display
