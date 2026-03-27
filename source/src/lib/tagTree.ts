@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════
-   B-Social Tag Tree — Komplet med underkategorier
-   Når brugeren skriver "cykling" → Race, MTB, Gravel osv.
+   B-Social Tag Tree — 3-niveau hierarki
+   OVERKATEGORI → KATEGORI → UNDERKATEGORI
+   Eksempel: Motion & Fitness → Cykling → racercykling, mtb, gravel …
    ═══════════════════════════════════════════════ */
 
 export interface TagNode {
@@ -11,443 +12,468 @@ export interface TagNode {
 }
 
 export const TAG_TREE: TagNode[] = [
-  // ── SPORT ──
+  // ══════════════════════════════════════════════
+  // 1. MOTION & FITNESS
+  // ══════════════════════════════════════════════
   {
-    tag: "cykling", emoji: "🚴", label: "Cykling", children: [
-      { tag: "racercykling", emoji: "🏎️", label: "Racercykling" },
-      { tag: "mtb", emoji: "🚵", label: "Mountainbike" },
-      { tag: "gravel", emoji: "🛤️", label: "Gravel" },
-      { tag: "landevejscykling", emoji: "🛣️", label: "Landevej" },
-      { tag: "bycykling", emoji: "🚲", label: "Bycykling" },
-      { tag: "bmx", emoji: "🤸", label: "BMX" },
-      { tag: "cykelløb", emoji: "🏁", label: "Cykelløb" },
-    ]
-  },
-  {
-    tag: "løb", emoji: "🏃", label: "Løb", children: [
-      { tag: "løbetur", emoji: "🏃", label: "Løbetur" },
-      { tag: "trail", emoji: "🌲", label: "Trail running" },
-      { tag: "maraton", emoji: "🏅", label: "Maraton" },
-      { tag: "halvmaraton", emoji: "🥈", label: "Halvmaraton" },
-      { tag: "5k", emoji: "🎯", label: "5K løb" },
-      { tag: "intervalløb", emoji: "⚡", label: "Intervalløb" },
-      { tag: "parkrun", emoji: "🌳", label: "Parkrun" },
-    ]
-  },
-  {
-    tag: "fodbold", emoji: "⚽", label: "Fodbold", children: [
-      { tag: "fodbold-5v5", emoji: "⚽", label: "5-mands" },
-      { tag: "fodbold-11v11", emoji: "⚽", label: "11-mands" },
-      { tag: "futsal", emoji: "🏟️", label: "Futsal" },
-      { tag: "strandfodbold", emoji: "🏖️", label: "Strandfodbold" },
-    ]
-  },
-  {
-    tag: "ski", emoji: "⛷️", label: "Ski", children: [
-      { tag: "alpin", emoji: "⛷️", label: "Alpin" },
-      { tag: "freestyle-ski", emoji: "🤸", label: "Freestyle" },
-      { tag: "off-piste", emoji: "🏔️", label: "Off-piste" },
-      { tag: "langrend", emoji: "🎿", label: "Langrend" },
-      { tag: "telemark", emoji: "⛰️", label: "Telemark" },
-      { tag: "skitouring", emoji: "🥾", label: "Skitouring" },
-    ]
-  },
-  {
-    tag: "snowboard", emoji: "🏂", label: "Snowboard", children: [
-      { tag: "freestyle-snowboard", emoji: "🤸", label: "Freestyle" },
-      { tag: "freeride", emoji: "🏔️", label: "Freeride" },
-      { tag: "park-snowboard", emoji: "🎢", label: "Park" },
-    ]
-  },
-  {
-    tag: "svømning", emoji: "🏊", label: "Svømning", children: [
-      { tag: "frisvømning", emoji: "🏊", label: "Frisvømning" },
-      { tag: "havsvømning", emoji: "🌊", label: "Havsvømning" },
-      { tag: "havnebad", emoji: "🏊", label: "Havnebad" },
-      { tag: "vinterbadning", emoji: "🥶", label: "Vinterbadning" },
-      { tag: "vandpolo", emoji: "🤽", label: "Vandpolo" },
-    ]
-  },
-  {
-    tag: "fitness", emoji: "💪", label: "Fitness", children: [
-      { tag: "styrketræning", emoji: "🏋️", label: "Styrketræning" },
-      { tag: "crossfit", emoji: "🔥", label: "CrossFit" },
-      { tag: "calisthenics", emoji: "🤸", label: "Calisthenics" },
-      { tag: "hiit", emoji: "⚡", label: "HIIT" },
-      { tag: "funktionel", emoji: "🏃", label: "Funktionel træning" },
-    ]
-  },
-  {
-    tag: "kampsport", emoji: "🥊", label: "Kampsport", children: [
-      { tag: "boksning", emoji: "🥊", label: "Boksning" },
-      { tag: "mma", emoji: "🤼", label: "MMA" },
-      { tag: "jiu-jitsu", emoji: "🥋", label: "Jiu-Jitsu" },
-      { tag: "karate", emoji: "🥋", label: "Karate" },
-      { tag: "taekwondo", emoji: "🦶", label: "Taekwondo" },
-      { tag: "kickboxing", emoji: "🦵", label: "Kickboxing" },
-    ]
-  },
-  {
-    tag: "vandsport", emoji: "🌊", label: "Vandsport", children: [
-      { tag: "surfing", emoji: "🏄", label: "Surfing" },
-      { tag: "sup", emoji: "🛶", label: "SUP" },
-      { tag: "kajak", emoji: "🛶", label: "Kajak" },
-      { tag: "kano", emoji: "🛶", label: "Kano" },
-      { tag: "sejlads", emoji: "⛵", label: "Sejlads" },
-      { tag: "wakeboard", emoji: "🏄", label: "Wakeboard" },
-      { tag: "dykning", emoji: "🤿", label: "Dykning" },
-      { tag: "kitesurfing", emoji: "🪁", label: "Kitesurfing" },
-    ]
-  },
-  {
-    tag: "basketball", emoji: "🏀", label: "Basketball", children: [
-      { tag: "streetball", emoji: "🏀", label: "Streetball" },
-      { tag: "3v3", emoji: "🏀", label: "3v3" },
-    ]
-  },
-  {
-    tag: "tennis", emoji: "🎾", label: "Tennis", children: [
-      { tag: "padel", emoji: "🏓", label: "Padel" },
-      { tag: "badminton", emoji: "🏸", label: "Badminton" },
-      { tag: "bordtennis", emoji: "🏓", label: "Bordtennis" },
-      { tag: "squash", emoji: "🎾", label: "Squash" },
-    ]
-  },
-  {
-    tag: "golf", emoji: "⛳", label: "Golf", children: [
-      { tag: "disc-golf", emoji: "🥏", label: "Disc Golf" },
-      { tag: "minigolf", emoji: "⛳", label: "Minigolf" },
-    ]
-  },
-  {
-    tag: "klatring", emoji: "🧗", label: "Klatring", children: [
-      { tag: "bouldering", emoji: "🧗", label: "Bouldering" },
-      { tag: "indendørs-klatring", emoji: "🏢", label: "Indendørs" },
-      { tag: "friluftsklatring", emoji: "⛰️", label: "Udendørs" },
-    ]
-  },
-  {
-    tag: "rulleskøjter", emoji: "🛼", label: "Rulleskøjter", children: [
-      { tag: "inline-skating", emoji: "🛼", label: "Inline" },
-      { tag: "skateboard", emoji: "🛹", label: "Skateboard" },
-      { tag: "longboard", emoji: "🛹", label: "Longboard" },
-    ]
-  },
-  {
-    tag: "ridning", emoji: "🏇", label: "Ridning", children: [
-      { tag: "dressur", emoji: "🏇", label: "Dressur" },
-      { tag: "spring", emoji: "🏇", label: "Spring" },
-      { tag: "terrænridning", emoji: "🐎", label: "Terrænridning" },
-    ]
+    tag: "motion-fitness",
+    emoji: "🏃",
+    label: "Motion & Fitness",
+    children: [
+      {
+        tag: "løb", emoji: "🏃", label: "Løb", children: [
+          { tag: "maraton", emoji: "🏅", label: "Maraton" },
+          { tag: "trailløb", emoji: "🌲", label: "Trailløb" },
+          { tag: "halvmaraton", emoji: "🥈", label: "Halvmaraton" },
+          { tag: "5k", emoji: "🎯", label: "5K" },
+          { tag: "intervalløb", emoji: "⚡", label: "Intervalløb" },
+          { tag: "parkrun", emoji: "🌳", label: "Parkrun" },
+          { tag: "crossfit-løb", emoji: "🔥", label: "CrossFit" },
+        ],
+      },
+      {
+        tag: "cykling", emoji: "🚴", label: "Cykling", children: [
+          { tag: "racercykling", emoji: "🏎️", label: "Racercykling" },
+          { tag: "mtb", emoji: "🚵", label: "Mountainbike" },
+          { tag: "gravel", emoji: "🛤️", label: "Gravel" },
+          { tag: "landevejscykling", emoji: "🛣️", label: "Landevejscykling" },
+          { tag: "bmx", emoji: "🤸", label: "BMX" },
+          { tag: "cykelløb", emoji: "🏁", label: "Cykelløb" },
+        ],
+      },
+      {
+        tag: "bold", emoji: "⚽", label: "Bold", children: [
+          { tag: "fodbold", emoji: "⚽", label: "Fodbold" },
+          { tag: "basketball", emoji: "🏀", label: "Basketball" },
+          { tag: "volleyball", emoji: "🏐", label: "Volleyball" },
+          { tag: "tennis", emoji: "🎾", label: "Tennis" },
+          { tag: "håndbold", emoji: "🤾", label: "Håndbold" },
+          { tag: "padel", emoji: "🏓", label: "Padel" },
+          { tag: "badminton", emoji: "🏸", label: "Badminton" },
+        ],
+      },
+      {
+        tag: "svømning", emoji: "🏐", label: "Svømning", children: [
+          { tag: "frisvømning", emoji: "🏐", label: "Frisvømning" },
+          { tag: "havsvømning", emoji: "🌊", label: "Havsvømning" },
+          { tag: "havnebad", emoji: "🏐", label: "Havnebad" },
+          { tag: "vinterbadning", emoji: "🥶", label: "Vinterbadning" },
+        ],
+      },
+      {
+        tag: "fitness", emoji: "💪", label: "Fitness", children: [
+          { tag: "styrketræning", emoji: "🏋️", label: "Styrketræning" },
+          { tag: "crossfit", emoji: "🔥", label: "CrossFit" },
+          { tag: "calisthenics", emoji: "🤸", label: "Calisthenics" },
+          { tag: "hiit", emoji: "⚡", label: "HIIT" },
+          { tag: "pilates", emoji: "🧘", label: "Pilates" },
+        ],
+      },
+      {
+        tag: "kampsport", emoji: "🥊", label: "Kampsport", children: [
+          { tag: "boksning", emoji: "🥊", label: "Boksning" },
+          { tag: "mma", emoji: "🤼", label: "MMA" },
+          { tag: "jiu-jitsu", emoji: "🥋", label: "Jiu-Jitsu" },
+          { tag: "karate", emoji: "🥋", label: "Karate" },
+          { tag: "taekwondo", emoji: "🦶", label: "Taekwondo" },
+          { tag: "kickboxing", emoji: "🦵", label: "Kickboxing" },
+        ],
+      },
+      {
+        tag: "vandsport", emoji: "🌊", label: "Vandsport", children: [
+          { tag: "surfing", emoji: "🏄", label: "Surfing" },
+          { tag: "sup", emoji: "🚣", label: "SUP" },
+          { tag: "kajak", emoji: "🚣", label: "Kajak" },
+          { tag: "kano", emoji: "🚣", label: "Kano" },
+          { tag: "sejlads", emoji: "⛵", label: "Sejlads" },
+          { tag: "wakeboard", emoji: "🏄", label: "Wakeboard" },
+          { tag: "dykning", emoji: "🤿", label: "Dykning" },
+          { tag: "kitesurfing", emoji: "🪁", label: "Kitesurfing" },
+        ],
+      },
+    ],
   },
 
-  // ── GAMING ──
+  // ══════════════════════════════════════════════
+  // 2. NATUR & OUTDOOR
+  // ══════════════════════════════════════════════
   {
-    tag: "gaming", emoji: "🎮", label: "Gaming", children: [
-      { tag: "pc-gaming", emoji: "🖥️", label: "PC Gaming" },
-      { tag: "console", emoji: "🎮", label: "Konsol" },
-      { tag: "mobilspil", emoji: "📱", label: "Mobilspil" },
-      { tag: "vr-gaming", emoji: "🥽", label: "VR Gaming" },
-      { tag: "fps", emoji: "🔫", label: "FPS / Shooters" },
-      { tag: "mmorpg", emoji: "⚔️", label: "MMORPG" },
-      { tag: "strategi", emoji: "🧠", label: "Strategi" },
-      { tag: "racing-spil", emoji: "🏎️", label: "Racing" },
-      { tag: "sportsspil", emoji: "⚽", label: "Sportsspil" },
-      { tag: "retro-gaming", emoji: "👾", label: "Retro" },
-      { tag: "esport", emoji: "🏆", label: "E-sport" },
-      { tag: "brætspil", emoji: "🎲", label: "Brætspil" },
-      { tag: "rollespil", emoji: "🐉", label: "Rollespil / D&D" },
-      { tag: "kortspil", emoji: "🃏", label: "Kortspil" },
-      { tag: "lan-party", emoji: "🖧", label: "LAN Party" },
-    ]
+    tag: "natur-outdoor",
+    emoji: "🌲",
+    label: "Natur & Outdoor",
+    children: [
+      {
+        tag: "vandring", emoji: "🥾", label: "Vandring", children: [
+          { tag: "dagture", emoji: "🥾", label: "Dagture" },
+          { tag: "flerdag", emoji: "🎒", label: "Flerdagsture" },
+          { tag: "bjergvandring", emoji: "🏔️", label: "Bjergvandring" },
+          { tag: "nationalpark", emoji: "🌿", label: "Nationalpark" },
+        ],
+      },
+      {
+        tag: "camping", emoji: "⛺", label: "Camping", children: [
+          { tag: "shelter", emoji: "🏕️", label: "Shelter" },
+          { tag: "telt", emoji: "⛺", label: "Telt" },
+          { tag: "autocamping", emoji: "🚐", label: "Autocamping" },
+          { tag: "glamping", emoji: "✨", label: "Glamping" },
+          { tag: "primitiv-overnatning", emoji: "🌲", label: "Primitiv overnatning" },
+        ],
+      },
+      {
+        tag: "klatring", emoji: "🧗", label: "Klatring", children: [
+          { tag: "indendørs", emoji: "🏢", label: "Indendørs" },
+          { tag: "udendørs", emoji: "⛰️", label: "Udendørs" },
+          { tag: "boulder", emoji: "🧗", label: "Boulder" },
+        ],
+      },
+      {
+        tag: "fiskeri", emoji: "🎣", label: "Fiskeri", children: [
+          { tag: "lystfiskeri", emoji: "🎣", label: "Lystfiskeri" },
+          { tag: "havfiskeri", emoji: "🌊", label: "Havfiskeri" },
+          { tag: "fluefiskeri", emoji: "🪰", label: "Fluefiskeri" },
+        ],
+      },
+      {
+        tag: "jagt", emoji: "🦌", label: "Jagt", children: [
+          { tag: "riffeljagt", emoji: "🎯", label: "Riffeljagt" },
+          { tag: "buejagt", emoji: "🏹", label: "Buejagt" },
+        ],
+      },
+      {
+        tag: "outdoor", emoji: "🌿", label: "Outdoor", children: [
+          { tag: "overlevelse", emoji: "🏕️", label: "Overlevelse" },
+          { tag: "geocaching", emoji: "📍", label: "Geocaching" },
+          { tag: "orienteringsløb", emoji: "🗺️", label: "Orienteringsløb" },
+          { tag: "rafting", emoji: "🚣", label: "Rafting" },
+          { tag: "paintball", emoji: "🔫", label: "Paintball" },
+        ],
+      },
+    ],
   },
 
-  // ── MUSIK ──
+  // ══════════════════════════════════════════════
+  // 3. MUSIK & KULTUR
+  // ══════════════════════════════════════════════
   {
-    tag: "musik", emoji: "🎵", label: "Musik", children: [
-      { tag: "koncert", emoji: "🎤", label: "Koncert" },
-      { tag: "festival", emoji: "🎪", label: "Festival" },
-      { tag: "rock", emoji: "🎸", label: "Rock" },
-      { tag: "pop", emoji: "🎶", label: "Pop" },
-      { tag: "elektronisk", emoji: "🎧", label: "Elektronisk / DJ" },
-      { tag: "jazz", emoji: "🎷", label: "Jazz" },
-      { tag: "klassisk", emoji: "🎻", label: "Klassisk" },
-      { tag: "hip-hop", emoji: "🎤", label: "Hip-hop / Rap" },
-      { tag: "country", emoji: "🤠", label: "Country" },
-      { tag: "metal", emoji: "🤘", label: "Metal" },
-      { tag: "akustisk", emoji: "🪕", label: "Akustisk" },
-      { tag: "kor", emoji: "🎼", label: "Kor / Sang" },
-      { tag: "jam-session", emoji: "🎸", label: "Jam session" },
-      { tag: "dj", emoji: "💿", label: "DJ / Mixing" },
-    ]
+    tag: "musik-kultur",
+    emoji: "🎵",
+    label: "Musik & Kultur",
+    children: [
+      {
+        tag: "koncert", emoji: "🎤", label: "Koncert", children: [
+          { tag: "rock", emoji: "🎸", label: "Rock" },
+          { tag: "pop", emoji: "🎶", label: "Pop" },
+          { tag: "jazz", emoji: "🎷", label: "Jazz" },
+          { tag: "klassisk", emoji: "🎻", label: "Klassisk" },
+          { tag: "metal", emoji: "🤘", label: "Metal" },
+          { tag: "edm", emoji: "🎧", label: "EDM" },
+          { tag: "hip-hop", emoji: "🎤", label: "Hip-hop" },
+          { tag: "indie", emoji: "🎸", label: "Indie" },
+        ],
+      },
+      {
+        tag: "festival", emoji: "🎪", label: "Festival", children: [
+          { tag: "musikfestival", emoji: "🎵", label: "Musikfestival" },
+          { tag: "madfestival", emoji: "🍽️", label: "Madfestival" },
+          { tag: "kulturfestival", emoji: "🎭", label: "Kulturfestival" },
+          { tag: "filmfestival", emoji: "🎬", label: "Filmfestival" },
+        ],
+      },
+      {
+        tag: "teater", emoji: "🎭", label: "Teater", children: [
+          { tag: "drama", emoji: "🎭", label: "Drama" },
+          { tag: "komedie", emoji: "😂", label: "Komedie" },
+          { tag: "børneteater", emoji: "🧸", label: "Børneteater" },
+          { tag: "musical", emoji: "🎵", label: "Musical" },
+          { tag: "stand-up", emoji: "🎤", label: "Stand-up" },
+        ],
+      },
+      {
+        tag: "kunst", emoji: "🎨", label: "Kunst", children: [
+          { tag: "galleri", emoji: "🖼️", label: "Galleri" },
+          { tag: "museum", emoji: "🏙️", label: "Museum" },
+          { tag: "street-art", emoji: "🎨", label: "Street Art" },
+          { tag: "udstilling", emoji: "🖼️", label: "Udstilling" },
+          { tag: "keramik", emoji: "🏺", label: "Keramik" },
+        ],
+      },
+      {
+        tag: "film", emoji: "🎬", label: "Film", children: [
+          { tag: "biograf", emoji: "🎬", label: "Biograf" },
+          { tag: "udendørs-kino", emoji: "🌙", label: "Udendørs kino" },
+          { tag: "premiere", emoji: "⭐", label: "Premiere" },
+          { tag: "filmklub", emoji: "📽️", label: "Filmklub" },
+          { tag: "dokumentar", emoji: "📹", label: "Dokumentar" },
+        ],
+      },
+      {
+        tag: "dans", emoji: "💃", label: "Dans", children: [
+          { tag: "salsa", emoji: "💃", label: "Salsa" },
+          { tag: "bachata", emoji: "💃", label: "Bachata" },
+          { tag: "hip-hop-dans", emoji: "🕺", label: "Hip-hop dans" },
+          { tag: "swing", emoji: "🕺", label: "Swing" },
+          { tag: "tango", emoji: "💃", label: "Tango" },
+          { tag: "ballet", emoji: "🩰", label: "Ballet" },
+          { tag: "zumba", emoji: "🏋️", label: "Zumba" },
+        ],
+      },
+    ],
   },
 
-  // ── DANS ──
+  // ══════════════════════════════════════════════
+  // 4. MAD & DRIKKE
+  // ══════════════════════════════════════════════
   {
-    tag: "dans", emoji: "💃", label: "Dans", children: [
-      { tag: "salsa", emoji: "💃", label: "Salsa" },
-      { tag: "bachata", emoji: "💃", label: "Bachata" },
-      { tag: "hip-hop-dans", emoji: "🕺", label: "Hip-hop dans" },
-      { tag: "swing", emoji: "🕺", label: "Swing" },
-      { tag: "tango", emoji: "💃", label: "Tango" },
-      { tag: "ballet", emoji: "🩰", label: "Ballet" },
-      { tag: "folkedans", emoji: "👯", label: "Folkedans" },
-      { tag: "zumba", emoji: "🏋️", label: "Zumba" },
-      { tag: "linedance", emoji: "🤠", label: "Linedance" },
-    ]
+    tag: "mad-drikke",
+    emoji: "🍽️",
+    label: "Mad & Drikke",
+    children: [
+      {
+        tag: "restaurant", emoji: "🍽️", label: "Restaurant", children: [
+          { tag: "dansk", emoji: "🇩🇰", label: "Dansk" },
+          { tag: "italiensk", emoji: "🇮🇹", label: "Italiensk" },
+          { tag: "asiatisk", emoji: "🥢", label: "Asiatisk" },
+          { tag: "vegansk", emoji: "🥬", label: "Vegansk" },
+          { tag: "brunch", emoji: "🥞", label: "Brunch" },
+        ],
+      },
+      {
+        tag: "bar", emoji: "🍸", label: "Bar", children: [
+          { tag: "cocktailbar", emoji: "🍹", label: "Cocktailbar" },
+          { tag: "ølbar", emoji: "🍺", label: "Ølbar" },
+          { tag: "vinbar", emoji: "🍷", label: "Vinbar" },
+          { tag: "natklub", emoji: "🪩", label: "Natklub" },
+        ],
+      },
+      {
+        tag: "café", emoji: "☕", label: "Café", children: [
+          { tag: "specialkaffe", emoji: "☕", label: "Specialkaffe" },
+          { tag: "brunch-café", emoji: "🥐", label: "Brunch-café" },
+          { tag: "takeaway", emoji: "🥡", label: "Takeaway" },
+        ],
+      },
+      {
+        tag: "marked", emoji: "🏪", label: "Marked", children: [
+          { tag: "madfestival-marked", emoji: "🍽️", label: "Madfestival" },
+          { tag: "streetfood", emoji: "🌮", label: "Streetfood" },
+          { tag: "bøndermarked", emoji: "🥕", label: "Bøndermarked" },
+        ],
+      },
+      {
+        tag: "madlavning", emoji: "👩‍🍳", label: "Madlavning", children: [
+          { tag: "kursus-mad", emoji: "📋", label: "Kursus" },
+          { tag: "workshop-mad", emoji: "🛠️", label: "Workshop" },
+          { tag: "pop-up-dinner", emoji: "🍽️", label: "Pop-up dinner" },
+          { tag: "grillaften", emoji: "🥩", label: "Grillaften" },
+          { tag: "sushi", emoji: "🍣", label: "Sushi" },
+        ],
+      },
+    ],
   },
 
-  // ── NATUR ──
+  // ══════════════════════════════════════════════
+  // 5. SOCIAL & HOBBY
+  // ══════════════════════════════════════════════
   {
-    tag: "natur", emoji: "🌲", label: "Natur", children: [
-      { tag: "vandring", emoji: "🥾", label: "Vandring" },
-      { tag: "skov", emoji: "🌲", label: "Skov" },
-      { tag: "strand", emoji: "🏖️", label: "Strand" },
-      { tag: "shelter", emoji: "🏕️", label: "Shelter" },
-      { tag: "nationalpark", emoji: "🌿", label: "Nationalpark" },
-      { tag: "fiskeri", emoji: "🎣", label: "Fiskeri" },
-      { tag: "fuglekiggeri", emoji: "🐦", label: "Fuglekiggeri" },
-      { tag: "camping", emoji: "⛺", label: "Camping" },
-      { tag: "bål", emoji: "🔥", label: "Bål & udendørs" },
-      { tag: "svampejagt", emoji: "🍄", label: "Svampejagt" },
-      { tag: "stjerneturen", emoji: "⭐", label: "Stjernekig" },
-      { tag: "gåtur", emoji: "🚶", label: "Gåtur" },
-      { tag: "naturlegeplads", emoji: "🌲", label: "Naturlegeplads" },
-    ]
+    tag: "social-hobby",
+    emoji: "👋",
+    label: "Social & Hobby",
+    children: [
+      {
+        tag: "gaming", emoji: "🎮", label: "Gaming", children: [
+          { tag: "pc-gaming", emoji: "🖥️", label: "PC Gaming" },
+          { tag: "console", emoji: "🎮", label: "Konsol" },
+          { tag: "vr-gaming", emoji: "🥽", label: "VR Gaming" },
+          { tag: "esport", emoji: "🏆", label: "E-sport" },
+          { tag: "brætspil", emoji: "🎲", label: "Brætspil" },
+          { tag: "rollespil", emoji: "🐉", label: "Rollespil" },
+          { tag: "lan-party", emoji: "🖧", label: "LAN Party" },
+        ],
+      },
+      {
+        tag: "frivilligt", emoji: "🫲", label: "Frivilligt", children: [
+          { tag: "strandrensning", emoji: "🏖️", label: "Strandrensning" },
+          { tag: "genbrugsbutik", emoji: "♻️", label: "Genbrugsbutik" },
+          { tag: "dyreinternat", emoji: "🐕", label: "Dyreinternat" },
+          { tag: "mentoring", emoji: "🎓", label: "Mentoring" },
+        ],
+      },
+      {
+        tag: "netværk", emoji: "🤝", label: "Netværk", children: [
+          { tag: "startup", emoji: "🚀", label: "Startup" },
+          { tag: "kreativt", emoji: "🎨", label: "Kreativt" },
+          { tag: "professionelt", emoji: "💼", label: "Professionelt" },
+          { tag: "speed-dating", emoji: "💕", label: "Speed-dating" },
+          { tag: "singles", emoji: "💖", label: "Singles" },
+        ],
+      },
+      {
+        tag: "familie", emoji: "👨‍👩‍👧‍👦", label: "Familie", children: [
+          { tag: "børnevenligt", emoji: "👶", label: "Børnevenligt" },
+          { tag: "leg", emoji: "🎠", label: "Leg" },
+          { tag: "zoo", emoji: "🦁", label: "Zoo" },
+          { tag: "forlystelsespark", emoji: "🏙️", label: "Forlystelsespark" },
+          { tag: "børneteater-fam", emoji: "🎭", label: "Børneteater" },
+          { tag: "familievandring", emoji: "🥾", label: "Familievandring" },
+          { tag: "seniorer", emoji: "👴", label: "Seniorer" },
+        ],
+      },
+      {
+        tag: "fotografering", emoji: "📸", label: "Fotografering", children: [
+          { tag: "portræt", emoji: "📸", label: "Portræt" },
+          { tag: "landskab", emoji: "🏞️", label: "Landskab" },
+          { tag: "gadebilleder", emoji: "🏙️", label: "Gadebilleder" },
+          { tag: "drone", emoji: "🛸", label: "Drone" },
+          { tag: "film-foto", emoji: "🎬", label: "Film" },
+          { tag: "vlogging", emoji: "📹", label: "Vlogging" },
+        ],
+      },
+    ],
   },
 
-  // ── MAD & DRIKKE ──
+  // ══════════════════════════════════════════════
+  // 6. LÆRING & UDVIKLING
+  // ══════════════════════════════════════════════
   {
-    tag: "mad", emoji: "🍽️", label: "Mad & Drikke", children: [
-      { tag: "madlavning", emoji: "👩‍🍳", label: "Madlavning" },
-      { tag: "bagning", emoji: "🍰", label: "Bagning" },
-      { tag: "streetfood", emoji: "🌮", label: "Streetfood" },
-      { tag: "sushi", emoji: "🍣", label: "Sushi" },
-      { tag: "grillaften", emoji: "🥩", label: "Grill" },
-      { tag: "vegansk", emoji: "🥬", label: "Vegansk" },
-      { tag: "vinsmagning", emoji: "🍷", label: "Vinsmagning" },
-      { tag: "ølsmagning", emoji: "🍺", label: "Ølsmagning" },
-      { tag: "cocktails", emoji: "🍹", label: "Cocktails" },
-      { tag: "kaffe", emoji: "☕", label: "Kaffe" },
-      { tag: "te", emoji: "🍵", label: "Te" },
-      { tag: "restaurant", emoji: "🍽️", label: "Restaurant" },
-      { tag: "cafe", emoji: "☕", label: "Café" },
-      { tag: "bar", emoji: "🍺", label: "Bar" },
-      { tag: "foodmarket", emoji: "🏪", label: "Food Market" },
-    ]
+    tag: "læring-udvikling",
+    emoji: "📚",
+    label: "Læring & Udvikling",
+    children: [
+      {
+        tag: "workshop", emoji: "🛠️", label: "Workshop", children: [
+          { tag: "kreativt-ws", emoji: "🎨", label: "Kreativt" },
+          { tag: "teknologi-ws", emoji: "💻", label: "Teknologi" },
+          { tag: "business-ws", emoji: "💼", label: "Business" },
+          { tag: "håndværk", emoji: "🔨", label: "Håndværk" },
+        ],
+      },
+      {
+        tag: "foredrag", emoji: "🎤️", label: "Foredrag", children: [
+          { tag: "inspiration", emoji: "✨", label: "Inspiration" },
+          { tag: "videnskab", emoji: "🔬", label: "Videnskab" },
+          { tag: "politik", emoji: "🏙️", label: "Politik" },
+          { tag: "ted-talks", emoji: "🎤", label: "TED Talks" },
+        ],
+      },
+      {
+        tag: "kursus", emoji: "📋", label: "Kursus", children: [
+          { tag: "online", emoji: "💻", label: "Online" },
+          { tag: "fysisk", emoji: "🏫", label: "Fysisk" },
+          { tag: "certificering", emoji: "📜", label: "Certificering" },
+        ],
+      },
+      {
+        tag: "tech", emoji: "💻", label: "Tech", children: [
+          { tag: "programmering", emoji: "👨‍💻", label: "Programmering" },
+          { tag: "ai", emoji: "🤖", label: "AI" },
+          { tag: "webdesign", emoji: "🌐", label: "Webdesign" },
+          { tag: "hackathon", emoji: "💻", label: "Hackathon" },
+        ],
+      },
+      {
+        tag: "bøger", emoji: "📚", label: "Bøger", children: [
+          { tag: "bogklub", emoji: "📖", label: "Bogklub" },
+          { tag: "skrivning", emoji: "✍️", label: "Skrivning" },
+          { tag: "lydbøger", emoji: "🎧", label: "Lydbøger" },
+          { tag: "bibliotek", emoji: "🏙️", label: "Bibliotek" },
+        ],
+      },
+    ],
   },
 
-  // ── KUNST & KULTUR ──
+  // ══════════════════════════════════════════════
+  // 7. WELLNESS & BALANCE
+  // ══════════════════════════════════════════════
   {
-    tag: "kunst", emoji: "🎨", label: "Kunst & Kultur", children: [
-      { tag: "maleri", emoji: "🖌️", label: "Maleri" },
-      { tag: "skulptur", emoji: "🗿", label: "Skulptur" },
-      { tag: "galleri", emoji: "🖼️", label: "Galleri" },
-      { tag: "museum", emoji: "🏛️", label: "Museum" },
-      { tag: "teater", emoji: "🎭", label: "Teater" },
-      { tag: "musical", emoji: "🎭", label: "Musical" },
-      { tag: "stand-up", emoji: "🎤", label: "Stand-up" },
-      { tag: "impro", emoji: "🎪", label: "Impro" },
-      { tag: "poesi", emoji: "📝", label: "Poesi / Spoken Word" },
-      { tag: "keramik", emoji: "🏺", label: "Keramik" },
-      { tag: "strik", emoji: "🧶", label: "Strik & Håndarbejde" },
-    ]
+    tag: "wellness-balance",
+    emoji: "🧘",
+    label: "Wellness & Balance",
+    children: [
+      {
+        tag: "yoga", emoji: "🧘", label: "Yoga", children: [
+          { tag: "hatha", emoji: "🧘", label: "Hatha" },
+          { tag: "vinyasa", emoji: "🧘", label: "Vinyasa" },
+          { tag: "yin", emoji: "🌙", label: "Yin" },
+          { tag: "hot-yoga", emoji: "🔥", label: "Hot Yoga" },
+        ],
+      },
+      {
+        tag: "meditation", emoji: "🧘", label: "Meditation", children: [
+          { tag: "mindfulness", emoji: "🌿", label: "Mindfulness" },
+          { tag: "guidet", emoji: "🎧", label: "Guidet" },
+          { tag: "retreat", emoji: "🏡", label: "Retreat" },
+        ],
+      },
+      {
+        tag: "sauna", emoji: "🧖", label: "Sauna", children: [
+          { tag: "vinterbadning-sauna", emoji: "🥶", label: "Vinterbadning" },
+          { tag: "spa", emoji: "💆", label: "Spa" },
+          { tag: "wellness-dag", emoji: "🌸", label: "Wellness-dag" },
+        ],
+      },
+    ],
   },
 
-  // ── FOTO & FILM ──
+  // ══════════════════════════════════════════════
+  // 8. REJSER & TRANSPORT
+  // ══════════════════════════════════════════════
   {
-    tag: "fotografering", emoji: "📸", label: "Foto & Film", children: [
-      { tag: "portræt", emoji: "📸", label: "Portræt" },
-      { tag: "landskab", emoji: "🏞️", label: "Landskab" },
-      { tag: "gadebilleder", emoji: "🏙️", label: "Gadefoto" },
-      { tag: "drone", emoji: "🛸", label: "Drone" },
-      { tag: "film", emoji: "🎬", label: "Film" },
-      { tag: "dokumentar", emoji: "📹", label: "Dokumentar" },
-      { tag: "vlogging", emoji: "📹", label: "Vlogging" },
-    ]
-  },
-
-  // ── YOGA & WELLNESS ──
-  {
-    tag: "yoga", emoji: "🧘", label: "Yoga & Wellness", children: [
-      { tag: "hatha", emoji: "🧘", label: "Hatha" },
-      { tag: "vinyasa", emoji: "🧘", label: "Vinyasa" },
-      { tag: "yin", emoji: "🌙", label: "Yin" },
-      { tag: "hot-yoga", emoji: "🔥", label: "Hot Yoga" },
-      { tag: "meditation", emoji: "🧘", label: "Meditation" },
-      { tag: "mindfulness", emoji: "🌿", label: "Mindfulness" },
-      { tag: "sauna", emoji: "🧖", label: "Sauna" },
-      { tag: "spa", emoji: "💆", label: "Spa" },
-      { tag: "breathwork", emoji: "🌬️", label: "Breathwork" },
-    ]
-  },
-
-  // ── SOCIAL ──
-  {
-    tag: "social", emoji: "👋", label: "Social", children: [
-      { tag: "netværk", emoji: "🤝", label: "Netværk" },
-      { tag: "singles", emoji: "💖", label: "Singles" },
-      { tag: "hygge", emoji: "🕯️", label: "Hygge" },
-      { tag: "book-club", emoji: "📚", label: "Bogklub" },
-      { tag: "språkcafe", emoji: "🗣️", label: "Sprogcafé" },
-      { tag: "quiz", emoji: "🧠", label: "Quiz aften" },
-      { tag: "filmaften", emoji: "🎬", label: "Filmaften" },
-      { tag: "picnic", emoji: "🧺", label: "Picnic" },
-      { tag: "fællesspisning", emoji: "🍲", label: "Fællesspisning" },
-    ]
-  },
-
-  // ── FAMILIE ──
-  {
-    tag: "familie", emoji: "👨‍👩‍👧‍👦", label: "Familie", children: [
-      { tag: "leg", emoji: "🎠", label: "Legeplads" },
-      { tag: "zoo", emoji: "🦁", label: "Zoo / Dyrepark" },
-      { tag: "forlystelsespark", emoji: "🎢", label: "Forlystelsespark" },
-      { tag: "børneteater", emoji: "🎭", label: "Børneteater" },
-      { tag: "familievandring", emoji: "🥾", label: "Familievandring" },
-      { tag: "svømmeland", emoji: "🏊", label: "Svømmeland" },
-      { tag: "naturlegeplads", emoji: "🌲", label: "Naturlegeplads" },
-    ]
-  },
-
-  // ── OUTDOOR ADVENTURE ──
-  {
-    tag: "outdoor", emoji: "🌿", label: "Outdoor", children: [
-      { tag: "overlevelse", emoji: "🏕️", label: "Overlevelse / Bushcraft" },
-      { tag: "geocaching", emoji: "📍", label: "Geocaching" },
-      { tag: "orienteringsløb", emoji: "🗺️", label: "Orienteringsløb" },
-      { tag: "rafting", emoji: "🚣", label: "Rafting" },
-      { tag: "zip-line", emoji: "🏔️", label: "Zip-line" },
-      { tag: "treetop", emoji: "🌳", label: "Treetop / Klatrepark" },
-      { tag: "paintball", emoji: "🔫", label: "Paintball" },
-      { tag: "archery", emoji: "🏹", label: "Bueskydning" },
-    ]
-  },
-
-  // ── TECH & LÆRING ──
-  {
-    tag: "tech", emoji: "💻", label: "Tech & Læring", children: [
-      { tag: "programmering", emoji: "👨‍💻", label: "Programmering" },
-      { tag: "ai", emoji: "🤖", label: "AI / Machine Learning" },
-      { tag: "webdesign", emoji: "🌐", label: "Webdesign" },
-      { tag: "startup", emoji: "🚀", label: "Startup" },
-      { tag: "workshop", emoji: "🛠️", label: "Workshop" },
-      { tag: "foredrag", emoji: "🎙️", label: "Foredrag" },
-      { tag: "hackathon", emoji: "💻", label: "Hackathon" },
-      { tag: "3d-print", emoji: "🖨️", label: "3D Print" },
-      { tag: "elektronik", emoji: "🔌", label: "Elektronik / Arduino" },
-    ]
-  },
-
-  // ── BØGER & SKRIVNING ──
-  {
-    tag: "bøger", emoji: "📚", label: "Bøger", children: [
-      { tag: "bogklub", emoji: "📖", label: "Bogklub" },
-      { tag: "skrivning", emoji: "✍️", label: "Skrivning" },
-      { tag: "lydbøger", emoji: "🎧", label: "Lydbøger" },
-      { tag: "bibliotek", emoji: "🏛️", label: "Bibliotek" },
-    ]
-  },
-
-  // ── FRIVILLIGT ──
-  {
-    tag: "frivilligt", emoji: "🤲", label: "Frivilligt", children: [
-      { tag: "strandrensning", emoji: "🏖️", label: "Strandrensning" },
-      { tag: "genbrugsbutik", emoji: "♻️", label: "Genbrug" },
-      { tag: "dyreinternat", emoji: "🐕", label: "Dyreinternat" },
-      { tag: "mentoring", emoji: "🎓", label: "Mentoring" },
-    ]
-  },
-
-  // ── SHOPPING & MARKEDER ──
-  {
-    tag: "shopping", emoji: "🛍️", label: "Shopping", children: [
-      { tag: "loppemarked", emoji: "🏪", label: "Loppemarked" },
-      { tag: "julemarked", emoji: "🎄", label: "Julemarked" },
-      { tag: "designmarked", emoji: "✨", label: "Designmarked" },
-      { tag: "bondens-marked", emoji: "🥕", label: "Bondens marked" },
-      { tag: "vintage", emoji: "👗", label: "Vintage" },
-    ]
-  },
-
-  // ── MOTOR ──
-  {
-    tag: "motor", emoji: "🏎️", label: "Motor", children: [
-      { tag: "go-kart", emoji: "🏎️", label: "Go-Kart" },
-      { tag: "motorcykel", emoji: "🏍️", label: "Motorcykel" },
-      { tag: "billøb", emoji: "🏁", label: "Billøb" },
-      { tag: "classic-cars", emoji: "🚗", label: "Klassiske biler" },
-    ]
-  },
-
-  // ── DYR ──
-  {
-    tag: "dyr", emoji: "🐾", label: "Dyr", children: [
-      { tag: "hundetur", emoji: "🐕", label: "Hundetur" },
-      { tag: "hundeskov", emoji: "🐕", label: "Hundeskov" },
-      { tag: "hundedressur", emoji: "🦮", label: "Hundedressur" },
-      { tag: "ridning-tur", emoji: "🐎", label: "Ridning" },
-      { tag: "dyrespotting", emoji: "🦌", label: "Dyrespotting" },
-    ]
-  },
-
-  // ── REJSER & TRANSPORT ──
-  {
-    tag: "rejser", emoji: "🚆", label: "Rejser & Transport", children: [
-      { tag: "tog", emoji: "🚆", label: "Tog" },
-      { tag: "samkoersel", emoji: "🚗", label: "Samkørsel" },
-      { tag: "cykelruter", emoji: "🚴", label: "Cykelruter" },
-      { tag: "faerge", emoji: "⛴️", label: "Færge" },
-      { tag: "roadtrip", emoji: "🛣️", label: "Road Trip" },
-      { tag: "flydeals", emoji: "✈️", label: "Fly-deals" },
-      { tag: "interrail", emoji: "🚂", label: "Interrail" },
-      { tag: "bus", emoji: "🚌", label: "Bus" },
-      { tag: "el-loebehjul", emoji: "🛴", label: "El-løbehjul" },
-    ]
-  },
-
-  // ── LOGI & BASE ──
-  {
-    tag: "logi", emoji: "🏕️", label: "Logi & Base", children: [
-      { tag: "shelter", emoji: "⛺", label: "Shelter" },
-      { tag: "camping", emoji: "🏕️", label: "Camping" },
-      { tag: "vandrerhjem", emoji: "🏠", label: "Vandrerhjem" },
-      { tag: "hytter", emoji: "🛖", label: "Hytter" },
-      { tag: "glamping", emoji: "✨", label: "Glamping" },
-      { tag: "baal", emoji: "🔥", label: "Bål & overnatning" },
-      { tag: "teltplads", emoji: "⛺", label: "Teltplads" },
-      { tag: "primitiv-overnatning", emoji: "🌲", label: "Primitiv overnatning" },
-    ]
+    tag: "rejser-transport",
+    emoji: "🚆",
+    label: "Rejser & Transport",
+    children: [
+      {
+        tag: "rejser", emoji: "✈️", label: "Rejser", children: [
+          { tag: "tog", emoji: "🚆", label: "Tog" },
+          { tag: "samkørsel", emoji: "🚗", label: "Samkørsel" },
+          { tag: "cykelruter", emoji: "🚴", label: "Cykelruter" },
+          { tag: "færge", emoji: "⛴️", label: "Færge" },
+          { tag: "roadtrip", emoji: "🛣️", label: "Road Trip" },
+          { tag: "flydeals", emoji: "✈️", label: "Fly-deals" },
+          { tag: "interrail", emoji: "🚂", label: "Interrail" },
+        ],
+      },
+      {
+        tag: "logi", emoji: "🏕️", label: "Logi", children: [
+          { tag: "shelter-logi", emoji: "⛺", label: "Shelter" },
+          { tag: "vandrerhjem", emoji: "🏠", label: "Vandrerhjem" },
+          { tag: "hytter", emoji: "🛖", label: "Hytter" },
+          { tag: "glamping-logi", emoji: "✨", label: "Glamping" },
+        ],
+      },
+    ],
   },
 ];
 
-/* ── Flatten: get all tags as flat array ── */
+/* ── Helper: smart match for short vs long queries ── */
+function smartMatch(text: string, q: string): boolean {
+  const t = text.toLowerCase();
+  if (q.length <= 3) {
+    return t === q || t.startsWith(q) || t.includes("-" + q) || t.includes(" " + q);
+  }
+  return t.includes(q);
+}
+
+/* ── Flatten: get all tags as flat array (all 3 levels) ── */
 export function getAllTagsFlat(): TagNode[] {
   const flat: TagNode[] = [];
-  for (const parent of TAG_TREE) {
-    flat.push({ tag: parent.tag, emoji: parent.emoji, label: parent.label });
-    if (parent.children) {
-      for (const child of parent.children) {
-        flat.push(child);
+  for (const over of TAG_TREE) {
+    flat.push({ tag: over.tag, emoji: over.emoji, label: over.label });
+    if (over.children) {
+      for (const kat of over.children) {
+        flat.push({ tag: kat.tag, emoji: kat.emoji, label: kat.label });
+        if (kat.children) {
+          for (const under of kat.children) {
+            flat.push(under);
+          }
+        }
       }
     }
   }
   return flat;
 }
 
-/* ── Search: type "cykling" → get parent + all children ── */
-/** Smart match: short queries (≤3 chars) use word-start matching to avoid
- *  false positives like "tog" matching "fo-tog-rafering". Longer queries
- *  use standard substring matching. */
-function smartMatch(text: string, q: string): boolean {
-  const t = text.toLowerCase();
-  if (q.length <= 3) {
-    // Must start a word: beginning of string, after a hyphen, after a space, or exact match
-    return t === q || t.startsWith(q) || t.includes("-" + q) || t.includes(" " + q);
-  }
-  return t.includes(q);
-}
-
+/* ── Search: search across all 3 levels ── */
 export function searchTags(query: string): TagNode[] {
   if (!query.trim()) return TAG_TREE.map(p => ({ tag: p.tag, emoji: p.emoji, label: p.label }));
 
@@ -455,40 +481,55 @@ export function searchTags(query: string): TagNode[] {
   const results: TagNode[] = [];
   const seen = new Set<string>();
 
-  for (const parent of TAG_TREE) {
-    const parentMatch =
-      smartMatch(parent.tag, q) ||
-      smartMatch(parent.label, q);
+  function addIfNew(node: TagNode) {
+    if (!seen.has(node.tag)) {
+      results.push({ tag: node.tag, emoji: node.emoji, label: node.label });
+      seen.add(node.tag);
+    }
+  }
 
-    if (parentMatch) {
-      // Show parent + ALL children
-      if (!seen.has(parent.tag)) {
-        results.push({ tag: parent.tag, emoji: parent.emoji, label: parent.label });
-        seen.add(parent.tag);
-      }
-      if (parent.children) {
-        for (const child of parent.children) {
-          if (!seen.has(child.tag)) {
-            results.push(child);
-            seen.add(child.tag);
+  for (const over of TAG_TREE) {
+    const overMatch = smartMatch(over.tag, q) || smartMatch(over.label, q);
+
+    if (overMatch) {
+      // Match on overkategori → show it + all kategorier + all underkategorier
+      addIfNew(over);
+      if (over.children) {
+        for (const kat of over.children) {
+          addIfNew(kat);
+          if (kat.children) {
+            for (const under of kat.children) {
+              addIfNew(under);
+            }
           }
         }
       }
-    } else if (parent.children) {
-      // Check children individually
-      for (const child of parent.children) {
-        if (
-          smartMatch(child.tag, q) ||
-          smartMatch(child.label, q)
-        ) {
-          // Show parent first, then matching child
-          if (!seen.has(parent.tag)) {
-            results.push({ tag: parent.tag, emoji: parent.emoji, label: parent.label });
-            seen.add(parent.tag);
+      continue;
+    }
+
+    // Check kategorier
+    if (over.children) {
+      for (const kat of over.children) {
+        const katMatch = smartMatch(kat.tag, q) || smartMatch(kat.label, q);
+
+        if (katMatch) {
+          // Match on kategori → show overkategori + kategori + all underkategorier
+          addIfNew(over);
+          addIfNew(kat);
+          if (kat.children) {
+            for (const under of kat.children) {
+              addIfNew(under);
+            }
           }
-          if (!seen.has(child.tag)) {
-            results.push(child);
-            seen.add(child.tag);
+        } else if (kat.children) {
+          // Check underkategorier
+          for (const under of kat.children) {
+            if (smartMatch(under.tag, q) || smartMatch(under.label, q)) {
+              // Match on underkategori → show overkategori + kategori + matching underkategori
+              addIfNew(over);
+              addIfNew(kat);
+              addIfNew(under);
+            }
           }
         }
       }
@@ -498,13 +539,35 @@ export function searchTags(query: string): TagNode[] {
   return results;
 }
 
-/* ── Get children of a tag ── */
+/* ── Get children of a tag (works at any level) ── */
 export function getChildren(tag: string): TagNode[] {
-  const parent = TAG_TREE.find(p => p.tag === tag);
-  return parent?.children || [];
+  // Check overkategorier
+  for (const over of TAG_TREE) {
+    if (over.tag === tag) return over.children || [];
+    // Check kategorier
+    if (over.children) {
+      for (const kat of over.children) {
+        if (kat.tag === tag) return kat.children || [];
+      }
+    }
+  }
+  return [];
 }
 
-/* ── Get parent categories only ── */
+/* ── Get parent categories (kategorier — the middle level) ── */
 export function getParentCategories(): TagNode[] {
-  return TAG_TREE.map(p => ({ tag: p.tag, emoji: p.emoji, label: p.label }));
+  const cats: TagNode[] = [];
+  for (const over of TAG_TREE) {
+    if (over.children) {
+      for (const kat of over.children) {
+        cats.push({ tag: kat.tag, emoji: kat.emoji, label: kat.label });
+      }
+    }
+  }
+  return cats;
 }
+
+/* ── Get overkategorier (top-level only) ── */
+export function getOverkategorier(): TagNode[] {
+  return TAG_TREE.map(o => ({ tag: o.tag, emoji: o.emoji, label: o.label }));
+           }
