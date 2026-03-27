@@ -2,9 +2,13 @@ import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
-import { getEventImage, formatDanishDate, getCategoryEmoji, getTimeBasedGreeting } from "@/lib/eventHelpers";
-import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink } from "lucide-react";
+import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
+import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal } from "lucide-react";
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
+import { buildTagFeed, scoreEvent, getTrendingTags, getTagNode, type TagSection } from "@/lib/tagEngine";
+import { useAuth } from "@/context/AuthContext";
+import { useTags } from "@/context/TagContext";
+import { FeedTagEditor } from "@/components/FeedTagEditor";
 
 const FRIENDS = [
   { name: "Anna", initial: "A" },
@@ -13,9 +17,17 @@ const FRIENDS = [
   { name: "Jonas", initial: "J" },
 ];
 
-const POPULAR_TAGS = ["#Cykling", "#Løb", "#Fodbold", "#Ski"];
+function getPersonalizedGreeting(name?: string | null): string {
+  const hour = new Date().getHours();
+  const timeGreeting = hour < 12 ? "God morgen" : hour < 17 ? "God eftermiddag" : "God aften";
+  return name ? `${timeGreeting}, ${name}` : `${timeGreeting}, opdagelsesrejsende`;
+}
 
-export default function TestFeed() {
+export default function Feed() {
+  const { profile } = useAuth();
+  const { selectedTags, city } = useTags();
+  const [tagEditorOpen, setTagEditorOpen] = useState(false);
+
   const { data: events = [], isLoading } = useQuery({
     queryKey: ["/api/events"],
     queryFn: getEvents,
@@ -35,16 +47,28 @@ export default function TestFeed() {
     return allNews.slice(0, 6);
   }, [allNews]);
 
-  const greeting = getTimeBasedGreeting();
+  const greeting = getPersonalizedGreeting(profile?.name);
 
-  const eventsByCategory: Record<string, any[]> = {};
-  events.forEach(event => {
-    const cat = event.category || "Andet";
-    if (!eventsByCategory[cat]) eventsByCategory[cat] = [];
-    eventsByCategory[cat].push(event);
-  });
+  // Build tag-based feed sections using tagEngine
+  const tagSections = useMemo(() => {
+    if (events.length === 0 || selectedTags.length === 0) return [];
+    const sections = buildTagFeed(events, selectedTags);
+    // Sort events within each section by relevance score
+    return sections.map(section => ({
+      ...section,
+      events: [...section.events].sort((a, b) => scoreEvent(b, selectedTags) - scoreEvent(a, selectedTags)),
+    }));
+  }, [events, selectedTags]);
 
-  const categories = Object.keys(eventsByCategory).filter(c => eventsByCategory[c].length > 0);
+  // Trending tags from real event data
+  const trendingTags = useMemo(() => {
+    return getTrendingTags(events, 12);
+  }, [events]);
+
+  // Subtitle line
+  const subtitle = profile
+    ? `${city || profile.city || "Danmark"} · ${selectedTags.length} tags valgt`
+    : "Her er hvad der sker i dine netværk";
 
   if (isLoading) {
     return (
@@ -60,9 +84,16 @@ export default function TestFeed() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold">{greeting}</h1>
-            <p className="text-white/50 mt-1">Her er hvad der sker i dine netværk</p>
+            <p className="text-white/50 mt-1">{subtitle}</p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setTagEditorOpen(true)}
+              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+              title="Rediger tags"
+            >
+              <SlidersHorizontal size={18} className="text-white/60" />
+            </button>
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
               <input type="text" placeholder="Søg events, steder..." className="bg-white/10 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-cyan-500 w-48" />
@@ -87,22 +118,30 @@ export default function TestFeed() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
           <div>
-            {categories.length === 0 ? (
-              <p className="text-white/40 text-center py-12">Ingen events fundet</p>
+            {tagSections.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-white/40 mb-3">Ingen events matcher dine tags</p>
+                <button
+                  onClick={() => setTagEditorOpen(true)}
+                  className="text-sm text-[#4ECDC4] hover:underline"
+                >
+                  Vælg tags for at se personlige forslag
+                </button>
+              </div>
             ) : (
-              categories.map(category => (
-                <div key={category} className="mb-10">
+              tagSections.map(section => (
+                <div key={section.tag} className="mb-10">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold">
-                      {getCategoryEmoji(category)}&nbsp;&nbsp;{category.charAt(0).toUpperCase() + category.slice(1)}
+                      {section.emoji}&nbsp;&nbsp;{section.label}
                     </h2>
                     <Link href="/udforsk" className="text-xs text-[#4ECDC4] hover:underline flex items-center gap-1">
                       <span>Se alle</span> <ChevronRight size={14} />
                     </Link>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {eventsByCategory[category].slice(0, 4).map(event => (
-                      <Link key={event.id} href={`/event/${event.id}`} className="glass-card rounded-xl overflow-hidden hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all group">
+                  <div className="flex gap-3 overflow-x-auto pb-2">
+                    {section.events.map(event => (
+                      <Link key={event.id} href={`/event/${event.id}`} className="glass-card rounded-xl overflow-hidden hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all group min-w-[180px] max-w-[220px] flex-shrink-0">
                         <img src={getEventImage(event)} alt={event.title} className="w-full h-28 object-cover" onError={(e) => { const target = e.target as HTMLImageElement; target.src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&auto=format&fit=crop"; }} />
                         <div className="p-3">
                           <p className="text-[10px] text-white/40 mb-1">{formatDanishDate(event.date)}</p>
@@ -154,14 +193,22 @@ export default function TestFeed() {
             <div className="glass-card rounded-2xl p-4">
               <h3 className="text-sm font-semibold text-white/70 mb-3">Populære Tags</h3>
               <div className="flex flex-wrap gap-2">
-                {POPULAR_TAGS.map(tag => (
-                  <span key={tag} className="text-xs bg-white/5 text-white/50 px-3 py-1.5 rounded-full hover:bg-white/10 cursor-pointer transition-colors">{tag}</span>
-                ))}
+                {trendingTags.map(({ tag, count }) => {
+                  const node = getTagNode(tag);
+                  return (
+                    <span key={tag} className="text-xs bg-white/5 text-white/50 px-3 py-1.5 rounded-full hover:bg-white/10 cursor-pointer transition-colors">
+                      {node?.emoji || "🏷️"} #{node?.label || tag}
+                      <span className="ml-1 text-white/25">{count}</span>
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </aside>
         </div>
       </div>
+
+      <FeedTagEditor open={tagEditorOpen} onClose={() => setTagEditorOpen(false)} />
     </div>
   );
 }
