@@ -1,8 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = "https://rbengtfrthqdfbcdcugp.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZW5ndGZydGhxZGZiY2RjdWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2MjUwNjksImV4cCI6MjA4ODIwMTA2OX0.9RXVN3u0UzXO2ideDFA8Un34jqUEf6hiG8ZJki5RAXk";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://rbengtfrthqdfbcdcugp.supabase.co";
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZW5ndGZydGhxZGZiY2RjdWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2MjUwNjksImV4cCI6MjA4ODIwMTA2OX0.9RXVN3u0UzXO2ideDFA8Un34jqUEf6hiG8ZJki5RAXk";
 
 // Custom in-memory storage to avoid localStorage (blocked in sandboxed iframes)
 const memoryStorage: Record<string, string> = {};
@@ -178,6 +177,65 @@ export async function fetchPlacesWithLimit(limit = 50): Promise<Place[]> {
     .limit(limit);
   if (error) { console.error("fetchPlacesWithLimit error:", error); return []; }
   return data || [];
+}
+
+/* ── Notification helpers ── */
+
+export async function createNotification(
+  userId: string,
+  type: string,
+  title: string,
+  body: string,
+  data?: Record<string, any>,
+) {
+  return supabase.from("notifications").insert({
+    user_id: userId,
+    type,
+    title,
+    body,
+    data: data ?? null,
+    is_read: false,
+  });
+}
+
+export async function createTagMatchNotification(userId: string, event: Event) {
+  const tag = event.interest_tags?.[0] || event.category;
+  return createNotification(
+    userId,
+    "tag_match",
+    `Nyt #${tag} event nær dig`,
+    event.title,
+    { link: `/event/${event.id}`, event_id: event.id },
+  );
+}
+
+export async function createEventInviteNotification(
+  userId: string,
+  eventTitle: string,
+  eventId: string,
+  inviterName: string,
+) {
+  return createNotification(
+    userId,
+    "event_invite",
+    `${inviterName} har inviteret dig`,
+    eventTitle,
+    { link: `/event/${eventId}`, event_id: eventId },
+  );
+}
+
+export async function createFriendRequestNotification(
+  userId: string,
+  fromName: string,
+  fromId: string,
+) {
+  return createNotification(
+    userId,
+    "friend_request",
+    `${fromName} vil følge dig`,
+    "Tryk for at acceptere eller afvise",
+    { link: `/profil/${fromId}`, from_user_id: fromId },
+  );
 }
 
 /** Count places by city */
