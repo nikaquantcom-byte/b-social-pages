@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import type { ReactNode } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { getOverkategoriForTag } from "@/lib/tagEngine";
 
 export type LifeMode = "solo" | "par" | "med-børn" | "venner" | "gruppe";
 export type PriceTier = "alle" | "gratis" | "hverdag" | "premium";
@@ -20,6 +21,8 @@ interface TagContextType {
   setOnboardingInterests: (interests: string[]) => void;
   radius: number;
   setRadius: (radius: number) => void;
+  /** Returns unique overkategorier the user has tags in */
+  getSelectedOverkategorier: () => string[];
 }
 
 const TagContext = createContext<TagContextType>({
@@ -37,6 +40,7 @@ const TagContext = createContext<TagContextType>({
   setOnboardingInterests: () => {},
   radius: 10,
   setRadius: () => {},
+  getSelectedOverkategorier: () => [],
 });
 
 export function TagProvider({ children }: { children: ReactNode }) {
@@ -58,7 +62,7 @@ export function TagProvider({ children }: { children: ReactNode }) {
   // Sync from profile whenever it loads or changes
   useEffect(() => {
     if (profile) {
-      if (profile.city) { setCityRaw(profile.city); setCities(profile.cities || [profile.city]); }
+      if (profile.city) { setCityRaw(profile.city); setCities([profile.city]); }
       if (profile.radius_km) setRadius(profile.radius_km);
       if (profile.interests && profile.interests.length > 0) {
         setOnboardingInterests(profile.interests);
@@ -67,8 +71,15 @@ export function TagProvider({ children }: { children: ReactNode }) {
     }
   }, [profile]);
 
+  // Derive unique overkategorier from the user's selected tags
+  const getSelectedOverkategorier = useMemo(() => {
+    return () => [...new Set(
+      selectedTags.map(t => getOverkategoriForTag(t)).filter(Boolean) as string[]
+    )];
+  }, [selectedTags]);
+
   return (
-    <TagContext.Provider value={{ selectedTags, setSelectedTags, lifeMode, setLifeMode, priceTier, setPriceTier, city, setCity, cities, setCities, onboardingInterests, setOnboardingInterests, radius, setRadius }}>
+    <TagContext.Provider value={{ selectedTags, setSelectedTags, lifeMode, setLifeMode, priceTier, setPriceTier, city, setCity, cities, setCities, onboardingInterests, setOnboardingInterests, radius, setRadius, getSelectedOverkategorier }}>
       {children}
     </TagContext.Provider>
   );
