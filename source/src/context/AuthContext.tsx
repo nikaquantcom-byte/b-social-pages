@@ -1,10 +1,12 @@
-// AuthContext — real Supabase auth
+// AuthContext — real Supabase auth with role-based access control
 // In-memory storage used because localStorage is blocked in sandboxed iframes
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 import type { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+
+export type UserRole = "user" | "firma" | "admin";
 
 interface AuthContextType {
   user: User | null;
@@ -15,6 +17,11 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   profile: ProfileData | null;
+  role: UserRole;
+  companyId: string | null;
+  isFirma: () => boolean;
+  isAdmin: () => boolean;
+  isLoggedIn: () => boolean;
 }
 
 export interface ProfileData {
@@ -33,6 +40,7 @@ export interface ProfileData {
   discovery_mode: string;
   experience_mode: string;
   energy_level: string;
+  role: UserRole;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -44,6 +52,11 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
   refreshProfile: async () => {},
   profile: null,
+  role: "user",
+  companyId: null,
+  isFirma: () => false,
+  isAdmin: () => false,
+  isLoggedIn: () => false,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -51,6 +64,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const [role, setRole] = useState<UserRole>("user");
+  const [companyId, setCompanyId] = useState<string | null>(null);
 
   // Fetch user profile from Supabase
   const fetchProfile = useCallback(async (userId: string) => {
@@ -61,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .single();
 
     if (!error && data) {
+      const userRole: UserRole = data.role ?? "user";
       setProfile({
         id: data.id,
         name: data.name,
@@ -77,7 +93,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         discovery_mode: data.discovery_mode ?? "both",
         experience_mode: data.experience_mode ?? "solo",
         energy_level: data.energy_level ?? "medium",
+        role: userRole,
       });
+      setRole(userRole);
+
+      // Fetch company membership if user is firma or admin
+      if (userRole === "firma" || userRole === "admin") {
+        const { data: membership } = await supabase
+          .from("company_members")
+          .select("company_id")
+          .eq("user_id", userId)
+          .single();
+
+        setCompanyId(membership?.company_id ?? null);
+      } else {
+        setCompanyId(null);
+      }
     }
   }, []);
 
@@ -86,6 +117,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await fetchProfile(user.id);
     }
   }, [user?.id, fetchProfile]);
+
+  const isLoggedIn = useCallback(() => !!user && !!session, [user, session]);
+  const isFirma = useCallback(() => role === "firma" || role === "admin", [role]);
+  const isAdmin = useCallback(() => role === "admin", [role]);
 
   // Listen for auth state changes
   useEffect(() => {
@@ -108,6 +143,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           fetchProfile(newSession.user.id);
         } else {
           setProfile(null);
+          setRole("user");
+          setCompanyId(null);
         }
       }
     );
@@ -150,6 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         vibe_tags: [],
         radius_km: 10,
         city: null,
+        role: "user",
       }, { onConflict: "id" });
 
       if (profileError) {
@@ -172,11 +210,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setSession(null);
     setProfile(null);
+    setRole("user");
+    setCompanyId(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, signIn, signUp, signOut, refreshProfile, profile }}
+      value={{
+        user, session, loading, signIn, signUp, signOut,
+        refreshProfile, profile, role, companyId,
+        isFirma, isAdmin, isLoggedIn,
+      }}
     >
       {children}
     </AuthContext.Provider>
