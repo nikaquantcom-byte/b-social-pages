@@ -20,6 +20,7 @@ import FirmaTargeting from "@/pages/FirmaTargeting";
 import FirmaAnalytics from "@/pages/FirmaAnalytics";
 import FirmaFakturering from "@/pages/FirmaFakturering";
 import FirmaRekruttering from "@/pages/FirmaRekruttering";
+import Indstillinger from "@/pages/Indstillinger";
 import Overblik from "@/pages/Overblik";
 // Desktop layout (now the default)
 import DesktopAppLayout from "@/components/DesktopAppLayout";
@@ -34,7 +35,7 @@ function MainRouter() {
     <DesktopAppLayout>
       <Switch>
         <Route path="/" component={TestFeed} />
-                <Route path="/test" component={TestFeed} />
+        <Route path="/test" component={TestFeed} />
         <Route path="/udforsk" component={TestUdforsk} />
         <Route path="/kort" component={TestKort} />
         <Route path="/beskeder" component={TestBeskeder} />
@@ -54,6 +55,7 @@ function FirmaRouter() {
       <Route path="/firma/analytics" component={FirmaAnalytics} />
       <Route path="/firma/fakturering" component={FirmaFakturering} />
       <Route path="/firma/rekruttering" component={FirmaRekruttering} />
+      <Route path="/firma/indstillinger" component={Indstillinger} />
       <Route path="/firma" component={FirmaDashboard} />
     </Switch>
   );
@@ -77,18 +79,16 @@ function App() {
   useReferralCapture();
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TagProvider>
+      <TagProvider>
+        <AuthProvider>
           <JoinProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router hook={useHashLocation}>
-                <RootRouter />
-              </Router>
-            </TooltipProvider>
+            <Router hook={useHashLocation}>
+              <RootRouter />
+            </Router>
+            <Toaster />
           </JoinProvider>
-        </TagProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </TagProvider>
     </QueryClientProvider>
   );
 }
