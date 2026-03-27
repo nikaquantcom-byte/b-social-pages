@@ -41,6 +41,7 @@ function MainRouter() {
         <Route path="/beskeder" component={TestBeskeder} />
         <Route path="/min-side" component={TestMinSide} />
         <Route path="/event/:id" component={EventDetail} />
+                <Route path="/indstillinger" component={Indstillinger} />
         <Route component={NotFound} />
       </Switch>
     </DesktopAppLayout>
