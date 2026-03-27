@@ -1,7 +1,6 @@
-// Local data layer — reads from static events.json
-// Replaces all Supabase fetch calls so the app works without a valid API key
-
-import eventsData from "@/data/events.json";
+// Live data layer — fetches from Supabase with static JSON fallback
+import { supabase } from "./supabase";
+import staticEvents from "@/data/events.json";
 
 export type Event = {
   id: string;
@@ -22,47 +21,52 @@ export type Event = {
   weather_suitable: string[] | null;
   indoor_outdoor: string | null;
   category_level: number | null;
-    min_required_participants: number | null;
+  min_required_participants: number | null;
 };
 
-// The JSON is already sorted by created_at; sort by date ascending for display
-const ALL_EVENTS: Event[] = (eventsData as Event[]).sort(
-  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-);
+let _cachedEvents: Event[] | null = null;
 
-/** Return all events, sorted by date ascending */
-export function getEvents(): Event[] {
-  return ALL_EVENTS;
+/** Fetch all events — live from Supabase, fallback to static JSON */
+export async function getEvents(): Promise<Event[]> {
+  // Return cache if available
+  if (_cachedEvents) return _cachedEvents;
+
+  try {
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .order("date", { ascending: true });
+
+    if (!error && data && data.length > 0) {
+      _cachedEvents = data as Event[];
+      // Refresh cache every 10 minutes
+      setTimeout(() => { _cachedEvents = null; }, 10 * 60 * 1000);
+      return _cachedEvents;
+    }
+  } catch (e) {
+    console.warn("Supabase fetch failed, using static fallback:", e);
+  }
+
+  // Fallback: static JSON sorted by date
+  const fallback = (staticEvents as Event[]).sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+  return fallback;
 }
 
-/** Return a single event by id, or null if not found */
-export function getEventById(id: string): Event | null {
-  return ALL_EVENTS.find((e) => e.id === id) ?? null;
+/** Get single event by id */
+export async function getEventById(id: string): Promise<Event | null> {
+  const events = await getEvents();
+  return events.find((e) => e.id === id) ?? null;
 }
 
-/** Return events filtered by interest tags */
-export function getEventsByTags(tags: string[]): Event[] {
-  if (tags.length === 0) return ALL_EVENTS;
-  return ALL_EVENTS.filter(
+/** Get events filtered by interest tags */
+export async function getEventsByTags(tags: string[]): Promise<Event[]> {
+  const events = await getEvents();
+  if (tags.length === 0) return events;
+  return events.filter(
     (e) =>
       e.interest_tags?.some((t) => tags.includes(t)) ||
-      tags.some((tag) => (e.category || "").toLowerCase().includes(tag))
+      tags.includes(e.category?.toLowerCase())
   );
 }
-
-// Re-export Profile type so pages that import it from supabase.ts still compile
-// after we switch them to import from data.ts
-export type Profile = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  avatar_url: string | null;
-  bio: string | null;
-  full_name: string | null;
-  location: string | null;
-  city: string | null;
-  interests: string[] | null;
-  vibe_tags: string[] | null;
-  created_at: string;
-  updated_at: string | null;
-};
