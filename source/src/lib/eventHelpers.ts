@@ -15,6 +15,7 @@ export const CATEGORY_EMOJI: Record<string, string> = {
   skov: "🌲",
   festival: "🎪",
   cykling: "🚴",
+  løb: "🏃",
   vandring: "🥾",
   fotografering: "📸",
   meditation: "🧘",
@@ -27,6 +28,13 @@ export const CATEGORY_EMOJI: Record<string, string> = {
   streetfood: "🌮",
   shopping: "🛍️",
   teater: "🎭",
+  fodbold: "⚽",
+  basketball: "🏀",
+  ski: "⛷️",
+  snowboard: "🏂",
+  svømning: "🏊",
+  kampsport: "🥋",
+  vandsport: "🤿",
 };
 
 export function getCategoryEmoji(category: string): string {
@@ -51,6 +59,20 @@ const FALLBACK_IMAGES: Record<string, string> = {
   kaffe: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&auto=format&fit=crop",
   cafe: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&auto=format&fit=crop",
   festival: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&auto=format&fit=crop",
+  cykling: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&auto=format&fit=crop",
+  løb: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&auto=format&fit=crop",
+  maraton: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&auto=format&fit=crop",
+  trail: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&auto=format&fit=crop",
+  fodbold: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&auto=format&fit=crop",
+  basketball: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&auto=format&fit=crop",
+  ski: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&auto=format&fit=crop",
+  outdoor: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&auto=format&fit=crop",
+  svømning: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=400&auto=format&fit=crop",
+  mad: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&auto=format&fit=crop",
+  restaurant: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&auto=format&fit=crop",
+  teater: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=400&auto=format&fit=crop",
+  yoga: "https://images.unsplash.com/photo-1545389336-cf090694435e?w=400&auto=format&fit=crop",
+  dans: "https://images.unsplash.com/photo-1547153760-18fc86324498?w=400&auto=format&fit=crop",
 };
 
 export function getEventImage(event: { image_url?: string | null; category?: string | null }): string {
@@ -78,9 +100,9 @@ export function formatDanishDate(dateStr: string): string {
 
 export function getTimeBasedGreeting(): string {
   const hour = new Date().getHours();
-  if (hour < 12) return "Godmorgen";
+  if (hour < 12) return "God morgen";
   if (hour < 17) return "God eftermiddag";
-  return "Godaften";
+  return "God aften";
 }
 
 export const ALL_TAGS = [
