@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, useMap, CircleMarker } from "react-lea
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlaces, type Place } from "@/lib/supabase";
+import { fetchPlaces, fetchEvents, type Place, type Event as SupabaseEvent } from "@/lib/supabase";
 
 // Prevent Leaflet from injecting default marker image (red pin)
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -33,6 +33,7 @@ interface MapPin {
   rating: number;
   ratingCount?: number;
   isEvent?: boolean;
+  isSupabaseEvent?: boolean;
   spots?: { current: number; total: number };
   season?: string;
   difficulty?: string;
@@ -40,6 +41,9 @@ interface MapPin {
   city?: string;
   fromSupabase?: boolean;
   image?: string;
+  date?: string;
+  price?: number | null;
+  eventId?: string;
 }
 
 /* ── Category config ── */
@@ -140,8 +144,8 @@ export const HARDCODED_PINS: MapPin[] = [
   { id: "m1", name: "Jomfru Ane Gade", lat: 57.048, lng: 9.921, category: "mad", description: "Aalborgs berømte gågade med restauranter, barer og caféer. Altid liv og stemning.", rating: 4.2 },
   { id: "m2", name: "Streetfood Aalborg", lat: 57.048, lng: 9.922, category: "mad", description: "Street food marked i Nordkraft med køkkener fra hele verden. Budget-venligt.", rating: 4.3 },
   { id: "m3", name: "Café Frederiksberg", lat: 57.044, lng: 9.912, category: "mad", description: "Hyggelig café med god kaffe, brunch og hjemmelavet kage. Perfekt mødested.", rating: 4.5 },
-  { id: "m4", name: "Duus Vinkjælder", lat: 57.047, lng: 9.920, category: "mad", description: "Historisk vinkælder fra 1624. Vin, mad og atmosfære i Aalborgs ældste kælder.", rating: 4.6 },
-  { id: "m5", name: "Skomagerrækken", lat: 57.045, lng: 9.905, category: "mad", description: "Charmerende gade med små butikker og caféer i historiske bindingsværkshuse.", rating: 4.4 },
+  { id: "m4", name: "Duus Vinkjælder", lat: 57.047, lng: 9.920, category: "mad", description: "Historisk vinkjælder fra 1624. Vin, mad og atmosfære i Aalborgs ældste kælder.", rating: 4.6 },
+  { id: "m5", name: "Skomagerkrækken", lat: 57.045, lng: 9.905, category: "mad", description: "Charmerende gade med små butikker og caféer i historiske bindingsværkshuse.", rating: 4.4 },
 
   // AALBORG — SPIL
   { id: "sp1", name: "Brætspilscaféen", lat: 57.046, lng: 9.918, category: "spil", description: "Over 500 brætspil at vælge imellem. Kaffe, øl og snacks. Perfekt til en hyggelig aften.", rating: 4.7 },
@@ -185,7 +189,7 @@ export const HARDCODED_PINS: MapPin[] = [
   { id: "shl2", name: "Rold Skov shelter", lat: 56.838, lng: 9.825, category: "shelter", description: "Skovly i hjertet af Rold Skov. Bålplads, vand og toilet tæt på.", rating: 4.4 },
 
   // DYRESPOT
-  { id: "dyr1", name: "Lille Vildmose dyrespot", lat: 56.880, lng: 10.200, category: "dyrespot", description: "Se vilde krondyr, vildsvin og ørne. Bedst ved solopgang.", rating: 4.9 },
+  { id: "dyr1", name: "Lille Vildmose dyrespot", lat: 56.880, lng: 10.200, category: "dyrespot", description: "Se vilde kronsdyr, vildsvin og ørne. Bedst ved solopgang.", rating: 4.9 },
   { id: "dyr2", name: "Egholm vilde heste", lat: 57.066, lng: 9.865, category: "dyrespot", description: "Vilde heste og køer på Egholm. Tæt på og frit tilgængeligt.", rating: 4.5 },
 
   // SOCIAL from feedData
@@ -228,7 +232,7 @@ export const HARDCODED_PINS: MapPin[] = [
   { id: "rol1", name: "Rebild Bakker", lat: 56.836, lng: 9.827, category: "natur", description: "Smuk nationalpark i Rold Skov. Vandreruter og sprækkedal.", rating: 4.7 },
 
   // MUSIK
-  { id: "mu1", name: "Skråen Musiksted", lat: 57.049, lng: 9.922, category: "musik", description: "Aalborgs legendariske spillested i Nordkraft. Live musik.", rating: 4.6 },
+  { id: "mu1", name: "Skråen Musiksted", lat: 57.049, lng: 9.922, category: "musik", description: "Aalborgs legendære spillested i Nordkraft. Live musik.", rating: 4.6 },
   { id: "mu2", name: "Studenterhuset", lat: 57.047, lng: 9.921, category: "musik", description: "Live musik, jamsessions og kulturelle events.", rating: 4.2 },
 
   // KREATIVT
@@ -242,7 +246,7 @@ export const HARDCODED_PINS: MapPin[] = [
   { id: "fi3", name: "Vestre Bådehavns Vinterbad", lat: 57.050, lng: 9.905, category: "fitness", description: "Vinterbadning med sauna. Kold dukkert og varmt fællesskab.", rating: 4.8 },
 
   // OUTDOOR
-  { id: "ou1", name: "Egholm Fuglereservat", lat: 57.065, lng: 9.865, category: "outdoor", description: "Fuglereservat med udsigtstårn. Vådenge og vadefugle.", rating: 4.6 },
+  { id: "ou1", name: "Egholm Fuglereservat", lat: 57.065, lng: 9.865, category: "outdoor", description: "Fuglereservat med udsigtsTårn. Vådenge og vadefugle.", rating: 4.6 },
   { id: "ou2", name: "Lille Vildmose Naturcenter", lat: 56.880, lng: 10.200, category: "outdoor", description: "Guidede ture i Nordeuropas største højmose. Krondyr og ørne.", rating: 4.9 },
   { id: "ou3", name: "Aalborg Kajakklub", lat: 57.052, lng: 9.908, category: "outdoor", description: "Kajakklub ved Limfjorden. Lån kajak eller SUP-board.", rating: 4.4 },
   { id: "ou4", name: "Aalborg Ridecenter", lat: 57.030, lng: 9.880, category: "outdoor", description: "Rideskole med heste til alle niveauer.", rating: 4.3 },
@@ -258,9 +262,9 @@ export const HARDCODED_PINS: MapPin[] = [
   { id: "ev3", name: "Nytorv Loppemarked", lat: 57.048, lng: 9.918, category: "events", description: "Månedligt loppemarked med vintage og genbrug.", rating: 4.3, isEvent: true },
 
   // KARRIERE
-  { id: "ka1", name: "Aalborg Startupværksted", lat: 57.046, lng: 9.922, category: "karriere", description: "Co-working space og iværksættermiljø.", rating: 4.4 },
-  { id: "ka2", name: "NOVI Innovation", lat: 57.015, lng: 9.985, category: "karriere", description: "Nordjyllands største innovationsmiljø.", rating: 4.5 },
-  { id: "ka3", name: "AAU Inkubator", lat: 57.015, lng: 9.975, category: "karriere", description: "Aalborg Universitets iværksættermiljø.", rating: 4.3 },
+  { id: "ka1", name: "Aalborg Startupværksted", lat: 57.046, lng: 9.922, category: "karriere", description: "Co-working space og iværksættermøø.", rating: 4.4 },
+  { id: "ka2", name: "NOVI Innovation", lat: 57.015, lng: 9.985, category: "karriere", description: "Nordjyllands største innovationsmøø.", rating: 4.5 },
+  { id: "ka3", name: "AAU Inkubator", lat: 57.015, lng: 9.975, category: "karriere", description: "Aalborg Universitets iværksættermøø.", rating: 4.3 },
 
   // TECH
   { id: "te1", name: "Aalborg Hackerspace", lat: 57.044, lng: 9.912, category: "tech", description: "Maker space med 3D-printere og coding meetups.", rating: 4.4 },
@@ -330,6 +334,29 @@ function placeToPin(place: Place): MapPin {
   };
 }
 
+/* ── Supabase event → MapPin ── */
+function supabaseEventToPin(event: SupabaseEvent): MapPin | null {
+  if (!event.latitude || !event.longitude) return null;
+  return {
+    id: `ev-${event.id}`,
+    eventId: event.id,
+    name: event.title,
+    lat: event.latitude,
+    lng: event.longitude,
+    category: "events",
+    description: event.description,
+    rating: 0,
+    isEvent: true,
+    isSupabaseEvent: true,
+    fromSupabase: true,
+    tags: event.interest_tags || [],
+    image: event.image_url || undefined,
+    date: event.date,
+    price: event.price,
+    city: event.location,
+  };
+}
+
 /* ── Pin icon: colored emoji circle ── */
 function createEmojiIcon(emoji: string, hex: string, size: number = 32): L.DivIcon {
   return L.divIcon({
@@ -387,8 +414,8 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
           <img src={headerImg} alt={pin.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f142d] via-[#0f142d]/40 to-transparent" />
           {/* Category badge */}
-          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: meta.hex }}>
-            {meta.emoji} {meta.label}
+          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: pin.isSupabaseEvent ? "#f97316" : meta.hex }}>
+            {pin.isSupabaseEvent ? "🎉 Event" : `${meta.emoji} ${meta.label}`}
           </span>
           {pin.fromSupabase && (
             <span className="absolute top-2.5 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/90 text-white text-[9px] font-bold">DB</span>
@@ -432,6 +459,21 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
             </div>
           )}
 
+          {/* Event date + price */}
+          {pin.isSupabaseEvent && pin.date && (
+            <div className="flex items-center gap-2 mb-2 text-[11px]">
+              <span className="text-[#f97316] font-medium">
+                {new Date(pin.date).toLocaleDateString("da-DK", { day: "numeric", month: "short", year: "numeric" })}
+              </span>
+              {pin.price != null && (
+                <>
+                  <span className="text-white/20">·</span>
+                  <span className="text-white/60">{pin.price === 0 ? "Gratis" : `${pin.price} kr`}</span>
+                </>
+              )}
+            </div>
+          )}
+
           <p className="text-white/55 text-xs leading-relaxed mb-3">{pin.description}</p>
 
           {/* Event spots */}
@@ -451,24 +493,35 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
 
           {/* Action buttons */}
           <div className="flex gap-2">
-            {pin.fromSupabase ? (
-              <Link href={`/sted/${pin.id.startsWith('sb-') ? pin.id.slice(3) : pin.id}`} className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
-                Se mere
-              </Link>
+            {pin.isSupabaseEvent && pin.eventId ? (
+              <>
+                <Link href={`/event/${pin.eventId}`} className="flex-1 py-2.5 rounded-xl bg-[#f97316] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#ea580c] transition-colors">
+                  Deltag
+                </Link>
+                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="py-2.5 px-3 rounded-xl bg-white/10 text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-white/15 transition-colors">
+                  <Navigation size={13} />
+                </a>
+              </>
+            ) : pin.fromSupabase ? (
+              <>
+                <Link href={`/sted/${pin.id.startsWith('sb-') ? pin.id.slice(3) : pin.id}`} className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
+                  Se mere
+                </Link>
+                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="py-2.5 px-3 rounded-xl bg-white/10 text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-white/15 transition-colors">
+                  <ExternalLink size={13} />
+                </a>
+              </>
             ) : (
-              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
-                <Navigation size={13} /> Vis rute
-              </a>
-            )}
-            {pin.fromSupabase && (
-              <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-2.5 rounded-xl bg-white/10 text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-white/15 transition-colors">
-                <ExternalLink size={13} /> Vis rute
-              </a>
-            )}
-            {pin.isEvent && (
-              <button className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
-                Deltag
-              </button>
+              <>
+                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
+                  <Navigation size={13} /> Vis rute
+                </a>
+                {pin.isEvent && (
+                  <button className="flex-1 py-2.5 rounded-xl bg-[#f97316] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#ea580c] transition-colors">
+                    Deltag
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -484,6 +537,7 @@ export default function Kort() {
   const [search, setSearch] = useState("");
   const [selectedPin, setSelectedPin] = useState<MapPin | null>(null);
   const [flyTo, setFlyTo] = useState<{ center: [number, number]; zoom: number } | null>(null);
+  const [showLayer, setShowLayer] = useState<"alle" | "steder" | "events">("alle");
   const searchRef = useRef<HTMLInputElement>(null);
 
   // Dynamic user location from profile city
@@ -496,19 +550,37 @@ export default function Kort() {
     staleTime: 5 * 60 * 1000,
   });
 
+  // Fetch Supabase events
+  const { data: supabaseEvents } = useQuery<SupabaseEvent[]>({
+    queryKey: ["supabase-events-map"],
+    queryFn: fetchEvents,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // Convert events to pins
+  const eventPins = useMemo(() => {
+    return (supabaseEvents || [])
+      .map(supabaseEventToPin)
+      .filter((p): p is MapPin => p !== null);
+  }, [supabaseEvents]);
+
   // Merge pins
   const allPins = useMemo(() => {
     const sbPins = (supabasePlaces || []).map(placeToPin);
     const sbNames = new Set(sbPins.map(p => p.name.toLowerCase()));
     const hardcodedFiltered = HARDCODED_PINS.filter(p => !sbNames.has(p.name.toLowerCase()));
-    return [...sbPins, ...hardcodedFiltered];
-  }, [supabasePlaces]);
+    const placePins = [...sbPins, ...hardcodedFiltered];
+    return [...placePins, ...eventPins];
+  }, [supabasePlaces, eventPins]);
 
   const PREMIUM_CATS = new Set(["kultur", "mad", "mad_hangout", "musik", "events", "karriere", "tech", "rejser", "logi"]);
   const GRATIS_CATS = new Set(["natur", "vandring", "mtb", "loeb", "hund", "fiskeri", "badning", "shelter", "dyrespot", "outdoor", "sport", "aktiv_sport", "aktiv", "fitness", "socialt", "spil", "kreativt", "ture", "communities", "wellness"]);
 
   const filteredPins = useMemo(() => {
     return allPins.filter((p) => {
+      // Layer toggle: events vs places
+      if (showLayer === "events" && !p.isSupabaseEvent) return false;
+      if (showLayer === "steder" && p.isSupabaseEvent) return false;
       if (priceFilter === "gratis" && PREMIUM_CATS.has(p.category)) return false;
       if (priceFilter === "premium" && GRATIS_CATS.has(p.category)) return false;
       const q = search.toLowerCase();
@@ -523,7 +595,7 @@ export default function Kort() {
         (p.tags && p.tags.some(t => t.toLowerCase().includes(term)))
       );
     });
-  }, [priceFilter, search, allPins]);
+  }, [priceFilter, search, allPins, showLayer]);
 
   // Pre-create emoji icons for each category
   const categoryIcons = useMemo(() => {
@@ -533,6 +605,15 @@ export default function Kort() {
     }
     return icons;
   }, []);
+
+  // Distinct pulsing icon for Supabase events (orange/coral)
+  const supabaseEventIcon = useMemo(() => L.divIcon({
+    className: "b-pin",
+    html: `<div style="width:36px;height:36px;border-radius:50%;background:#f97316;border:3px solid rgba(255,255,255,0.95);box-shadow:0 0 14px rgba(249,115,22,0.6),0 2px 8px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;animation:b-event-pulse 2s ease-out infinite;">🎉</div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -18],
+  }), []);
 
   function handleRecenter() {
     setFlyTo({ center: [USER_LAT, USER_LNG], zoom: 14 });
@@ -588,9 +669,30 @@ export default function Kort() {
             Premium
           </button>
         </div>
-        {/* Pin count — subtle */}
-        <div className="mt-2 px-1">
-          <span className="text-white/30 text-[10px]">{filteredPins.length} steder</span>
+        {/* Layer toggle + pin count */}
+        <div className="mt-2 px-1 flex items-center gap-3">
+          <div className="flex gap-1.5">
+            {(["alle", "steder", "events"] as const).map(layer => (
+              <button
+                key={layer}
+                onClick={() => { setShowLayer(layer); setSelectedPin(null); }}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all ${
+                  showLayer === layer
+                    ? layer === "events"
+                      ? "bg-[#f97316] text-white"
+                      : "bg-[#4ECDC4] text-white"
+                    : "bg-white/8 text-white/40 hover:text-white/60"
+                }`}
+                data-testid={`filter-layer-${layer}`}
+              >
+                {layer === "alle" ? "📍 Alle" : layer === "steder" ? "🏛️ Steder" : "🎉 Events"}
+              </button>
+            ))}
+          </div>
+          <span className="text-white/30 text-[10px]">
+            {filteredPins.length} {showLayer === "events" ? "events" : showLayer === "steder" ? "steder" : "pins"}
+            {showLayer === "alle" && eventPins.length > 0 && ` (${eventPins.length} events)`}
+          </span>
         </div>
       </div>
 
@@ -632,7 +734,7 @@ export default function Kort() {
             <Marker
               key={pin.id}
               position={[pin.lat, pin.lng]}
-              icon={categoryIcons[pin.category] || createEmojiIcon("📍", "#4ECDC4", 34)}
+              icon={pin.isSupabaseEvent ? supabaseEventIcon : (categoryIcons[pin.category] || createEmojiIcon("📍", "#4ECDC4", 34))}
               eventHandlers={{ click: () => handlePinClick(pin) }}
             />
           ))}
@@ -655,6 +757,14 @@ export default function Kort() {
       {selectedPin && <PinDetail pin={selectedPin} onClose={() => setSelectedPin(null)} />}
 
       <CalmBottomNav />
+
+      <style>{`
+        @keyframes b-event-pulse {
+          0% { box-shadow: 0 0 14px rgba(249,115,22,0.6), 0 2px 8px rgba(0,0,0,0.4); }
+          50% { box-shadow: 0 0 22px rgba(249,115,22,0.9), 0 2px 8px rgba(0,0,0,0.4); }
+          100% { box-shadow: 0 0 14px rgba(249,115,22,0.6), 0 2px 8px rgba(0,0,0,0.4); }
+        }
+      `}</style>
     </div>
   );
-}
+   }
