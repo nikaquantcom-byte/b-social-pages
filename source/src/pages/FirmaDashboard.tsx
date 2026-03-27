@@ -258,6 +258,7 @@ function EmptyCompanyState() {
 /* ── Main Component ── */
 export default function FirmaDashboard() {
   const { t } = useTranslation();
+  const { isLoggedIn, isFirma, loading: authLoading } = useAuth();
   const { company, stats, events, activity, weeklyViews, loading } = useFirmaData();
   const [allNews, setAllNews] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
@@ -302,7 +303,27 @@ export default function FirmaDashboard() {
       .map(([tag, count]) => ({ tag, count }));
   }, [events]);
 
-  if (loading) {
+  // Guard: if not authenticated or not firma, show login prompt only
+  if (!authLoading && (!isLoggedIn() || !isFirma())) {
+    return (
+      <FirmaLayout>
+        <div className="max-w-lg mx-auto py-20 text-center space-y-6">
+          <div className="w-20 h-20 mx-auto rounded-2xl bg-[#4ECDC4]/10 flex items-center justify-center">
+            <AlertCircle size={36} className="text-[#4ECDC4]" />
+          </div>
+          <h2 className="text-2xl font-bold text-white">{t('firma.login_required')}</h2>
+          <p className="text-white/50 text-sm leading-relaxed">{t('firma.login_required_desc')}</p>
+          <Link href="/firma/auth">
+            <a className="inline-flex items-center gap-2 bg-[#4ECDC4] hover:bg-[#3dbdb5] text-[#0a1929] px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-[#4ECDC4]/20">
+              {t('firma.create_company_account')}
+            </a>
+          </Link>
+        </div>
+      </FirmaLayout>
+    );
+  }
+
+  if (loading || authLoading) {
     return (
       <FirmaLayout>
         <div className="flex items-center justify-center py-32">

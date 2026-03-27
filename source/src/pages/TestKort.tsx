@@ -21,9 +21,10 @@ export default function TestKort() {
   const mapInstanceRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
 
-  // Filter events using superhjerne
+  // Filter events using superhjerne (only upcoming)
   const filteredEvents = useMemo(() => {
-    let filtered = filterEventsForMap(events, activeTags);
+    const now = new Date().toISOString();
+    let filtered = filterEventsForMap(events, activeTags).filter(e => e.date >= now);
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       filtered = filtered.filter(e =>
@@ -185,8 +186,8 @@ export default function TestKort() {
               >
                 <img src={getEventImage(event)} alt={event.title} className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-sm font-medium truncate">{event.title}</p>
-                  <p className="text-xs text-white/40">{formatDanishDate(event.date)}</p>
+                  <p className="text-sm font-medium line-clamp-2 leading-snug">{event.title}</p>
+                  <p className="text-xs text-white/40 mt-0.5">{formatDanishDate(event.date)}</p>
                   <p className="text-xs text-[#4ECDC4] truncate">{event.location}</p>
                 </div>
               </button>

@@ -47,7 +47,10 @@
     "login_required": "Log in to see your messages",
     "login_required_desc": "Create an account or log in to send messages, join group chats, and meet new people.",
     "must_be_logged_in": "You must be logged in to create a business account. Log in first.",
-    "login_here": "Log in here"
+    "login_here": "Log in here",
+    "error_enter_email_for_reset": "Enter your email first to reset the password.",
+    "reset_email_sent": "We've sent an email with a link to reset your password.",
+    "sending_reset": "Sending..."
   },
   "events": {
     "join": "Join",
@@ -153,6 +156,8 @@
     "create_company": "Create your company",
     "no_company_desc": "You don't have a company profile yet. Create one to start making events and reaching users.",
     "create_company_account": "Create business account",
+    "login_required": "Log in as a business",
+    "login_required_desc": "You must be logged in with a business account to view this dashboard.",
     "tip_share": "Tip: Share your profile to get more views",
     "tip_share_desc": "Create events and share them with your network to build your following.",
     "event_views": "Event views",

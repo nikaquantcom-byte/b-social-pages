@@ -1,6 +1,7 @@
 import { ArrowLeft, FileText } from "lucide-react";
 import { useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -44,7 +45,8 @@ export default function Vilkaar() {
         >
           <ArrowLeft size={18} className="text-white" />
         </button>
-        <h1 className="text-white text-xl font-bold">{t('legal.terms_title')}</h1>
+        <h1 className="text-white text-xl font-bold flex-1">{t('legal.terms_title')}</h1>
+        <LanguageSwitcher variant="toggle" />
       </div>
 
       <div className="px-5 mt-2 space-y-4">

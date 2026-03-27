@@ -94,7 +94,7 @@ function NotificationRow({ n, onClick }: { n: Notification; onClick: () => void 
 export default function Notifikationer() {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, loading: authLoading } = useAuth();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications();
 
   const grouped = groupNotifications(notifications, t);
@@ -103,6 +103,14 @@ export default function Notifikationer() {
     if (!n.is_read) markAsRead(n.id);
     const link = n.data?.link;
     if (link) setLocation(link);
+  }
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#0a0e23] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[#4ECDC4]/30 border-t-[#4ECDC4] rounded-full animate-spin" />
+      </div>
+    );
   }
 
   if (!isLoggedIn()) {

@@ -47,7 +47,10 @@
     "login_required": "Log ind for at se dine beskeder",
     "login_required_desc": "Opret en konto eller log ind for at sende beskeder, deltage i gruppesamtaler og møde nye mennesker.",
     "must_be_logged_in": "Du skal være logget ind for at oprette en firmakonto. Log ind først.",
-    "login_here": "Log ind her"
+    "login_here": "Log ind her",
+    "error_enter_email_for_reset": "Indtast din e-mail først for at nulstille adgangskoden.",
+    "reset_email_sent": "Vi har sendt en e-mail med link til nulstilling af adgangskoden.",
+    "sending_reset": "Sender..."
   },
   "events": {
     "join": "Deltag",
@@ -153,6 +156,8 @@
     "create_company": "Opret din virksomhed",
     "no_company_desc": "Du har endnu ikke en firmaprofil. Opret en for at begynde at lave events og nå ud til brugere.",
     "create_company_account": "Opret firmakonto",
+    "login_required": "Log ind som virksomhed",
+    "login_required_desc": "Du skal være logget ind med en firmakonto for at se dette dashboard.",
     "tip_share": "Tip: Del din profil for at få flere visninger",
     "tip_share_desc": "Opret events og del dem med dit netværk for at bygge din følgerskare op.",
     "event_views": "Event-visninger",

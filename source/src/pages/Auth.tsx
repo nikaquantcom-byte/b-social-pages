@@ -18,6 +18,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -180,6 +181,32 @@ export default function Auth() {
             </div>
             {mode === "signup" && (
               <p className="text-white/30 text-xs pl-1">{t('auth.min_password')}</p>
+            )}
+            {mode === "login" && (
+              <button
+                type="button"
+                disabled={resetLoading}
+                onClick={async () => {
+                  if (!email.trim()) {
+                    setError(t('auth.error_enter_email_for_reset'));
+                    return;
+                  }
+                  setResetLoading(true);
+                  setError(null);
+                  const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + window.location.pathname + "#/auth",
+                  });
+                  setResetLoading(false);
+                  if (resetErr) {
+                    setError(resetErr.message);
+                  } else {
+                    setSuccessMsg(t('auth.reset_email_sent'));
+                  }
+                }}
+                className="text-[#4ECDC4] text-xs font-medium pl-1 hover:underline mt-1"
+              >
+                {resetLoading ? t('auth.sending_reset') : t('auth.forgot')}
+              </button>
             )}
           </div>
 
