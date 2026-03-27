@@ -171,7 +171,7 @@ export default function TestKort() {
 
         {showList && (
           <div className="w-80 bg-[#0a0e23]/80 backdrop-blur border-l border-white/5 overflow-y-auto px-3 py-4">
-            <h3 className="text-sm font-semibold text-white/70 mb-3">Events i n\u00e6rheden ({filteredEvents.length})</h3>
+            <h3 className="text-sm font-semibold text-white/70 mb-3">Events i nærheden ({filteredEvents.length})</h3>
             {filteredEvents.slice(0, 20).map(event => (
               <button
                 key={event.id}
