@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
@@ -13,12 +14,32 @@ export default function TestMinSide() {
   // Show upcoming events as suggestions
   const upcomingEvents = events.slice(0, 5);
 
+  // Derive dynamic interests from event tags
+  const topInterests = useMemo(() => {
+    const tagCounts: Record<string, number> = {};
+    events.forEach(e => {
+      (e.interest_tags || []).forEach((t: string) => {
+        tagCounts[t] = (tagCounts[t] || 0) + 1;
+      });
+    });
+    return Object.entries(tagCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([tag]) => tag);
+  }, [events]);
+
+  // Derive unique categories count as "badges"
+  const uniqueCategories = useMemo(() => {
+    const cats = new Set(events.map(e => e.category).filter(Boolean));
+    return cats.size;
+  }, [events]);
+
   const userStats = {
     name: "Nicolaj",
     location: "Aalborg, Danmark",
     joined: "Januar 2026",
     friendsCount: 42,
-    interests: ["Cykling", "Løb", "Musik", "Outdoor", "Ski"],
+    interests: topInterests.length > 0 ? topInterests : ["Cykling", "Løb", "Musik", "Outdoor", "Ski"],
   };
 
   return (
@@ -46,78 +67,69 @@ export default function TestMinSide() {
         </div>
       </div>
 
-      <div className="px-4 -mt-10">
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-white/5 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
-            <Calendar className="mx-auto mb-2 text-[#4ECDC4]" size={24} />
+      <div className="px-6 -mt-10">
+        <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="glass-card rounded-2xl p-4 text-center">
+            <Calendar size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
             <p className="text-2xl font-bold">{events.length}</p>
             <p className="text-xs text-white/50">Events</p>
           </div>
-          <div className="bg-white/5 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
-            <Users className="mx-auto mb-2 text-[#4ECDC4]" size={24} />
+          <div className="glass-card rounded-2xl p-4 text-center">
+            <Users size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
             <p className="text-2xl font-bold">{userStats.friendsCount}</p>
             <p className="text-xs text-white/50">Venner</p>
           </div>
-          <div className="bg-white/5 backdrop-blur rounded-2xl p-4 text-center border border-white/10">
-            <Award className="mx-auto mb-2 text-[#4ECDC4]" size={24} />
-            <p className="text-2xl font-bold">12</p>
-            <p className="text-xs text-white/50">Badges</p>
+          <div className="glass-card rounded-2xl p-4 text-center">
+            <Award size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
+            <p className="text-2xl font-bold">{uniqueCategories}</p>
+            <p className="text-xs text-white/50">Kategorier</p>
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-2xl p-4 mb-6 border border-white/10">
-          <h3 className="text-sm font-bold text-white/60 uppercase mb-3">Mine Interesser</h3>
+        <div className="glass-card rounded-2xl p-4 mb-6">
+          <h3 className="text-sm font-semibold text-white/70 mb-3 flex items-center gap-2">
+            <Heart size={16} className="text-[#4ECDC4]" /> Dine interesser
+          </h3>
           <div className="flex flex-wrap gap-2">
-            {userStats.interests.map(interest => (
-              <span key={interest} className="px-3 py-1.5 bg-[#4ECDC4]/15 text-[#4ECDC4] rounded-full text-sm font-medium">
-                {interest}
+            {userStats.interests.map(tag => (
+              <span key={tag} className="px-3 py-1.5 bg-[#4ECDC4]/15 text-[#4ECDC4] rounded-full text-xs font-medium">
+                {tag}
               </span>
             ))}
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-2xl p-4 border border-white/10">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-white/60 uppercase">Kommende Events</h3>
-            <Link href="/udforsk">
-              <span className="text-xs text-[#4ECDC4] hover:underline cursor-pointer">Se alle</span>
-            </Link>
+        <div className="glass-card rounded-2xl p-4 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white/70 flex items-center gap-2">
+              <TrendingUp size={16} className="text-[#4ECDC4]" /> Kommende Events
+            </h3>
+            <Link href="/udforsk" className="text-xs text-[#4ECDC4]">Se alle</Link>
           </div>
           <div className="space-y-3">
             {upcomingEvents.map(event => (
-              <Link key={event.id} href={`/event/${event.id}`}>
-                <div className="flex gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer">
-                  <img
-                    src={getEventImage(event)}
-                    alt={event.title}
-                    className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-sm line-clamp-1">{event.title}</h4>
-                    <p className="text-xs text-[#4ECDC4]">{formatDanishDate(event.date)}</p>
-                    <p className="text-xs text-white/40 line-clamp-1">{event.location}</p>
-                  </div>
+              <Link key={event.id} href={`/event/${event.id}`} className="flex gap-3 hover:bg-white/5 rounded-xl p-1.5 -mx-1.5 transition-colors">
+                <img src={getEventImage(event)} alt={event.title} className="w-14 h-14 rounded-xl object-cover flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium truncate">{event.title}</p>
+                  <p className="text-xs text-white/40">{formatDanishDate(event.date)}</p>
+                  <p className="text-xs text-[#4ECDC4] truncate">{event.location}</p>
                 </div>
               </Link>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mt-6">
-          <Link href="/udforsk">
-            <div className="p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer border border-white/10">
-              <TrendingUp className="mb-2 text-[#4ECDC4]" size={20} />
-              <p className="font-medium text-sm">Udforsk</p>
-              <p className="text-xs text-white/40">Find nye oplevelser</p>
-            </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Link href="/udforsk" className="glass-card rounded-2xl p-4 hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all">
+            <Calendar size={24} className="text-[#4ECDC4] mb-2" />
+            <p className="font-semibold text-sm">Udforsk</p>
+            <p className="text-xs text-white/40">Find nye events</p>
           </Link>
-          <Link href="/kort">
-            <div className="p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer border border-white/10">
-              <MapPin className="mb-2 text-[#4ECDC4]" size={20} />
-              <p className="font-medium text-sm">Kort</p>
-              <p className="text-xs text-white/40">Events nær dig</p>
-            </div>
+          <Link href="/kort" className="glass-card rounded-2xl p-4 hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all">
+            <MapPin size={24} className="text-[#4ECDC4] mb-2" />
+            <p className="font-semibold text-sm">Kort</p>
+            <p className="text-xs text-white/40">Events i nærheden</p>
           </Link>
         </div>
       </div>
