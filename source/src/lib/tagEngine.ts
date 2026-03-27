@@ -1,7 +1,7 @@
 /*
-  B-Social Tag Engine — "Superhjernen"
-  Forbinder tags på kryds og tværs af alle sider:
-  Feed, Udforsk, Kort, Firma, Henvisning
+ B-Social Tag Engine — "Superhjernen"
+ Forbinder tags på kryds og tværs af alle sider:
+ Feed, Udforsk, Kort, Firma, Henvisning
 */
 import { TAG_TREE, type TagNode } from "./tagTree";
 import type { Event } from "./data";
@@ -17,7 +17,9 @@ export function getUserTags(): string[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : DEFAULT_TAGS;
-    } catch { return DEFAULT_TAGS; }
+  } catch { return DEFAULT_TAGS; }
+}
+
 export function setUserTags(tags: string[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tags));
   window.dispatchEvent(new CustomEvent("bsocial-tags-changed", { detail: tags }));
@@ -104,7 +106,6 @@ export function scoreEvent(event: Event, userTags: string[]): number {
     ...(event.interest_tags || []),
     event.category?.toLowerCase()
   ].filter(Boolean));
-  
   let score = 0;
   for (const ut of userTags) {
     if (eventTags.has(ut.toLowerCase())) score += 10; // Direct match
@@ -185,7 +186,7 @@ export function filterEventsForMap(events: Event[], activeTags: string[]): Event
 export function searchAllTags(query: string): TagNode[] {
   if (!query.trim()) return [];
   const q = query.toLowerCase();
-  return ALL_TAGS.filter(t =>
+  return ALL_TAGS.filter(t => 
     t.tag.includes(q) || t.label.toLowerCase().includes(q)
   ).slice(0, 20);
 }
