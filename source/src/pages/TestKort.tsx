@@ -66,14 +66,20 @@ export default function TestKort() {
         zoom: 7,
         zoomControl: false,
       });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {        attribution: "\u00a9 OSM \u00a9 CARTO",
-        attribution: '© OpenStreetMap contributors',      }).addTo(map);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '\u00a9 OpenStreetMap contributors',
+      }).addTo(map);
       L.control.zoom({ position: "bottomright" }).addTo(map);
       mapInstanceRef.current = map;
       setTimeout(() => map.invalidateSize(), 100);
     };
     loadLeaflet();
-    return () => { if (mapInstanceRef.current) { mapInstanceRef.current.remove(); mapInstanceRef.current = null; } };
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -84,14 +90,15 @@ export default function TestKort() {
     markersRef.current = [];
     geoEvents.forEach(event => {
       const icon = L.divIcon({
-        html: '<div style="width:14px;height:14px;background:#4ECDC4;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.3)"></div>',        className: "b-pin",
-        iconSize: [12, 12],
-                iconAnchor: [6, 6],
-              });
+        html: '<div class="b-pin-dot"><div class="b-pin-pulse"></div></div>',
+        className: "b-pin",
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+      });
       const marker = L.marker([event.latitude, event.longitude], { icon })
         .addTo(map)
         .on("click", () => setSelectedEvent(event));
-      marker.bindTooltip(event.title, { className: "leaflet-dark-tooltip", direction: "top", offset: [0, -8] });
+      marker.bindTooltip(event.title, { className: "leaflet-dark-tooltip", direction: "top", offset: [0, -16] });
       markersRef.current.push(marker);
     });
     if (geoEvents.length > 1) {
@@ -103,89 +110,116 @@ export default function TestKort() {
   }, [geoEvents]);
 
   const toggleTag = (tag: string) => {
-    setActiveTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]);
+    setActiveTags(prev =>
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
   };
 
   return (
-    <div className="min-h-screen nature-bg flex flex-col">
-      <header className="sticky top-0 z-30 backdrop-blur-xl bg-[#0a0e23]/80 border-b border-white/8">
-        <div className="max-w-full px-6 h-14 flex items-center justify-between">
-          <h1 className="text-lg font-bold">Kort</h1>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
-              <input type="search" placeholder={"S\u00f8g p\u00e5 kortet..."} value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50" />
-            </div>
-            <button onClick={() => setShowList(!showList)}
-              className={`p-2 rounded-lg ${showList ? "bg-[#4ECDC4]/15 text-[#4ECDC4]" : "bg-white/8 text-white/60"}`}>
-              <List size={18} />
-            </button>
+    <div className="min-h-screen bg-[#0a0e23] text-white">
+      <div className="flex items-center justify-between px-6 pt-6 pb-3">
+        <h1 className="text-2xl font-bold">Kort</h1>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+            <input
+              type="search"
+              placeholder="S\u00f8g p\u00e5 kortet..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-white/8 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 w-64 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
+            />
           </div>
+          <button onClick={() => setShowList(!showList)} className={`p-2 rounded-lg ${showList ? "bg-[#4ECDC4]/15 text-[#4ECDC4]" : "bg-white/8 text-white/60"}`}>
+            <List size={18} />
+          </button>
         </div>
-        <div className="px-6 pb-2 flex gap-1.5 overflow-x-auto scrollbar-hide">
-          {TAG_TREE.slice(0, 10).map(tag => (
-            <button key={tag.tag} onClick={() => toggleTag(tag.tag)}
-              className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
-                activeTags.includes(tag.tag) ? "bg-[#4ECDC4] text-white" : "bg-white/8 text-white/60 hover:bg-white/15"
-              }`}>
-              {tag.emoji} {tag.label}
-            </button>
-          ))}
-        </div>
-      </header>
+      </div>
 
-      <div className="flex-1 flex">
-        <div className="flex-1 relative">
-          <div ref={mapRef} className="absolute inset-0" style={{ background: "#1a1a2e" }} />
+      <div className="flex gap-2 px-6 pb-3 overflow-x-auto scrollbar-hide">
+        {TAG_TREE.slice(0, 10).map(tag => (
+          <button key={tag.tag} onClick={() => toggleTag(tag.tag)} className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+            activeTags.includes(tag.tag) ? "bg-[#4ECDC4] text-white" : "bg-white/8 text-white/60 hover:bg-white/15"
+          }`}>
+            {tag.emoji} {tag.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-1" style={{ height: "calc(100vh - 140px)" }}>
+        <div className="relative flex-1">
+          <div ref={mapRef} className="w-full h-full" />
           {selectedEvent && (
-            <div className="absolute bottom-4 left-4 right-4 z-20 bg-[#0a0e23]/95 backdrop-blur-lg rounded-xl border border-white/10 p-4 max-w-md">
+            <div className="absolute bottom-4 left-4 right-4 bg-[#0a0e23]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 max-w-sm">
               <button onClick={() => setSelectedEvent(null)} className="absolute top-2 right-2 text-white/40 hover:text-white">
                 <X size={16} />
               </button>
-              <div className="flex gap-3">
-                <img src={getEventImage(selectedEvent)} alt={selectedEvent.title} className="w-16 h-16 rounded-lg object-cover" />
-                <div>
-                  <Link href={`/event/${selectedEvent.id}`} className="text-sm font-medium text-white hover:text-[#4ECDC4]">{selectedEvent.title}</Link>
-                  <p className="text-xs text-white/50 mt-0.5">{formatDanishDate(selectedEvent.date)}</p>
-                  <p className="text-xs text-white/40 flex items-center gap-0.5 mt-0.5"><MapPin size={10} /> {selectedEvent.location}</p>
-                  <div className="flex gap-1 mt-1">
-                    {(selectedEvent.interest_tags || []).slice(0, 3).map(tag => (
-                      <span key={tag} className="px-1.5 py-0.5 rounded text-[10px] bg-[#4ECDC4]/10 text-[#4ECDC4]">#{tag}</span>
-                    ))}
-                  </div>
+              <Link href={`/event/${selectedEvent.id}`}>
+                <img src={getEventImage(selectedEvent)} alt={selectedEvent.title} className="w-full h-32 object-cover rounded-xl mb-3" />
+                <h3 className="font-bold text-base mb-1">{selectedEvent.title}</h3>
+                <p className="text-xs text-white/50 mb-1">{formatDanishDate(selectedEvent.date)}</p>
+                <p className="text-xs text-[#4ECDC4]">{selectedEvent.location}</p>
+                <div className="flex gap-1 mt-2">
+                  {(selectedEvent.interest_tags || []).slice(0, 3).map(tag => (
+                    <span key={tag} className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded-full text-white/60">#{tag}</span>
+                  ))}
                 </div>
-              </div>
+              </Link>
             </div>
           )}
         </div>
 
         {showList && (
-          <div className="w-80 bg-[#0a0e23]/90 backdrop-blur-lg border-l border-white/8 overflow-y-auto">
-            <div className="p-4">
-              <h3 className="text-sm font-semibold text-white mb-3">{"Events i n\u00e6rheden"} ({filteredEvents.length})</h3>
-              {filteredEvents.slice(0, 20).map(event => (
-                <button key={event.id} onClick={() => {
+          <div className="w-80 bg-[#0a0e23]/80 backdrop-blur border-l border-white/5 overflow-y-auto px-3 py-4">
+            <h3 className="text-sm font-semibold text-white/70 mb-3">Events i n\u00e6rheden ({filteredEvents.length})</h3>
+            {filteredEvents.slice(0, 20).map(event => (
+              <button
+                key={event.id}
+                onClick={() => {
                   setSelectedEvent(event);
                   if (mapInstanceRef.current && event.latitude && event.longitude) {
                     mapInstanceRef.current.flyTo([event.latitude, event.longitude], 14, { duration: 0.5 });
                   }
-                }} className="w-full flex gap-3 py-2 border-t border-white/5 first:border-0 hover:bg-white/5 rounded-lg transition-colors px-1 text-left">
-                  <img src={getEventImage(event)} alt={event.title} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{event.title}</p>
-                    <p className="text-xs text-white/40">{formatDanishDate(event.date)}</p>
-                    <p className="text-xs text-white/30 flex items-center gap-0.5"><MapPin size={10} /> {event.location}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
+                }}
+                className="w-full flex gap-3 py-2 border-t border-white/5 first:border-0 hover:bg-white/5 rounded-lg transition-colors px-1 text-left"
+              >
+                <img src={getEventImage(event)} alt={event.title} className="w-14 h-14 rounded-lg object-cover flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{event.title}</p>
+                  <p className="text-xs text-white/40">{formatDanishDate(event.date)}</p>
+                  <p className="text-xs text-[#4ECDC4] truncate">{event.location}</p>
+                </div>
+              </button>
+            ))}
           </div>
         )}
       </div>
 
       <style>{`
+        .b-pin { background: none !important; border: none !important; }
+        .b-pin-dot {
+          width: 20px; height: 20px;
+          background: #4ECDC4;
+          border-radius: 50%;
+          border: 3px solid white;
+          box-shadow: 0 0 12px rgba(78, 205, 196, 0.6), 0 2px 8px rgba(0,0,0,0.4);
+          position: relative;
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .b-pin-dot:hover { transform: scale(1.3); }
+        .b-pin-pulse {
+          position: absolute;
+          top: -6px; left: -6px;
+          width: 32px; height: 32px;
+          border-radius: 50%;
+          border: 2px solid rgba(78, 205, 196, 0.4);
+          animation: b-pulse 2s ease-out infinite;
+        }
+        @keyframes b-pulse {
+          0% { transform: scale(0.8); opacity: 1; }
+          100% { transform: scale(1.6); opacity: 0; }
+        }
         .leaflet-dark-tooltip {
           background: rgba(10,14,35,0.9) !important;
           border: 1px solid rgba(255,255,255,0.1) !important;
