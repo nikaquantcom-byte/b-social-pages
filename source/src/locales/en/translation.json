@@ -1,0 +1,19 @@
+{
+  "nav": { "feed": "Feed", "udforsk": "Explore", "kort": "Map", "beskeder": "Messages", "min_side": "My Page", "firma": "Business" },
+  "greeting": { "morning": "Good morning", "afternoon": "Good afternoon", "evening": "Good evening", "anonymous": "explorer" },
+  "auth": { "login": "Log in", "signup": "Create account", "email": "Email", "password": "Password", "name": "Name", "google": "Continue with Google", "guest": "Continue without login", "forgot": "Forgot password?", "terms_agree": "By creating an account you accept our", "terms": "terms", "privacy": "privacy policy", "min_password": "At least 6 characters", "error_email": "Invalid email", "error_password": "Password must be at least 6 characters", "error_generic": "Something went wrong. Try again.", "success_signup": "Account created!", "verify_email": "Check your email to verify your account" },
+  "events": { "join": "Join this experience", "joined": "You're going", "upcoming": "Upcoming Events", "nearby": "Events nearby", "see_all": "See all", "spots": "spots", "free": "Free", "from": "From", "participants": "participants", "no_events": "No events found", "create": "Create event" },
+  "tags": { "popular": "Popular Tags", "your_interests": "Your interests", "search": "Search tags...", "selected": "selected tags", "no_results": "No tags match your search", "edit": "Edit tags" },
+  "firma": { "overview": "Overview", "events": "Events", "targeting": "Tag Targeting", "analytics": "Analytics", "billing": "Billing", "settings": "Settings", "recruitment": "Recruitment", "followers": "Followers", "views": "Views", "clicks": "Clicks", "signups": "Signups", "engagement": "Engagement Rate", "create_event": "Create event", "become_firma": "Become a business", "company_name": "Company name", "cvr": "Company ID", "plan": "Subscription" },
+  "pricing": { "free": "Free", "starter": "Starter", "pro": "Pro", "enterprise": "Enterprise", "per_month": "/mo", "current_plan": "Current plan" },
+  "filters": { "all": "All", "free": "Free", "premium": "Premium", "today": "Today", "tonight": "Tonight", "this_week": "This week", "this_weekend": "This weekend", "this_month": "This month" },
+  "profile": { "my_page": "My Page", "edit": "Edit profile", "settings": "Settings", "logout": "Log out", "events_count": "Events", "friends_count": "Friends", "tags_count": "Categories", "member_since": "Member since", "shortcuts": "Shortcuts", "calendar": "Calendar", "saved": "Saved events", "favorites": "Favorites" },
+  "chat": { "messages": "Messages", "write": "Write a message...", "send": "Send", "new_chat": "New conversation", "no_messages": "No messages yet", "search_users": "Search users...", "online": "Online" },
+  "map": { "title": "Map", "search": "Search events, places, tags...", "nearby": "Nearby", "layers": { "all": "All", "events": "Events", "places": "Places" } },
+  "common": { "search": "Search", "save": "Save", "share": "Share", "back": "Back", "cancel": "Cancel", "confirm": "Confirm", "loading": "Loading...", "close": "Close", "delete": "Delete", "edit": "Edit", "more": "More" },
+  "errors": { "generic": "Something went wrong", "try_again": "Try again", "not_found": "Page not found", "unauthorized": "Access denied", "network": "Network error" },
+  "legal": { "privacy": "Privacy Policy", "terms": "Terms and Conditions" },
+  "ai": { "title": "B-Social AI Assistant", "placeholder": "Ask me about events, places or routes..." },
+  "notifications": { "title": "Notifications", "mark_all": "Mark all as read", "empty": "No notifications yet", "today": "Today", "yesterday": "Yesterday", "this_week": "This week", "older": "Older" },
+  "onboarding": { "welcome": "Welcome to B-Social", "choose_city": "Choose your city", "choose_interests": "Choose your interests", "finish": "Get started" }
+}

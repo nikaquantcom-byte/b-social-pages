@@ -1,0 +1,19 @@
+{
+  "nav": { "feed": "Feed", "udforsk": "Udforsk", "kort": "Kort", "beskeder": "Beskeder", "min_side": "Min Side", "firma": "Firma" },
+  "greeting": { "morning": "God morgen", "afternoon": "God eftermiddag", "evening": "God aften", "anonymous": "opdagelsesrejsende" },
+  "auth": { "login": "Log ind", "signup": "Opret konto", "email": "E-mail", "password": "Adgangskode", "name": "Navn", "google": "Fortsæt med Google", "guest": "Fortsæt uden login", "forgot": "Glemt adgangskode?", "terms_agree": "Ved at oprette en konto accepterer du vores", "terms": "vilkår", "privacy": "privatlivspolitik", "min_password": "Mindst 6 tegn", "error_email": "Ugyldig e-mail", "error_password": "Adgangskode skal være mindst 6 tegn", "error_generic": "Noget gik galt. Prøv igen.", "success_signup": "Konto oprettet!", "verify_email": "Tjek din e-mail for at bekræfte din konto" },
+  "events": { "join": "Deltag i oplevelsen", "joined": "Du deltager", "upcoming": "Kommende Events", "nearby": "Events i nærheden", "see_all": "Se alle", "spots": "pladser", "free": "Gratis", "from": "Fra", "participants": "deltagere", "no_events": "Ingen events fundet", "create": "Opret event" },
+  "tags": { "popular": "Populære Tags", "your_interests": "Dine interesser", "search": "Søg tags...", "selected": "valgte tags", "no_results": "Ingen tags matcher din søgning", "edit": "Rediger tags" },
+  "firma": { "overview": "Overblik", "events": "Events", "targeting": "Tag-targeting", "analytics": "Analytics", "billing": "Fakturering", "settings": "Indstillinger", "recruitment": "Rekruttering", "followers": "Følgere", "views": "Visninger", "clicks": "Klik", "signups": "Tilmeldinger", "engagement": "Engagement Rate", "create_event": "Opret event", "become_firma": "Bliv virksomhed", "company_name": "Firmanavn", "cvr": "CVR-nummer", "plan": "Abonnement" },
+  "pricing": { "free": "Gratis", "starter": "Starter", "pro": "Pro", "enterprise": "Enterprise", "per_month": "kr/md", "current_plan": "Nuværende plan" },
+  "filters": { "all": "Alle", "free": "Gratis", "premium": "Premium", "today": "I dag", "tonight": "I aften", "this_week": "Denne uge", "this_weekend": "Denne weekend", "this_month": "Denne måned" },
+  "profile": { "my_page": "Min Side", "edit": "Rediger profil", "settings": "Indstillinger", "logout": "Log ud", "events_count": "Events", "friends_count": "Venner", "tags_count": "Kategorier", "member_since": "Medlem siden", "shortcuts": "Genveje", "calendar": "Kalender", "saved": "Gemte events", "favorites": "Favoritter" },
+  "chat": { "messages": "Beskeder", "write": "Skriv en besked...", "send": "Send", "new_chat": "Ny samtale", "no_messages": "Ingen beskeder endnu", "search_users": "Søg brugere...", "online": "Online" },
+  "map": { "title": "Kort", "search": "Søg events, steder, tags...", "nearby": "I nærheden", "layers": { "all": "Alle", "events": "Events", "places": "Steder" } },
+  "common": { "search": "Søg", "save": "Gem", "share": "Del", "back": "Tilbage", "cancel": "Annuller", "confirm": "Bekræft", "loading": "Indlæser...", "close": "Luk", "delete": "Slet", "edit": "Rediger", "more": "Mere" },
+  "errors": { "generic": "Noget gik galt", "try_again": "Prøv igen", "not_found": "Siden blev ikke fundet", "unauthorized": "Du har ikke adgang", "network": "Netværksfejl" },
+  "legal": { "privacy": "Privatlivspolitik", "terms": "Vilkår og betingelser" },
+  "ai": { "title": "B-Social AI Assistent", "placeholder": "Spørg mig om events, steder eller ruter..." },
+  "notifications": { "title": "Notifikationer", "mark_all": "Markér alle som læst", "empty": "Ingen notifikationer endnu", "today": "I dag", "yesterday": "I går", "this_week": "Denne uge", "older": "Ældre" },
+  "onboarding": { "welcome": "Velkommen til B-Social", "choose_city": "Vælg din by", "choose_interests": "Vælg dine interesser", "finish": "Kom i gang" }
+}
