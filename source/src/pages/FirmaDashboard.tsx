@@ -57,8 +57,8 @@ function WeeklyChart() {
         {WEEKLY.map((d) => (
           <div key={d.day} className="flex-1 flex flex-col items-center gap-2 group">
             <div 
-              className="w-full bg-teal-400/30 rounded-t-lg hover:bg-teal-400/50 transition-all relative" 
-              style={{ height: `${(d.views / maxViews) * 100}%` }}
+              className="w-full rounded-t-lg transition-all relative" 
+              style={{ height: `${(d.views / maxViews) * 100}%`, background: 'rgba(78,205,196,0.4)' }}
             >
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1e2535] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 border border-white/10">
                 {d.views}
