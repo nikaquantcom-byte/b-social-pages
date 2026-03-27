@@ -1,35 +1,52 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { ArrowLeft, Loader2, Building2, Check } from "lucide-react";
+import { ArrowLeft, Loader2, Building2, Check, Heart, Zap, Crown, Sparkles, Gift } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 
-type Plan = "free" | "starter" | "pro" | "enterprise";
+type Plan = "starter" | "vaekst" | "partner";
 
-const PLANS: { id: Plan; name: string; price: string; features: string[] }[] = [
-  {
-    id: "free",
-    name: "Gratis",
-    price: "0 kr/md",
-    features: ["1 aktiv event", "Basis synlighed", "Firmaprofil"],
-  },
+const PLANS: {
+  id: Plan;
+  name: string;
+  revenueShare: string;
+  revenueSharePct: number;
+  features: string[];
+  idealFor: string;
+  icon: typeof Heart;
+  color: string;
+  highlight?: boolean;
+}[] = [
   {
     id: "starter",
     name: "Starter",
-    price: "299 kr/md",
-    features: ["5 events", "Målretning", "Statistik", "Prioriteret support"],
+    revenueShare: "0%",
+    revenueSharePct: 0,
+    icon: Heart,
+    color: "text-emerald-400",
+    features: ["Op til 3 aktive events", "Basis statistik", "Firmaprofil", "Tag-targeting (basis)"],
+    idealFor: "Små foreninger, klubber, frivillige",
   },
   {
-    id: "pro",
-    name: "Pro",
-    price: "799 kr/md",
-    features: ["Ubegrænsede events", "Avanceret målretning", "API-adgang", "Kampagneværktøjer"],
+    id: "vaekst",
+    name: "Vækst",
+    revenueShare: "5%",
+    revenueSharePct: 5,
+    highlight: true,
+    icon: Zap,
+    color: "text-[#4ECDC4]",
+    features: ["Ubegrænsede events", "Fuld analytics", "Avanceret tag-targeting", "Promoted events", "Email support"],
+    idealFor: "Voksende virksomheder, padel-centre, yoga-studier",
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    price: "Kontakt os",
-    features: ["Alt i Pro", "Dedikeret kontakt", "SLA-garanti", "Brugerdefinerede integrationer"],
+    id: "partner",
+    name: "Partner",
+    revenueShare: "3%",
+    revenueSharePct: 3,
+    icon: Crown,
+    color: "text-purple-400",
+    features: ["Alt i Vækst", "Dedicated account manager", "Custom integrationer", "API-adgang", "Multi-lokation"],
+    idealFor: "Større arrangører, festivaler, kæder",
   },
 ];
 
@@ -41,7 +58,7 @@ export default function FirmaAuth() {
   const [cvr, setCvr] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState<Plan>("free");
+  const [selectedPlan, setSelectedPlan] = useState<Plan>("starter");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -160,8 +177,12 @@ export default function FirmaAuth() {
           </div>
           <h1 className="text-white text-2xl font-bold">Bliv firma på B-Social</h1>
           <p className="text-white/50 text-sm mt-1 text-center">
-            Opret din virksomhedsprofil og nå ud til aktive brugere
+            Start gratis — du betaler kun når du tjener penge
           </p>
+          <div className="flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+            <Gift size={12} className="text-emerald-400" />
+            <span className="text-emerald-400 text-xs font-bold">Alle pakker er gratis at starte</span>
+          </div>
         </div>
 
         {!isLoggedIn() && (
@@ -238,37 +259,61 @@ export default function FirmaAuth() {
             </div>
           </div>
 
-          {/* Plan selection */}
+          {/* Plan selection — 3 new tiers */}
           <div className="space-y-3">
-            <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider">Vælg plan</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {PLANS.map((plan) => (
-                <button
-                  key={plan.id}
-                  type="button"
-                  onClick={() => setSelectedPlan(plan.id)}
-                  className={`relative p-4 rounded-2xl border text-left transition-all ${
-                    selectedPlan === plan.id
-                      ? "bg-[#4ECDC4]/15 border-[#4ECDC4]/50 ring-1 ring-[#4ECDC4]/30"
-                      : "bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20"
-                  }`}
-                >
-                  {selectedPlan === plan.id && (
-                    <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#4ECDC4] flex items-center justify-center">
-                      <Check size={12} className="text-white" />
+            <h2 className="text-white/80 text-sm font-semibold uppercase tracking-wider">Vælg pakke</h2>
+            <p className="text-white/30 text-xs">Alle pakker er gratis. Du betaler kun en procentdel af det du sælger via B-Social.</p>
+            <div className="grid grid-cols-1 gap-3">
+              {PLANS.map((plan) => {
+                const Icon = plan.icon;
+                return (
+                  <button
+                    key={plan.id}
+                    type="button"
+                    onClick={() => setSelectedPlan(plan.id)}
+                    className={`relative p-4 rounded-2xl border text-left transition-all ${
+                      selectedPlan === plan.id
+                        ? "bg-[#4ECDC4]/15 border-[#4ECDC4]/50 ring-1 ring-[#4ECDC4]/30"
+                        : "bg-white/5 border-white/10 hover:bg-white/8 hover:border-white/20"
+                    }`}
+                  >
+                    {selectedPlan === plan.id && (
+                      <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#4ECDC4] flex items-center justify-center">
+                        <Check size={12} className="text-white" />
+                      </div>
+                    )}
+                    {plan.highlight && (
+                      <div className="absolute top-3 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold uppercase">
+                        Populær
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 mb-1">
+                      <Icon size={16} className={plan.color} />
+                      <span className="text-white font-semibold text-sm">{plan.name}</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                        GRATIS
+                      </span>
                     </div>
-                  )}
-                  <div className="text-white font-semibold text-sm">{plan.name}</div>
-                  <div className="text-[#4ECDC4] text-xs font-medium mt-0.5">{plan.price}</div>
-                  <ul className="mt-2 space-y-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="text-white/40 text-xs">
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </button>
-              ))}
+                    <div className="flex items-center gap-2 mt-1 mb-2">
+                      <Sparkles size={12} className={plan.color} />
+                      <span className="text-white/70 text-xs font-medium">
+                        {plan.revenueSharePct === 0
+                          ? "0% — ingen revenue share"
+                          : `${plan.revenueShare} af omsætning via B-Social`}
+                      </span>
+                    </div>
+                    <ul className="space-y-1">
+                      {plan.features.map((f) => (
+                        <li key={f} className="text-white/40 text-xs flex items-center gap-1.5">
+                          <Check size={10} className="text-[#4ECDC4] shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-white/25 text-[10px] mt-2">Perfekt til: {plan.idealFor}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -279,7 +324,7 @@ export default function FirmaAuth() {
             className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 size={18} className="animate-spin" />}
-            {loading ? "Opretter firma..." : "Opret firmakonto"}
+            {loading ? "Opretter firma..." : "Opret firmakonto — gratis"}
           </button>
         </form>
 

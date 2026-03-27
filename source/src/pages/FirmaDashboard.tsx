@@ -332,7 +332,7 @@ export default function FirmaDashboard() {
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-3xl font-bold text-white tracking-tight">{company.name}</h1>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#4ECDC4]/15 text-[#4ECDC4] border border-[#4ECDC4]/20">
-                {company.plan} plan
+                {company.plan === "vaekst" ? "Vækst" : company.plan === "partner" ? "Partner" : "Starter"} · {company.plan === "vaekst" ? "5%" : company.plan === "partner" ? "3%" : "0%"} revenue share
               </span>
             </div>
             <p className="text-white/40">Velkommen tilbage. Her er din virksomheds performance.</p>
