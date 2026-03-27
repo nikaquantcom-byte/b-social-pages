@@ -7,7 +7,8 @@
     "min_side": "Min Side",
     "firma": "Firma",
     "notifications": "Notifikationer",
-    "kunde": "Kunde"
+    "kunde": "Kunde",
+    "henvisning": "Henvisning"
   },
   "greeting": {
     "morning": "God morgen",
@@ -413,7 +414,248 @@
     "all": "Alle",
     "places": "Steder",
     "events": "Events",
-    "pins": "pins",
+    "pins": {
+      "s1": {
+        "desc": "Hjemsted for AaB — Aalborgs professionelle fodboldstadion med plads til 14.000 tilskuere."
+      },
+      "s2": {
+        "desc": "Nordjyllands største sports- og eventarena. Ishockey, håndbold, koncerter og messer."
+      },
+      "s3": {
+        "desc": "Centralt beliggende svømmehal med 50m bassin, varmtvandsbassin og wellness."
+      },
+      "s4": {
+        "desc": "Populær park til løb, fodbold og udendørs træning. Perfekt til 5-mands."
+      },
+      "s5": {
+        "desc": "Fitnesscenter, klatrevæg og badmintonbaner i det ikoniske Nordkraft-bygning."
+      },
+      "k1": {
+        "desc": "Museum for moderne og samtidskunst. Tegnet af Alvar Aalto. Skulpturpark og udstillinger."
+      },
+      "k2": {
+        "desc": "Arkitektur- og designcenter opkaldt efter Jørn Utzon. Beliggende ved havnefronten."
+      },
+      "k3": {
+        "desc": "Danmarks ældste provinsscene med teater, musikteater og moderne forestillinger."
+      },
+      "k4": {
+        "desc": "Koncerthus ved havnen med fantastisk akustik. Klassisk, jazz og verdensmusik."
+      },
+      "k5": {
+        "desc": "Kulturcenter i gammelt elværk. Biograf, teater, musik og spisesteder."
+      },
+      "k6": {
+        "desc": "Byens historie fra middelalder til nutid. Gratis adgang."
+      },
+      "n1": {
+        "desc": "Vikingegravplads med over 700 grave. Fantastisk udsigt over Limfjorden og Aalborg."
+      },
+      "n2": {
+        "desc": "Smuk gang- og cykelsti langs Limfjorden. Perfekt til en rolig tur med udsigt."
+      },
+      "n3": {
+        "desc": "Nordjyllands dyrehave med over 1.500 dyr. Populært for familier og dyreelskere."
+      },
+      "n4": {
+        "desc": "Grøn oase midt i Aalborg. Perfekt til en pause, picnic eller en stille gåtur."
+      },
+      "n5": {
+        "desc": "Historisk parkanlæg med store træer, stier og bænke. Roligt og fredfyldt."
+      },
+      "n6": {
+        "desc": "Strandområde med udsigt over Limfjorden. Perfekt til en solnedgangstur."
+      },
+      "m1": {
+        "desc": "Aalborgs berømte gågade med restauranter, barer og caféer. Altid liv og stemning."
+      },
+      "m2": {
+        "desc": "Street food marked i Nordkraft med køkkener fra hele verden. Budget-venligt."
+      },
+      "m3": {
+        "desc": "Hyggelig café med god kaffe, brunch og hjemmelavet kage. Perfekt mødested."
+      },
+      "m4": {
+        "desc": "Historisk vinkjælder fra 1624. Vin, mad og atmosfære i Aalborgs ældste kælder."
+      },
+      "m5": {
+        "desc": "Charmerende gade med små butikker og caféer i historiske bindingsværkshuse."
+      },
+      "sp1": {
+        "desc": "Over 500 brætspil at vælge imellem. Kaffe, øl og snacks. Perfekt til en hyggelig aften."
+      },
+      "sp2": {
+        "desc": "Escape rooms med flere temaer. Teambuilding og sjov for venner og familie."
+      },
+      "e1": {
+        "desc": "Ugentlig social gåtur langs havnefronten. Alle er velkomne — mød nye mennesker."
+      },
+      "e2": {
+        "desc": "Afslappet gåtur i parken med kaffe bagefter. Perfekt for nye i byen."
+      },
+      "e3": {
+        "desc": "Hyggelig fodbold i Kildeparken. Alle niveauer. Vi mangler altid folk."
+      },
+      "e4": {
+        "desc": "Settlers, Catan og pizza. Alle niveauer velkomne."
+      },
+      "mtb1": {
+        "desc": "Tekniske MTB-spor i Hammer Bakker. 3 ruter: grøn, blå, rød. Fantastisk terræn."
+      },
+      "mtb2": {
+        "desc": "Lange MTB-stier gennem Rold Skov. Kuperet terræn med tekniske sektioner."
+      },
+      "mtb3": {
+        "desc": "Let MTB-rute perfekt til begyndere. Flad skovsti med sjove bump."
+      },
+      "vdr1": {
+        "desc": "Smuk vandresti langs Limfjorden fra Aalborg til Nibe."
+      },
+      "vdr2": {
+        "desc": "Eventyrlig vandresti gennem sprækkedalen i Rold Skov. 5 km rundtur."
+      },
+      "vdr3": {
+        "desc": "Kort vandring med vikinge-historie og panoramaudsigt."
+      },
+      "vdr4": {
+        "desc": "Smuk vandrerute med panoramaudsigt over Limfjorden."
+      },
+      "lob1": {
+        "desc": "3-5 km løberute i Kildeparken. Fladt, oplyst om aftenen."
+      },
+      "lob2": {
+        "desc": "Flad rute langs havnefronten. Ca. 4 km tur/retur."
+      },
+      "hnd1": {
+        "desc": "Indhegnet hundeskov med masser af plads. Vandpost og bænke."
+      },
+      "hnd2": {
+        "desc": "Stor indhegnet hundepark. Separate arealer for store og små hunde."
+      },
+      "fsk1": {
+        "desc": "God fiskeplads ved Limfjorden. Havørred, fladfisk og hornfisk i sæson."
+      },
+      "fsk2": {
+        "desc": "Kendt fiskested ved Nibe. Gode muligheder for havørred fra kysten."
+      },
+      "bad1": {
+        "desc": "Aalborgs populære havnebad ved Vestre Bådehavn. Sauna og solterrasse. Gratis."
+      },
+      "bad2": {
+        "desc": "Naturlig sandstrand på Egholm. Perfekt sommerdag."
+      },
+      "shl1": {
+        "desc": "Primitiv shelter på Egholm med bålplads. Fantastisk stjernehimmel."
+      },
+      "shl2": {
+        "desc": "Skovly i hjertet af Rold Skov. Bålplads, vand og toilet tæt på."
+      },
+      "dyr1": {
+        "desc": "Se vilde kronsdyr, vildsvin og ørne. Bedst ved solopgang."
+      },
+      "dyr2": {
+        "desc": "Vilde heste og køer på Egholm. Tæt på og frit tilgængeligt."
+      },
+      "cph1": {
+        "desc": "Verdens næstældste forlystelsespark. Koncerter, mad og eventyr."
+      },
+      "cph2": {
+        "desc": "Ikonisk havnepromenade med farverige huse, restauranter og caféer."
+      },
+      "cph3": {
+        "desc": "Trendy kødby-kvarter med gallerier, restauranter og natklubber."
+      },
+      "aar1": {
+        "desc": "Ikonisk kunstmuseum med Rainbow Panorama på taget."
+      },
+      "aar2": {
+        "desc": "Åben friluftsmuseum med historiske bygninger fra hele Danmark."
+      },
+      "ode1": {
+        "desc": "Museum dedikeret til HC Andersen med interaktive udstillinger."
+      },
+      "nib1": {
+        "desc": "Hyggelig lille fiskerihavn med caféer og udsigt over Limfjorden."
+      },
+      "nib2": {
+        "desc": "Hjem for Nibe Festival — populær sommermusikfestival."
+      },
+      "ska1": {
+        "desc": "Danmarks nordligste punkt. Her mødes Skagerrak og Kattegat."
+      },
+      "rol1": {
+        "desc": "Smuk nationalpark i Rold Skov. Vandreruter og sprækkedal."
+      },
+      "mu1": {
+        "desc": "Aalborgs legendære spillested i Nordkraft. Live musik."
+      },
+      "mu2": {
+        "desc": "Live musik, jamsessions og kulturelle events."
+      },
+      "kr1": {
+        "desc": "Museum for moderne kunst med atelierer og workshops."
+      },
+      "kr2": {
+        "desc": "Åbne atelierer. Keramik, maleri, fotografi og DIY-workshops."
+      },
+      "kr3": {
+        "desc": "Fotoklub med ugentlige fotwalks og workshops."
+      },
+      "fi1": {
+        "desc": "CrossFit-box med fællesskab i fokus. WODs og open gym."
+      },
+      "fi2": {
+        "desc": "Indendørs klatrecenter med bouldering og topreb."
+      },
+      "fi3": {
+        "desc": "Vinterbadning med sauna. Kold dukkert og varmt fællesskab."
+      },
+      "ou1": {
+        "desc": "Fuglereservat med udsigtsTårn. Vådenge og vadefugle."
+      },
+      "ou2": {
+        "desc": "Guidede ture i Nordeuropas største højmose. Krondyr og ørne."
+      },
+      "ou3": {
+        "desc": "Kajakklub ved Limfjorden. Lån kajak eller SUP-board."
+      },
+      "ou4": {
+        "desc": "Rideskole med heste til alle niveauer."
+      },
+      "so1": {
+        "desc": "Hyggelig café med brætspil og bogklub."
+      },
+      "so2": {
+        "desc": "Kulturhus med sprogcafé, filmklub og sociale events."
+      },
+      "so3": {
+        "desc": "Mødested for frivillige. Forældregrupper og netværk."
+      },
+      "ev1": {
+        "desc": "Stand-up comedy med lokale og nationale komikere."
+      },
+      "ev2": {
+        "desc": "Ugentlig pub quiz med øl fra eget bryggeri."
+      },
+      "ev3": {
+        "desc": "Månedligt loppemarked med vintage og genbrug."
+      },
+      "ka1": {
+        "desc": "Co-working space og iværksættermiljø."
+      },
+      "ka2": {
+        "desc": "Nordjyllands største innovationsmiljø."
+      },
+      "ka3": {
+        "desc": "Aalborg Universitets iværksættermiljø."
+      },
+      "te1": {
+        "desc": "Maker space med 3D-printere og coding meetups."
+      },
+      "te2": {
+        "desc": "Tech-hub med gaming events og drone-workshops."
+      }
+    },
     "categories": {
       "events": "Events",
       "logi": "Logi & base",
@@ -449,88 +691,6 @@
       "easy": "Let",
       "medium": "Middel",
       "medium_hard": "Middel/Svær"
-    },
-    "pins": {
-      "s1": { "desc": "Hjemsted for AaB — Aalborgs professionelle fodboldstadion med plads til 14.000 tilskuere." },
-      "s2": { "desc": "Nordjyllands største sports- og eventarena. Ishockey, håndbold, koncerter og messer." },
-      "s3": { "desc": "Centralt beliggende svømmehal med 50m bassin, varmtvandsbassin og wellness." },
-      "s4": { "desc": "Populær park til løb, fodbold og udendørs træning. Perfekt til 5-mands." },
-      "s5": { "desc": "Fitnesscenter, klatrevæg og badmintonbaner i det ikoniske Nordkraft-bygning." },
-      "k1": { "desc": "Museum for moderne og samtidskunst. Tegnet af Alvar Aalto. Skulpturpark og udstillinger." },
-      "k2": { "desc": "Arkitektur- og designcenter opkaldt efter Jørn Utzon. Beliggende ved havnefronten." },
-      "k3": { "desc": "Danmarks ældste provinsscene med teater, musikteater og moderne forestillinger." },
-      "k4": { "desc": "Koncerthus ved havnen med fantastisk akustik. Klassisk, jazz og verdensmusik." },
-      "k5": { "desc": "Kulturcenter i gammelt elværk. Biograf, teater, musik og spisesteder." },
-      "k6": { "desc": "Byens historie fra middelalder til nutid. Gratis adgang." },
-      "n1": { "desc": "Vikingegravplads med over 700 grave. Fantastisk udsigt over Limfjorden og Aalborg." },
-      "n2": { "desc": "Smuk gang- og cykelsti langs Limfjorden. Perfekt til en rolig tur med udsigt." },
-      "n3": { "desc": "Nordjyllands dyrehave med over 1.500 dyr. Populært for familier og dyreelskere." },
-      "n4": { "desc": "Grøn oase midt i Aalborg. Perfekt til en pause, picnic eller en stille gåtur." },
-      "n5": { "desc": "Historisk parkanlæg med store træer, stier og bænke. Roligt og fredfyldt." },
-      "n6": { "desc": "Strandområde med udsigt over Limfjorden. Perfekt til en solnedgangstur." },
-      "m1": { "desc": "Aalborgs berømte gågade med restauranter, barer og caféer. Altid liv og stemning." },
-      "m2": { "desc": "Street food marked i Nordkraft med køkkener fra hele verden. Budget-venligt." },
-      "m3": { "desc": "Hyggelig café med god kaffe, brunch og hjemmelavet kage. Perfekt mødested." },
-      "m4": { "desc": "Historisk vinkjælder fra 1624. Vin, mad og atmosfære i Aalborgs ældste kælder." },
-      "m5": { "desc": "Charmerende gade med små butikker og caféer i historiske bindingsværkshuse." },
-      "sp1": { "desc": "Over 500 brætspil at vælge imellem. Kaffe, øl og snacks. Perfekt til en hyggelig aften." },
-      "sp2": { "desc": "Escape rooms med flere temaer. Teambuilding og sjov for venner og familie." },
-      "e1": { "desc": "Ugentlig social gåtur langs havnefronten. Alle er velkomne — mød nye mennesker." },
-      "e2": { "desc": "Afslappet gåtur i parken med kaffe bagefter. Perfekt for nye i byen." },
-      "e3": { "desc": "Hyggelig fodbold i Kildeparken. Alle niveauer. Vi mangler altid folk." },
-      "e4": { "desc": "Settlers, Catan og pizza. Alle niveauer velkomne." },
-      "mtb1": { "desc": "Tekniske MTB-spor i Hammer Bakker. 3 ruter: grøn, blå, rød. Fantastisk terræn." },
-      "mtb2": { "desc": "Lange MTB-stier gennem Rold Skov. Kuperet terræn med tekniske sektioner." },
-      "mtb3": { "desc": "Let MTB-rute perfekt til begyndere. Flad skovsti med sjove bump." },
-      "vdr1": { "desc": "Smuk vandresti langs Limfjorden fra Aalborg til Nibe." },
-      "vdr2": { "desc": "Eventyrlig vandresti gennem sprækkedalen i Rold Skov. 5 km rundtur." },
-      "vdr3": { "desc": "Kort vandring med vikinge-historie og panoramaudsigt." },
-      "vdr4": { "desc": "Smuk vandrerute med panoramaudsigt over Limfjorden." },
-      "lob1": { "desc": "3-5 km løberute i Kildeparken. Fladt, oplyst om aftenen." },
-      "lob2": { "desc": "Flad rute langs havnefronten. Ca. 4 km tur/retur." },
-      "hnd1": { "desc": "Indhegnet hundeskov med masser af plads. Vandpost og bænke." },
-      "hnd2": { "desc": "Stor indhegnet hundepark. Separate arealer for store og små hunde." },
-      "fsk1": { "desc": "God fiskeplads ved Limfjorden. Havørred, fladfisk og hornfisk i sæson." },
-      "fsk2": { "desc": "Kendt fiskested ved Nibe. Gode muligheder for havørred fra kysten." },
-      "bad1": { "desc": "Aalborgs populære havnebad ved Vestre Bådehavn. Sauna og solterrasse. Gratis." },
-      "bad2": { "desc": "Naturlig sandstrand på Egholm. Perfekt sommerdag." },
-      "shl1": { "desc": "Primitiv shelter på Egholm med bålplads. Fantastisk stjernehimmel." },
-      "shl2": { "desc": "Skovly i hjertet af Rold Skov. Bålplads, vand og toilet tæt på." },
-      "dyr1": { "desc": "Se vilde kronsdyr, vildsvin og ørne. Bedst ved solopgang." },
-      "dyr2": { "desc": "Vilde heste og køer på Egholm. Tæt på og frit tilgængeligt." },
-      "cph1": { "desc": "Verdens næstældste forlystelsespark. Koncerter, mad og eventyr." },
-      "cph2": { "desc": "Ikonisk havnepromenade med farverige huse, restauranter og caféer." },
-      "cph3": { "desc": "Trendy kødby-kvarter med gallerier, restauranter og natklubber." },
-      "aar1": { "desc": "Ikonisk kunstmuseum med Rainbow Panorama på taget." },
-      "aar2": { "desc": "Åben friluftsmuseum med historiske bygninger fra hele Danmark." },
-      "ode1": { "desc": "Museum dedikeret til HC Andersen med interaktive udstillinger." },
-      "nib1": { "desc": "Hyggelig lille fiskerihavn med caféer og udsigt over Limfjorden." },
-      "nib2": { "desc": "Hjem for Nibe Festival — populær sommermusikfestival." },
-      "ska1": { "desc": "Danmarks nordligste punkt. Her mødes Skagerrak og Kattegat." },
-      "rol1": { "desc": "Smuk nationalpark i Rold Skov. Vandreruter og sprækkedal." },
-      "mu1": { "desc": "Aalborgs legendære spillested i Nordkraft. Live musik." },
-      "mu2": { "desc": "Live musik, jamsessions og kulturelle events." },
-      "kr1": { "desc": "Museum for moderne kunst med atelierer og workshops." },
-      "kr2": { "desc": "Åbne atelierer. Keramik, maleri, fotografi og DIY-workshops." },
-      "kr3": { "desc": "Fotoklub med ugentlige fotwalks og workshops." },
-      "fi1": { "desc": "CrossFit-box med fællesskab i fokus. WODs og open gym." },
-      "fi2": { "desc": "Indendørs klatrecenter med bouldering og topreb." },
-      "fi3": { "desc": "Vinterbadning med sauna. Kold dukkert og varmt fællesskab." },
-      "ou1": { "desc": "Fuglereservat med udsigtsTårn. Vådenge og vadefugle." },
-      "ou2": { "desc": "Guidede ture i Nordeuropas største højmose. Krondyr og ørne." },
-      "ou3": { "desc": "Kajakklub ved Limfjorden. Lån kajak eller SUP-board." },
-      "ou4": { "desc": "Rideskole med heste til alle niveauer." },
-      "so1": { "desc": "Hyggelig café med brætspil og bogklub." },
-      "so2": { "desc": "Kulturhus med sprogcafé, filmklub og sociale events." },
-      "so3": { "desc": "Mødested for frivillige. Forældregrupper og netværk." },
-      "ev1": { "desc": "Stand-up comedy med lokale og nationale komikere." },
-      "ev2": { "desc": "Ugentlig pub quiz med øl fra eget bryggeri." },
-      "ev3": { "desc": "Månedligt loppemarked med vintage og genbrug." },
-      "ka1": { "desc": "Co-working space og iværksættermiljø." },
-      "ka2": { "desc": "Nordjyllands største innovationsmiljø." },
-      "ka3": { "desc": "Aalborg Universitets iværksættermiljø." },
-      "te1": { "desc": "Maker space med 3D-printere og coding meetups." },
-      "te2": { "desc": "Tech-hub med gaming events og drone-workshops." }
     }
   },
   "common": {
