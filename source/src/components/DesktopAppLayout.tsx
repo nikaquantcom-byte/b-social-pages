@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import { Home, Compass, MapPin, MessageCircle, User, Bell, Search, Plus, Building2 } from "lucide-react";
 import { useState } from "react";
+import { useNotifications } from "@/context/NotificationContext";
 
 const NAV = [
   { label: "Feed", icon: Home, href: "/" },
@@ -13,6 +14,7 @@ const NAV = [
 
 export default function DesktopAppLayout({ children }: { children: React.ReactNode }) {
   const [location] = useHashLocation();
+  const { unreadCount } = useNotifications();
 
   return (
     <div className="dsk-app dark">
@@ -52,10 +54,32 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
               </Link>
             );
           })}
+          {/* Notifications link */}
+          <Link
+            href="/notifikationer"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mt-4 ${
+              location === "/notifikationer"
+                ? "bg-[#4ECDC4]/15 text-[#4ECDC4] font-medium"
+                : "text-white/50 hover:text-white/80 hover:bg-white/5"
+            }`}
+          >
+            <div className={`relative w-8 h-8 rounded-lg flex items-center justify-center ${
+              location === "/notifikationer" ? "bg-[#4ECDC4]/20" : ""
+            }`}>
+              <Bell size={18} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </div>
+            Notifikationer
+          </Link>
+
           {/* Kunde section link */}
           <Link
             href="/firma"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mt-6 ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all mt-2 ${
               location.startsWith("/firma")
                 ? "bg-[#4ECDC4]/15 text-[#4ECDC4] font-medium"
                 : "text-white/50 hover:text-white/80 hover:bg-white/5"
