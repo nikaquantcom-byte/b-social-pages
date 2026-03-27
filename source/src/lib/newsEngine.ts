@@ -37,6 +37,12 @@ const RSS_FEEDS: FeedConfig[] = [
     tags: ["cykling", "løb", "fodbold", "svømning", "fitness", "kampsport", "basketball", "tennis", "golf", "ski", "snowboard", "ridning"],
   },
   {
+    url: "https://www.dr.dk/nyheder/service/feeds/sporten",
+    source: "DR Sporten",
+    sourceEmoji: "📺",
+    tags: ["fodbold", "håndbold", "cykling", "løb", "tennis", "badminton", "fitness", "svømning"],
+  },
+  {
     url: "https://nordjyske.dk/rss/aalborg",
     source: "Nordjyske Aalborg",
     sourceEmoji: "🎨",
@@ -55,6 +61,7 @@ const PROXY = "https://bsocial-rss-proxy.nicbj96.workers.dev/?url=";
 
 // --- Cache ---
 const CACHE_KEY = "bsocial_news_v4";
+const SAVED_NEWS_KEY = "bsocial_saved_news";
 const CACHE_TTL = 30 * 60 * 1000; // 30 min
 
 interface NewsCache {
@@ -74,7 +81,9 @@ function getCache(): NewsCache | null {
     // Restore Date objects
     cache.items = cache.items.map(i => ({ ...i, pubDate: new Date(i.pubDate) }));
     return cache;
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 function setCache(items: NewsItem[]): void {
@@ -82,6 +91,41 @@ function setCache(items: NewsItem[]): void {
     const cache: NewsCache = { timestamp: Date.now(), items };
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
   } catch { /* localStorage full */ }
+}
+
+// --- Bookmark / Saved News Functions ---
+export function getSavedNews(): NewsItem[] {
+  try {
+    const raw = localStorage.getItem(SAVED_NEWS_KEY);
+    if (!raw) return [];
+    const items: NewsItem[] = JSON.parse(raw);
+    return items.map(i => ({ ...i, pubDate: new Date(i.pubDate) }));
+  } catch {
+    return [];
+  }
+}
+
+export function saveNews(item: NewsItem): void {
+  try {
+    const saved = getSavedNews();
+    if (saved.some(i => i.id === item.id)) return;
+    const next = [item, ...saved];
+    localStorage.setItem(SAVED_NEWS_KEY, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent('bsocial-saved-news-changed', { detail: next }));
+  } catch { /* localStorage full */ }
+}
+
+export function removeSavedNews(id: string): void {
+  try {
+    const saved = getSavedNews();
+    const next = saved.filter(i => i.id !== id);
+    localStorage.setItem(SAVED_NEWS_KEY, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent('bsocial-saved-news-changed', { detail: next }));
+  } catch { /* error */ }
+}
+
+export function isNewsSaved(id: string): boolean {
+  return getSavedNews().some(i => i.id === id);
 }
 
 // --- RSS Parser ---
@@ -108,6 +152,7 @@ function parseRSS(xml: string, config: FeedConfig): NewsItem[] {
     if (!image && mediaContent?.getAttribute("url")) {
       image = mediaContent.getAttribute("url");
     }
+
     // Fallback: extract first img src from description HTML
     if (!image && description) {
       const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/);
@@ -170,6 +215,13 @@ function matchTagsToContent(text: string, feedTags: string[]): string[] {
   const lower = text.toLowerCase();
   const matched = new Set<string>();
 
+  // Better sport keyword matching
+  if (lower.includes("fodbold") || lower.includes("aab") || lower.includes("superliga")) matched.add("fodbold");
+  if (lower.includes("håndbold") || lower.includes("aalborg håndbold")) matched.add("håndbold");
+  if (lower.includes("cykling") || lower.includes("tour de")) matched.add("cykling");
+  if (lower.includes("løb") || lower.includes("maraton")) matched.add("løb");
+  if (lower.includes("padel") || lower.includes("tennis")) matched.add("tennis");
+
   // Always include feed-level tags if content has relevant words
   for (const ft of feedTags) {
     const node = getTagNode(ft);
@@ -227,7 +279,6 @@ export async function fetchNews(): Promise<NewsItem[]> {
   if (cached) return cached.items;
 
   const allItems: NewsItem[] = [];
-
   const fetches = RSS_FEEDS.map(async (config) => {
     try {
       const res = await fetch(PROXY + encodeURIComponent(config.url), {
@@ -252,7 +303,6 @@ export async function fetchNews(): Promise<NewsItem[]> {
 
   // Only cache non-empty results
   if (allItems.length > 0) setCache(allItems);
-
   return allItems;
 }
 
@@ -285,20 +335,18 @@ export function buildNewsSections(allNews: NewsItem[], userTags: string[]): News
   if (userTags.length === 0) return [];
 
   const sections: NewsSection[] = [];
-
   for (const tag of userTags) {
     const node = getTagNode(tag);
     const related = [tag, ...getRelatedTags(tag)];
     const relatedSet = new Set(related.map(r => r.toLowerCase()));
 
-    const matched = allNews.filter(item =>
+    const matched = allNews.filter(item => 
       item.matchedTags.some(mt => relatedSet.has(mt.toLowerCase()))
     );
 
     if (matched.length > 0) {
       // Sort by date within section
       matched.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
-
       sections.push({
         tag,
         label: node?.label || tag,
@@ -307,7 +355,6 @@ export function buildNewsSections(allNews: NewsItem[], userTags: string[]): News
       });
     }
   }
-
   return sections;
 }
 
@@ -315,6 +362,7 @@ export function buildNewsSections(allNews: NewsItem[], userTags: string[]): News
 export function formatNewsTime(date: Date): string {
   const now = Date.now();
   const diff = now - date.getTime();
+
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
