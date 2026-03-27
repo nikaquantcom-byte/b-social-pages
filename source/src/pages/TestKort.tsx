@@ -66,10 +66,8 @@ export default function TestKort() {
         zoom: 7,
         zoomControl: false,
       });
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        attribution: "\u00a9 OSM \u00a9 CARTO",
-        maxZoom: 19,
-      }).addTo(map);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {        attribution: "\u00a9 OSM \u00a9 CARTO",
+        attribution: '© OpenStreetMap contributors',      }).addTo(map);
       L.control.zoom({ position: "bottomright" }).addTo(map);
       mapInstanceRef.current = map;
       setTimeout(() => map.invalidateSize(), 100);
