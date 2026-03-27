@@ -21,6 +21,7 @@ import FirmaAnalytics from "@/pages/FirmaAnalytics";
 import FirmaFakturering from "@/pages/FirmaFakturering";
 import FirmaRekruttering from "@/pages/FirmaRekruttering";
 import Indstillinger from "@/pages/Indstillinger";
+import FirmaIndstillinger from "@/pages/FirmaIndstillinger";
 import Overblik from "@/pages/Overblik";
 // Desktop layout (now the default)
 import DesktopAppLayout from "@/components/DesktopAppLayout";
@@ -56,7 +57,7 @@ function FirmaRouter() {
       <Route path="/firma/analytics" component={FirmaAnalytics} />
       <Route path="/firma/fakturering" component={FirmaFakturering} />
       <Route path="/firma/rekruttering" component={FirmaRekruttering} />
-      <Route path="/firma/indstillinger" component={Indstillinger} />
+      <Route path="/firma/indstillinger" component={FirmaIndstillinger} />
       <Route path="/firma" component={FirmaDashboard} />
     </Switch>
   );
