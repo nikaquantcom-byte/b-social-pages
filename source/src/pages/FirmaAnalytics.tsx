@@ -1,5 +1,6 @@
 import FirmaLayout from "@/components/FirmaLayout";
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import {
@@ -70,6 +71,7 @@ async function safeQuery<T>(fn: () => Promise<{ data: T | null; error: any }>): 
 
 /* ── Main Component ── */
 export default function FirmaAnalytics() {
+  const { t } = useTranslation();
   const { user, companyId } = useAuth();
   const [period, setPeriod] = useState<Period>("uge");
   const [loading, setLoading] = useState(true);
@@ -142,7 +144,7 @@ export default function FirmaAnalytics() {
 
   // Daily views chart — show events per day of week
   const dailyData = useMemo(() => {
-    const dayLabels = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
+    const dayLabels = [t('firma.analytics_day_mon'), t('firma.analytics_day_tue'), t('firma.analytics_day_wed'), t('firma.analytics_day_thu'), t('firma.analytics_day_fri'), t('firma.analytics_day_sat'), t('firma.analytics_day_sun')];
     const counts = new Array(7).fill(0);
     for (const e of filteredEvents) {
       const d = new Date(e.date);
@@ -161,9 +163,9 @@ export default function FirmaAnalytics() {
 
   // Funnel
   const funnel = useMemo(() => [
-    { label: "Events", value: eventsCount, pct: "100%" },
-    { label: "Tilmeldinger", value: signupsCount, pct: eventsCount > 0 ? `${((signupsCount / eventsCount) * 100).toFixed(1)}%` : "0%" },
-  ], [eventsCount, signupsCount]);
+    { label: t('firma.analytics_events'), value: eventsCount, pct: "100%" },
+    { label: t('firma.analytics_signups'), value: signupsCount, pct: eventsCount > 0 ? `${((signupsCount / eventsCount) * 100).toFixed(1)}%` : "0%" },
+  ], [eventsCount, signupsCount, t]);
 
   // Event performance table
   const eventPerformance = useMemo(() => {
@@ -200,7 +202,7 @@ export default function FirmaAnalytics() {
   const geoData = useMemo(() => {
     const cityCounts: Record<string, number> = {};
     for (const p of followerProfiles) {
-      const city = p.city || "Ukendt";
+      const city = p.city || t('firma.analytics_unknown');
       cityCounts[city] = (cityCounts[city] || 0) + 1;
     }
     const total = followerProfiles.length || 1;
@@ -227,8 +229,8 @@ export default function FirmaAnalytics() {
     return grid;
   }, [filteredEvents]);
 
-  const heatmapTimes = ["Morgen", "Middag", "Eftermiddag", "Aften"];
-  const heatmapDays = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
+  const heatmapTimes = [t('firma.analytics_time_morning'), t('firma.analytics_time_noon'), t('firma.analytics_time_afternoon'), t('firma.analytics_time_evening')];
+  const heatmapDays = [t('firma.analytics_day_mon'), t('firma.analytics_day_tue'), t('firma.analytics_day_wed'), t('firma.analytics_day_thu'), t('firma.analytics_day_fri'), t('firma.analytics_day_sat'), t('firma.analytics_day_sun')];
   const heatmapMax = Math.max(...heatmapData.flat(), 1);
 
   if (loading) {
@@ -246,8 +248,8 @@ export default function FirmaAnalytics() {
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Analytics</h1>
-            <p className="text-muted-foreground text-sm mt-1">Detaljeret indsigt i dine events og engagement.</p>
+            <h1 className="text-2xl font-bold">{t('firma.analytics_title')}</h1>
+            <p className="text-muted-foreground text-sm mt-1">{t('firma.analytics_subtitle')}</p>
           </div>
           <div className="flex gap-1 bg-white/5 rounded-lg p-1">
             {(["i dag", "uge", "måned", "alt"] as Period[]).map((p) => (
@@ -263,8 +265,8 @@ export default function FirmaAnalytics() {
           <div className="p-4 rounded-2xl bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 flex items-start gap-3">
             <TrendingUp size={20} className="text-[#4ECDC4] mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-white text-sm font-semibold">Tip: Del din profil for at få flere visninger</p>
-              <p className="text-white/50 text-xs mt-1">Opret events og del dem med dit netværk. Data vises her, så snart der er aktivitet.</p>
+              <p className="text-white text-sm font-semibold">{t('firma.analytics_tip_title')}</p>
+              <p className="text-white/50 text-xs mt-1">{t('firma.analytics_tip_description')}</p>
             </div>
           </div>
         )}
@@ -272,10 +274,10 @@ export default function FirmaAnalytics() {
         {/* Overview stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: "Events", value: eventsCount.toLocaleString("da-DK"), icon: Calendar },
-            { label: "Tilmeldinger", value: signupsCount.toLocaleString("da-DK"), icon: UserPlus },
-            { label: "Visninger", value: impressions.toLocaleString("da-DK"), icon: Eye, note: "Kommer snart" },
-            { label: "Favoritter", value: favorites.toLocaleString("da-DK"), icon: Heart, note: "Kommer snart" },
+            { label: t('firma.analytics_events'), value: eventsCount.toLocaleString("da-DK"), icon: Calendar },
+            { label: t('firma.analytics_signups'), value: signupsCount.toLocaleString("da-DK"), icon: UserPlus },
+            { label: t('firma.analytics_impressions'), value: impressions.toLocaleString("da-DK"), icon: Eye, note: t('firma.analytics_coming_soon') },
+            { label: t('firma.analytics_favorites'), value: favorites.toLocaleString("da-DK"), icon: Heart, note: t('firma.analytics_coming_soon') },
           ].map((stat) => {
             const Icon = stat.icon;
             return (
@@ -293,7 +295,7 @@ export default function FirmaAnalytics() {
 
         {/* SVG Line Chart */}
         <div className="glass-card rounded-xl p-4">
-          <h3 className="font-semibold mb-3">Events pr. ugedag</h3>
+          <h3 className="font-semibold mb-3">{t('firma.analytics_events_per_weekday')}</h3>
           {eventsCount > 0 ? (
             <svg viewBox="0 0 300 160" className="w-full h-40">
               <defs>
@@ -313,14 +315,14 @@ export default function FirmaAnalytics() {
             </svg>
           ) : (
             <div className="h-40 flex items-center justify-center text-white/30 text-sm">
-              Ingen data endnu — opret events for at se grafen
+              {t('firma.analytics_no_data_chart')}
             </div>
           )}
         </div>
 
         {/* Engagement Funnel */}
         <div className="glass-card rounded-xl p-4">
-          <h3 className="font-semibold mb-4">Engagement Funnel</h3>
+          <h3 className="font-semibold mb-4">{t('firma.analytics_engagement_funnel')}</h3>
           <div className="space-y-2">
             {funnel.map((step, i) => (
               <div key={step.label} className="flex items-center gap-3">
@@ -340,7 +342,7 @@ export default function FirmaAnalytics() {
 
         {/* Heatmap */}
         <div className="glass-card rounded-xl p-4">
-          <h3 className="font-semibold mb-3">Event-tidspunkter</h3>
+          <h3 className="font-semibold mb-3">{t('firma.analytics_event_times')}</h3>
           <div className="overflow-x-auto">
             <div className="grid grid-cols-8 gap-1 min-w-[400px]">
               <div />
@@ -362,16 +364,16 @@ export default function FirmaAnalytics() {
         {/* Event performance table */}
         <div className="glass-card rounded-xl overflow-hidden">
           <div className="p-4 border-b border-white/10">
-            <h2 className="font-semibold">Event-performance</h2>
+            <h2 className="font-semibold">{t('firma.analytics_event_performance')}</h2>
           </div>
           {eventPerformance.length > 0 ? (
             <table className="w-full">
               <thead>
                 <tr className="text-xs text-muted-foreground border-b border-white/10">
-                  <th className="text-left px-4 py-2">Event</th>
-                  <th className="text-left px-4 py-2">Kategori</th>
-                  <th className="text-left px-4 py-2">Dato</th>
-                  <th className="text-left px-4 py-2">Tilmeld.</th>
+                  <th className="text-left px-4 py-2">{t('firma.analytics_table_event')}</th>
+                  <th className="text-left px-4 py-2">{t('firma.analytics_table_category')}</th>
+                  <th className="text-left px-4 py-2">{t('firma.analytics_table_date')}</th>
+                  <th className="text-left px-4 py-2">{t('firma.analytics_table_signups')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -386,34 +388,34 @@ export default function FirmaAnalytics() {
               </tbody>
             </table>
           ) : (
-            <div className="p-8 text-center text-white/30 text-sm">Ingen events i den valgte periode</div>
+            <div className="p-8 text-center text-white/30 text-sm">{t('firma.analytics_no_events_period')}</div>
           )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Tag performance */}
           <div className="glass-card rounded-xl p-4">
-            <h3 className="font-semibold mb-3">Tag-performance</h3>
+            <h3 className="font-semibold mb-3">{t('firma.analytics_tag_performance')}</h3>
             {tagPerformance.length > 0 ? (
               <div className="space-y-3">
-                {tagPerformance.map((t) => (
-                  <div key={t.tag} className="flex items-center justify-between">
-                    <span className="text-sm capitalize">{t.tag}</span>
+                {tagPerformance.map((item) => (
+                  <div key={item.tag} className="flex items-center justify-between">
+                    <span className="text-sm capitalize">{item.tag}</span>
                     <div className="flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground">{t.events} events</span>
-                      <span className="text-xs text-primary font-medium">{t.signups} tilmeld.</span>
+                      <span className="text-xs text-muted-foreground">{item.events} {t('firma.analytics_events_label')}</span>
+                      <span className="text-xs text-primary font-medium">{item.signups} {t('firma.analytics_signups_short')}</span>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-white/30 text-sm text-center py-4">Ingen tag-data endnu</p>
+              <p className="text-white/30 text-sm text-center py-4">{t('firma.analytics_no_tag_data')}</p>
             )}
           </div>
 
           {/* Geo distribution */}
           <div className="glass-card rounded-xl p-4">
-            <h3 className="font-semibold mb-3">Geografisk fordeling (følgere)</h3>
+            <h3 className="font-semibold mb-3">{t('firma.analytics_geo_distribution')}</h3>
             {geoData.length > 0 ? (
               <div className="space-y-2">
                 {geoData.map((g) => (
@@ -430,7 +432,7 @@ export default function FirmaAnalytics() {
                 ))}
               </div>
             ) : (
-              <p className="text-white/30 text-sm text-center py-4">Ingen følgere endnu — del din profil for at bygge din målgruppe op</p>
+              <p className="text-white/30 text-sm text-center py-4">{t('firma.analytics_no_followers')}</p>
             )}
           </div>
         </div>

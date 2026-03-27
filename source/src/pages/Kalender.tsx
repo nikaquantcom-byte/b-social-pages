@@ -1,12 +1,13 @@
 import { useState, useMemo } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useLocation } from "wouter";
+import { useTranslation } from 'react-i18next';
 import { useQuery } from "@tanstack/react-query";
 import { fetchEvents, type Event as SupabaseEvent } from "@/lib/supabase";
 import { CalmBottomNav } from "@/components/CalmBottomNav";
 
-const DAYS = ["Ma", "Ti", "On", "To", "Fr", "Lø", "Sø"];
-const MONTH_NAMES = ["Januar", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December"];
+const DAY_KEYS = ["calendar.day_mon", "calendar.day_tue", "calendar.day_wed", "calendar.day_thu", "calendar.day_fri", "calendar.day_sat", "calendar.day_sun"];
+const MONTH_NAME_KEYS = ["calendar.month_january", "calendar.month_february", "calendar.month_march", "calendar.month_april", "calendar.month_may", "calendar.month_june", "calendar.month_july", "calendar.month_august", "calendar.month_september", "calendar.month_october", "calendar.month_november", "calendar.month_december"];
 
 // Static fallback events
 const STATIC_EVENT_DATES: Record<string, { title: string; emoji: string; type: string }[]> = {
@@ -35,6 +36,7 @@ function getFirstDayOfMonth(year: number, month: number) {
 }
 
 export default function Kalender() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [year, setYear] = useState(2026);
   const [month, setMonth] = useState(2); // March = 2
@@ -92,7 +94,7 @@ export default function Kalender() {
     >
       <div className="sticky top-0 z-30 pt-12 pb-3 px-5 flex items-center gap-3" style={{ background: "linear-gradient(to bottom, rgba(10,14,35,0.95) 60%, transparent)" }}>
         <button onClick={() => setLocation("/min-side")} className="w-9 h-9 rounded-full glass-card flex items-center justify-center"><ArrowLeft size={18} className="text-white" /></button>
-        <h1 className="text-white text-xl font-bold">Kalender</h1>
+        <h1 className="text-white text-xl font-bold">{t('calendar.title')}</h1>
         {isLoading && <Loader2 size={14} className="animate-spin text-[#4ECDC4]" />}
       </div>
 
@@ -101,13 +103,13 @@ export default function Kalender() {
         <div className="glass-card-strong rounded-3xl p-4 mb-5">
           <div className="flex items-center justify-between mb-4">
             <button onClick={prevMonth} className="w-8 h-8 rounded-full glass-card flex items-center justify-center"><ChevronLeft size={16} className="text-white" /></button>
-            <h2 className="text-white font-semibold text-sm">{MONTH_NAMES[month]} {year}</h2>
+            <h2 className="text-white font-semibold text-sm">{t(MONTH_NAME_KEYS[month])} {year}</h2>
             <button onClick={nextMonth} className="w-8 h-8 rounded-full glass-card flex items-center justify-center"><ChevronRight size={16} className="text-white" /></button>
           </div>
 
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {DAYS.map(d => <div key={d} className="text-center text-white/40 text-[10px] font-medium">{d}</div>)}
+            {DAY_KEYS.map(dk => <div key={dk} className="text-center text-white/40 text-[10px] font-medium">{t(dk)}</div>)}
           </div>
 
           {/* Calendar grid */}
@@ -143,13 +145,13 @@ export default function Kalender() {
 
         {/* Events list */}
         <h2 className="text-white font-semibold text-sm mb-3">
-          {selectedDate ? `Events d. ${parseInt(selectedDate.split("-")[2])}. ${MONTH_NAMES[parseInt(selectedDate.split("-")[1]) - 1]}` : "Kommende events"}
+          {selectedDate ? `${t('calendar.events_on')} ${parseInt(selectedDate.split("-")[2])}. ${t(MONTH_NAME_KEYS[parseInt(selectedDate.split("-")[1]) - 1])}` : t('calendar.upcoming_events')}
         </h2>
 
         {selectedDate && selectedEvents.length === 0 && (
           <div className="glass-card rounded-2xl p-6 text-center">
             <span className="text-2xl">📅</span>
-            <p className="text-white/50 text-xs mt-2">Ingen events denne dag</p>
+            <p className="text-white/50 text-xs mt-2">{t('calendar.no_events_this_day')}</p>
           </div>
         )}
 
@@ -165,7 +167,7 @@ export default function Kalender() {
               event.type === "tilmeldt" ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" :
               "bg-amber-500/20 text-amber-400"
             }`}>
-              {(event as any).fromDB ? "Fra DB" : event.type === "tilmeldt" ? "Tilmeldt" : "Venter"}
+              {(event as any).fromDB ? t('calendar.from_db') : event.type === "tilmeldt" ? t('calendar.registered') : t('calendar.waiting')}
             </span>
           </div>
         ))}

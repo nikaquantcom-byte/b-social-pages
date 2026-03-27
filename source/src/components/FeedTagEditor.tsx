@@ -5,16 +5,17 @@ import type { PriceTier } from "@/context/TagContext";
 import { TAG_TREE, type TagNode } from "@/lib/tagTree";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from 'react-i18next';
 
 interface FeedTagEditorProps {
   open: boolean;
   onClose: () => void;
 }
 
-const PRICE_OPTIONS: { value: PriceTier; label: string; activeClass: string }[] = [
-  { value: "alle", label: "Alle", activeClass: "bg-white/15 text-white" },
-  { value: "gratis", label: "Gratis", activeClass: "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/25" },
-  { value: "premium", label: "Premium", activeClass: "bg-amber-500 text-white shadow-lg shadow-amber-500/25" },
+const PRICE_OPTIONS: { value: PriceTier; labelKey: string; activeClass: string }[] = [
+  { value: "alle", labelKey: "tags.price_all", activeClass: "bg-white/15 text-white" },
+  { value: "gratis", labelKey: "tags.price_free", activeClass: "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/25" },
+  { value: "premium", labelKey: "tags.price_premium", activeClass: "bg-amber-500 text-white shadow-lg shadow-amber-500/25" },
 ];
 
 /* ── Expandable tag-tree group ── */
@@ -108,6 +109,7 @@ function TagTreeRow({ parent, selectedTags, onToggle, forceExpand }: {
 
 
 export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
+  const { t } = useTranslation();
   const { selectedTags: contextTags, setSelectedTags, priceTier, setPriceTier, city, radius } = useTags();
   const { user } = useAuth();
   const [localTags, setLocalTags] = useState<Set<string>>(new Set());
@@ -150,7 +152,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
     if (user) {
       const tagArray = [...localTags];
       const parentTagSet = new Set(TAG_TREE.map(p => p.tag));
-      const vibeKeys = tagArray.filter(t => parentTagSet.has(t));
+      const vibeKeys = tagArray.filter(item => parentTagSet.has(item));
 
       await supabase.from("profiles").update({
         interests: tagArray,
@@ -165,7 +167,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
   if (!open) return null;
 
   const tagCount = localTags.size;
-  const radiusLabel = radius === 0 ? "Hele DK" : `${radius} km`;
+  const radiusLabel = radius === 0 ? t('tags.whole_dk') : `${radius} km`;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end" data-testid="feed-tag-editor">
@@ -179,7 +181,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h3 className="text-white font-bold text-lg">Tilpas dit feed</h3>
+            <h3 className="text-white font-bold text-lg">{t('tags.customize_feed')}</h3>
             <p className="text-white/40 text-[11px]">{city} · {radiusLabel}</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center" data-testid="button-close-tag-editor">
@@ -189,7 +191,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
 
         {/* Price filter */}
         <div className="mb-3">
-          <p className="text-white/40 text-[10px] font-medium mb-1.5">Vis oplevelser</p>
+          <p className="text-white/40 text-[10px] font-medium mb-1.5">{t('tags.show_experiences')}</p>
           <div className="flex gap-2">
             {PRICE_OPTIONS.map(p => {
               const active = localPrice === p.value;
@@ -202,7 +204,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
                   }`}
                   data-testid={`price-${p.value}`}
                 >
-                  {p.label}
+                  {t(p.labelKey)}
                 </button>
               );
             })}
@@ -216,7 +218,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
             type="text"
             value={tagSearch}
             onChange={e => setTagSearch(e.target.value)}
-            placeholder="Søg i tags... fx cykling, jazz, yoga"
+            placeholder={t('tags.search_placeholder')}
             className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-white/6 border border-white/10 text-white text-xs placeholder:text-white/30 focus:outline-none focus:border-[#4ECDC4]/40 transition-all"
             data-testid="feed-tag-search"
           />
@@ -234,7 +236,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <Sparkles size={12} className="text-[#4ECDC4]" />
-            <p className="text-white/40 text-[10px] font-medium">Dine tags</p>
+            <p className="text-white/40 text-[10px] font-medium">{t('tags.your_tags')}</p>
             {tagCount > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4]/15 text-[#4ECDC4] text-[9px] font-bold">
                 {tagCount}
@@ -243,7 +245,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
           </div>
           {tagCount > 0 && (
             <button onClick={() => setLocalTags(new Set())} className="text-[#4ECDC4] text-[10px] font-medium">
-              Nulstil
+              {t('tags.reset')}
             </button>
           )}
         </div>
@@ -265,12 +267,12 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
 
           {filteredTree.length === 0 && (
             <div className="text-center py-6">
-              <p className="text-white/25 text-xs">Ingen tags matcher "{tagSearch}"</p>
+              <p className="text-white/25 text-xs">{t('tags.no_tags_match', { search: tagSearch })}</p>
             </div>
           )}
 
           {tagCount === 0 && !tagSearch && (
-            <p className="text-white/20 text-[10px] mt-1 px-1">Ingen valgt = viser alt</p>
+            <p className="text-white/20 text-[10px] mt-1 px-1">{t('tags.none_selected_shows_all')}</p>
           )}
         </div>
 
@@ -281,7 +283,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
             className="w-full py-3.5 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-sm hover:bg-[#0EA372] active:scale-[0.98] transition-all shadow-lg shadow-[#4ECDC4]/20"
             data-testid="button-save-tags"
           >
-            Gem ({tagCount === 0 ? "viser alt" : `${tagCount} tags`} · {PRICE_OPTIONS.find(p => p.value === localPrice)?.label})
+            {t('tags.save')} ({tagCount === 0 ? t('tags.shows_all') : t('tags.tag_count', { count: tagCount })} · {t(PRICE_OPTIONS.find(p => p.value === localPrice)?.labelKey ?? 'tags.price_all')})
           </button>
         </div>
       </div>

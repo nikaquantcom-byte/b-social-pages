@@ -1,5 +1,6 @@
 import { ArrowLeft, FileText } from "lucide-react";
 import { useLocation } from "wouter";
+import { useTranslation } from 'react-i18next';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -22,6 +23,7 @@ function Li({ children }: { children: React.ReactNode }) {
 }
 
 export default function Vilkaar() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
 
   return (
@@ -38,11 +40,11 @@ export default function Vilkaar() {
         <button
           onClick={() => setLocation(-1 as unknown as string)}
           className="w-9 h-9 rounded-full glass-card flex items-center justify-center"
-          aria-label="Gå tilbage"
+          aria-label={t('legal.go_back')}
         >
           <ArrowLeft size={18} className="text-white" />
         </button>
-        <h1 className="text-white text-xl font-bold">Vilkår og betingelser</h1>
+        <h1 className="text-white text-xl font-bold">{t('legal.terms_title')}</h1>
       </div>
 
       <div className="px-5 mt-2 space-y-4">
@@ -53,147 +55,147 @@ export default function Vilkaar() {
           </div>
           <div>
             <p className="text-white font-semibold text-sm">B-Social.net</p>
-            <p className="text-white/50 text-xs mt-0.5">Gældende fra: 27. marts 2026</p>
+            <p className="text-white/50 text-xs mt-0.5">{t('legal.terms_effective_date')}</p>
             <p className="text-white/60 text-xs mt-2 leading-relaxed">
-              Disse vilkår og betingelser regulerer din brug af B-Social-platformen. Ved at oprette en konto accepterer du disse vilkår i sin helhed. Læs dem venligst omhyggeligt.
+              {t('legal.terms_intro_description')}
             </p>
           </div>
         </div>
 
         {/* 1. Om B-Social */}
-        <Section title="1. Om B-Social">
+        <Section title={t('legal.terms_section1_title')}>
           <p>
-            B-Social er en dansk social platform med base i Aalborg, der forbinder mennesker via lokale sociale arrangementer. Platformen er tilgængelig som en progressiv webapp (PWA) på b-social.net.
+            {t('legal.terms_section1_description')}
           </p>
           <p>
-            Kontakt: <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>
+            {t('legal.terms_contact_label')}: <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>
           </p>
         </Section>
 
         {/* 2. Acceptbetingelser */}
-        <Section title="2. Accept af vilkår">
+        <Section title={t('legal.terms_section2_title')}>
           <p>
-            Ved at registrere dig og bruge B-Social bekræfter du, at:
+            {t('legal.terms_section2_intro')}
           </p>
           <ul className="space-y-1.5 mt-1">
-            <Li>Du er mindst 16 år gammel</Li>
-            <Li>Du har læst og accepteret disse vilkår samt vores privatlivspolitik</Li>
-            <Li>De oplysninger, du angiver under registrering, er korrekte og opdaterede</Li>
-            <Li>Du bruger platformen i overensstemmelse med gældende dansk og EU-lovgivning</Li>
+            <Li>{t('legal.terms_accept_age')}</Li>
+            <Li>{t('legal.terms_accept_read')}</Li>
+            <Li>{t('legal.terms_accept_correct_info')}</Li>
+            <Li>{t('legal.terms_accept_compliance')}</Li>
           </ul>
         </Section>
 
         {/* 3. Brugerkonto */}
-        <Section title="3. Brugerkonto og sikkerhed">
+        <Section title={t('legal.terms_section3_title')}>
           <p>
-            Du er ansvarlig for at opretholde fortroligheden af dine loginoplysninger og for al aktivitet, der finder sted på din konto. Du skal straks underrette os på <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>, hvis du har mistanke om uautoriseret adgang til din konto.
+            {t('legal.terms_section3_responsibility')} <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>{t('legal.terms_section3_unauthorized_suffix')}
           </p>
           <p>
-            Du kan oprette konto via e-mail/adgangskode eller via Google OAuth. Ved brug af Google OAuth er Googles egne vilkår og privatlivspolitik ligeledes gældende.
+            {t('legal.terms_section3_google_oauth')}
           </p>
         </Section>
 
         {/* 4. Platformens formål */}
-        <Section title="4. Platformens formål og tilladte brug">
+        <Section title={t('legal.terms_section4_title')}>
           <p>
-            B-Social er udelukkende beregnet til at facilitere sociale arrangementer og kontakt mellem mennesker. Det er tilladt at:
+            {t('legal.terms_section4_allowed_intro')}
           </p>
           <ul className="space-y-1.5 mt-1">
-            <Li>Oprette og tilmelde sig sociale arrangementer</Li>
-            <Li>Kommunikere med andre brugere via platformen</Li>
-            <Li>Oprette en offentlig profil med dine interesser og præferencer</Li>
+            <Li>{t('legal.terms_allowed_create_events')}</Li>
+            <Li>{t('legal.terms_allowed_communicate')}</Li>
+            <Li>{t('legal.terms_allowed_profile')}</Li>
           </ul>
-          <p className="mt-2">Det er ikke tilladt at:</p>
+          <p className="mt-2">{t('legal.terms_section4_not_allowed_intro')}</p>
           <ul className="space-y-1.5 mt-1">
-            <Li>Anvende platformen til kommercielle formål uden skriftlig aftale med B-Social</Li>
-            <Li>Sende spam, uopfordret markedsføring eller chikane</Li>
-            <Li>Udgive sig for at være en anden person</Li>
-            <Li>Offentliggøre ulovligt, stødende eller krænkende indhold</Li>
-            <Li>Forsøge at omgå eller kompromittere platformens sikkerhed</Li>
-            <Li>Indsamle oplysninger om andre brugere til kommercielle formål</Li>
+            <Li>{t('legal.terms_not_allowed_commercial')}</Li>
+            <Li>{t('legal.terms_not_allowed_spam')}</Li>
+            <Li>{t('legal.terms_not_allowed_impersonation')}</Li>
+            <Li>{t('legal.terms_not_allowed_illegal_content')}</Li>
+            <Li>{t('legal.terms_not_allowed_security')}</Li>
+            <Li>{t('legal.terms_not_allowed_data_collection')}</Li>
           </ul>
         </Section>
 
         {/* 5. Brugerindhold */}
-        <Section title="5. Brugerindhold">
+        <Section title={t('legal.terms_section5_title')}>
           <p>
-            Du bevarer ejerskabet til det indhold, du opretter og deler på platformen (herunder profiloplysninger, arrangementsbeskrivelser og beskeder). Ved at uploade indhold giver du B-Social en ikke-eksklusiv, royaltyfri licens til at vise og distribuere dette indhold på platformen med henblik på at drifte tjenesten.
+            {t('legal.terms_section5_ownership')}
           </p>
           <p>
-            Du er selv ansvarlig for det indhold, du deler. Indhold, der overtræder disse vilkår, kan blive fjernet uden varsel.
+            {t('legal.terms_section5_responsibility')}
           </p>
         </Section>
 
         {/* 6. Arrangementer */}
-        <Section title="6. Arrangementer og deltagelse">
+        <Section title={t('legal.terms_section6_title')}>
           <p>
-            B-Social fungerer som en formidlingsplatform og er ikke direkte arrangør af de events, der oprettes af brugerne. Arrangørerne er selv ansvarlige for indholdet og afviklingen af deres arrangementer.
+            {t('legal.terms_section6_platform_role')}
           </p>
           <p>
-            B-Social påtager sig intet ansvar for skader, ulykker eller andre hændelser, der opstår i forbindelse med arrangementer formidlet via platformen. Deltagelse sker på eget ansvar.
+            {t('legal.terms_section6_liability')}
           </p>
         </Section>
 
         {/* 7. Immaterialrettigheder */}
-        <Section title="7. Intellektuelle rettigheder">
+        <Section title={t('legal.terms_section7_title')}>
           <p>
-            Alle rettigheder til platformen, herunder design, kode, logo og indhold produceret af B-Social, tilhører B-Social. Du må ikke kopiere, modificere, distribuere eller anvende disse til kommercielle formål uden forudgående skriftlig tilladelse.
+            {t('legal.terms_section7_description')}
           </p>
         </Section>
 
         {/* 8. Ansvarsbegrænsning */}
-        <Section title="8. Ansvarsbegrænsning">
+        <Section title={t('legal.terms_section8_title')}>
           <p>
-            B-Social leveres "som den er" og "som tilgængelig". Vi stræber efter høj tilgængelighed, men garanterer ikke uafbrudt eller fejlfri drift. B-Social er ikke ansvarlig for:
+            {t('legal.terms_section8_intro')}
           </p>
           <ul className="space-y-1.5 mt-1">
-            <Li>Tab eller skade som følge af din brug af platformen</Li>
-            <Li>Handlinger foretaget af andre brugere</Li>
-            <Li>Midlertidige nedetider eller tekniske fejl</Li>
-            <Li>Tab af data som følge af force majeure-begivenheder</Li>
+            <Li>{t('legal.terms_liability_loss')}</Li>
+            <Li>{t('legal.terms_liability_other_users')}</Li>
+            <Li>{t('legal.terms_liability_downtime')}</Li>
+            <Li>{t('legal.terms_liability_force_majeure')}</Li>
           </ul>
           <p>
-            B-Socials samlede ansvar over for dig er under alle omstændigheder begrænset til det beløb, du eventuelt har betalt for at bruge platformen inden for de seneste 12 måneder.
+            {t('legal.terms_section8_cap')}
           </p>
         </Section>
 
         {/* 9. Opsigelse */}
-        <Section title="9. Opsigelse og kontosletning">
+        <Section title={t('legal.terms_section9_title')}>
           <p>
-            Du kan til enhver tid slette din konto under Indstillinger i appen. Kontosletning medfører sletning af dine personoplysninger i overensstemmelse med vores privatlivspolitik.
+            {t('legal.terms_section9_user_deletion')}
           </p>
           <p>
-            B-Social forbeholder sig retten til at suspendere eller slette konti, der overtræder disse vilkår, uden forudgående varsel.
+            {t('legal.terms_section9_suspension')}
           </p>
         </Section>
 
         {/* 10. Ændringer */}
-        <Section title="10. Ændringer i vilkårene">
+        <Section title={t('legal.terms_section10_title')}>
           <p>
-            Vi kan opdatere disse vilkår med rimeligt varsel. Væsentlige ændringer vil blive meddelt via e-mail eller notifikation i appen mindst 14 dage inden ikrafttrædelse. Fortsat brug af platformen efter ikrafttrædelsen udgør accept af de opdaterede vilkår.
+            {t('legal.terms_section10_description')}
           </p>
         </Section>
 
         {/* 11. Lovvalg */}
-        <Section title="11. Lovvalg og tvistløsning">
+        <Section title={t('legal.terms_section11_title')}>
           <p>
-            Disse vilkår er underlagt dansk ret. Eventuelle tvister, der opstår i forbindelse med brugen af B-Social, søges løst ved forhandling. Kan dette ikke lykkes, afgøres tvisten ved de danske domstole med Retten i Aalborg som værneting i første instans.
+            {t('legal.terms_section11_governing_law')}
           </p>
           <p>
-            Du kan også indgive en klage til Center for Klageløsning eller EU's online klageplatform på <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-[#4ECDC4] underline underline-offset-2">ec.europa.eu/consumers/odr</a>.
+            {t('legal.terms_section11_complaint')} <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-[#4ECDC4] underline underline-offset-2">ec.europa.eu/consumers/odr</a>.
           </p>
         </Section>
 
         {/* 12. Kontakt */}
-        <Section title="12. Kontakt">
+        <Section title={t('legal.terms_section12_title')}>
           <p>
-            Har du spørgsmål til disse vilkår, er du velkommen til at kontakte os:
+            {t('legal.terms_section12_intro')}
           </p>
           <div className="glass-card rounded-xl p-3 space-y-0.5 text-white/60 text-xs mt-1">
             <p className="text-white/80 font-medium">B-Social</p>
-            <p>Aalborg, Danmark</p>
+            <p>{t('legal.privacy_aalborg_denmark')}</p>
             <p>
-              E-mail:{" "}
+              {t('legal.privacy_email_label')}:{" "}
               <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">
                 kontakt@b-social.net
               </a>
@@ -203,8 +205,8 @@ export default function Vilkaar() {
 
         {/* Footer */}
         <div className="text-center pt-2 pb-8">
-          <p className="text-white/20 text-[10px]">B-Social · Aalborg, Danmark · 27. marts 2026</p>
-          <p className="text-white/15 text-[10px] mt-1">Disse vilkår er underlagt dansk ret</p>
+          <p className="text-white/20 text-[10px]">{t('legal.terms_footer_line1')}</p>
+          <p className="text-white/15 text-[10px] mt-1">{t('legal.terms_footer_line2')}</p>
         </div>
       </div>
     </div>

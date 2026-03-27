@@ -1,5 +1,6 @@
 import FirmaLayout from "@/components/FirmaLayout";
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Check,
   ArrowRight,
@@ -23,8 +24,8 @@ type Plan = "starter" | "vaekst" | "partner";
 
 interface PlanDef {
   id: Plan;
-  name: string;
-  tagline: string;
+  nameKey: string;
+  taglineKey: string;
   price: string;
   revenueShare: string;
   revenueSharePct: number;
@@ -32,14 +33,14 @@ interface PlanDef {
   icon: typeof Heart;
   color: string;
   features: string[];
-  idealFor: string;
+  idealForKey: string;
 }
 
 const PLANS: PlanDef[] = [
   {
     id: "starter",
-    name: "Starter",
-    tagline: "Helt gratis — altid",
+    nameKey: "pricing.starter",
+    taglineKey: "pricing.always_free",
     price: "0 kr/md",
     revenueShare: "0%",
     revenueSharePct: 0,
@@ -51,12 +52,12 @@ const PLANS: PlanDef[] = [
       "Firmaprofil",
       "Tag-targeting (basis)",
     ],
-    idealFor: "Små foreninger, klubber, frivillige",
+    idealForKey: "Små foreninger, klubber, frivillige",
   },
   {
     id: "vaekst",
-    name: "Vækst",
-    tagline: "Ingen faste omkostninger",
+    nameKey: "pricing.vaekst",
+    taglineKey: "pricing.no_fixed_costs",
     price: "0 kr/md",
     revenueShare: "5%",
     revenueSharePct: 5,
@@ -70,12 +71,12 @@ const PLANS: PlanDef[] = [
       "Promoted events (betalt reach)",
       "Email support",
     ],
-    idealFor: "Voksende virksomheder, padel-centre, yoga-studier",
+    idealForKey: "Voksende virksomheder, padel-centre, yoga-studier",
   },
   {
     id: "partner",
-    name: "Partner",
-    tagline: "Lavere rate for volumen",
+    nameKey: "pricing.partner",
+    taglineKey: "pricing.lower_rate",
     price: "0 kr/md",
     revenueShare: "3%",
     revenueSharePct: 3,
@@ -89,7 +90,7 @@ const PLANS: PlanDef[] = [
       "Multi-lokation support",
       "Prioriteret support",
     ],
-    idealFor: "Større arrangører, festivaler, kæder",
+    idealForKey: "Større arrangører, festivaler, kæder",
   },
 ];
 
@@ -101,6 +102,7 @@ interface RevenueMonth {
 }
 
 export default function FirmaFakturering() {
+  const { t } = useTranslation();
   const { user, companyId } = useAuth();
   const [currentPlan, setCurrentPlan] = useState<Plan>("starter");
   const [loading, setLoading] = useState(true);
@@ -203,9 +205,9 @@ export default function FirmaFakturering() {
     <FirmaLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Fakturering</h1>
+          <h1 className="text-2xl font-bold">{t('pricing.billing_title')}</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Du betaler kun når du tjener penge. Alle pakker er gratis at starte.
+            {t('pricing.billing_desc')}
           </p>
         </div>
 
@@ -218,9 +220,9 @@ export default function FirmaFakturering() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <p className="font-semibold text-lg">{currentPlanDef.name}</p>
+                  <p className="font-semibold text-lg">{t(currentPlanDef.nameKey)}</p>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-primary/15 text-primary border border-primary/20">
-                    {currentPlanDef.revenueShare} revenue share
+                    {currentPlanDef.revenueShare} {t('firma.revenue_share')}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -233,7 +235,7 @@ export default function FirmaFakturering() {
             <div className="flex items-center gap-2">
               <span className="px-3 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 text-xs font-bold flex items-center gap-1.5">
                 <Gift size={12} />
-                GRATIS
+                {t('pricing.free_badge')}
               </span>
             </div>
           </div>
@@ -242,15 +244,15 @@ export default function FirmaFakturering() {
         {/* Monthly revenue overview */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="glass-card rounded-xl p-4">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Din omsætning denne måned</p>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">{t('pricing.your_revenue')}</p>
             <p className="text-2xl font-bold">{monthlyRevenue.toLocaleString("da-DK")} kr</p>
           </div>
           <div className="glass-card rounded-xl p-4">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">B-Social andel ({currentPlanDef.revenueShare})</p>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">{t('pricing.bsocial_share', { pct: currentPlanDef.revenueShare })}</p>
             <p className="text-2xl font-bold">{bsocialShare.toLocaleString("da-DK")} kr</p>
           </div>
           <div className="glass-card rounded-xl p-4">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Dit udbytte</p>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">{t('pricing.your_profit')}</p>
             <p className="text-2xl font-bold text-emerald-400">{(monthlyRevenue - bsocialShare).toLocaleString("da-DK")} kr</p>
           </div>
         </div>
@@ -260,11 +262,9 @@ export default function FirmaFakturering() {
           <div className="flex items-start gap-3">
             <Info size={16} className="text-blue-400 mt-0.5 shrink-0" />
             <div>
-              <p className="text-sm font-medium text-blue-300">Sammenlign med alternativer</p>
+              <p className="text-sm font-medium text-blue-300">{t('pricing.compare_title')}</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Hos Billetto betaler du 2% + 7 kr per billet. Hos Eventbrite op til 6,95% + 4,49 kr per billet.
-                <br />
-                Hos B-Social betaler du kun {currentPlanDef.revenueShare} — og kun af det du sælger via os. Ingen faste gebyrer, ingen per-billet-tillæg.
+                {t('pricing.compare_desc', { pct: currentPlanDef.revenueShare })}
               </p>
             </div>
           </div>
@@ -272,8 +272,8 @@ export default function FirmaFakturering() {
 
         {/* Plans grid */}
         <div>
-          <h2 className="font-semibold mb-1">Vælg din pakke</h2>
-          <p className="text-xs text-muted-foreground mb-4">Alle pakker er gratis at starte. Opgrader eller nedgrader når som helst.</p>
+          <h2 className="font-semibold mb-1">{t('pricing.choose_plan')}</h2>
+          <p className="text-xs text-muted-foreground mb-4">{t('pricing.choose_plan_desc')}</p>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {PLANS.map((plan) => {
               const isCurrent = plan.id === currentPlan;
@@ -287,16 +287,16 @@ export default function FirmaFakturering() {
                 >
                   {plan.highlight && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider">
-                      Mest populær
+                      {t('pricing.most_popular')}
                     </div>
                   )}
 
                   <div className="flex items-center gap-2 mb-2">
                     <Icon size={18} className={plan.color} />
-                    <h3 className="font-bold">{plan.name}</h3>
+                    <h3 className="font-bold">{t(plan.nameKey)}</h3>
                   </div>
 
-                  <p className="text-xs text-muted-foreground mb-3">{plan.tagline}</p>
+                  <p className="text-xs text-muted-foreground mb-3">{t(plan.taglineKey)}</p>
 
                   {/* Price & revenue share */}
                   <div className="mb-4">
@@ -308,8 +308,8 @@ export default function FirmaFakturering() {
                       <Sparkles size={12} className={plan.color} />
                       <span className="text-sm font-semibold">
                         {plan.revenueSharePct === 0
-                          ? "Ingen revenue share"
-                          : `${plan.revenueShare} af omsætning via B-Social`}
+                          ? t('pricing.no_revenue_share')
+                          : t('pricing.revenue_share_of', { pct: plan.revenueShare })}
                       </span>
                     </div>
                   </div>
@@ -326,14 +326,14 @@ export default function FirmaFakturering() {
                   <div className="pt-2 border-t border-white/5 mb-4">
                     <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                       <TrendingUp size={10} />
-                      Perfekt til: {plan.idealFor}
+                      {t('pricing.ideal_for', { audience: plan.idealForKey })}
                     </p>
                   </div>
 
                   {isCurrent ? (
                     <div className="px-3 py-2.5 rounded-lg bg-primary/10 text-primary text-sm text-center font-medium flex items-center justify-center gap-2">
                       <Check size={14} />
-                      Nuværende pakke
+                      {t('pricing.current_plan')}
                     </div>
                   ) : (
                     <button
@@ -347,8 +347,8 @@ export default function FirmaFakturering() {
                         <ArrowRight size={14} />
                       )}
                       {PLANS.findIndex((p) => p.id === plan.id) > PLANS.findIndex((p) => p.id === currentPlan)
-                        ? "Opgrader"
-                        : "Skift til denne"}
+                        ? t('pricing.upgrade')
+                        : t('pricing.switch_to')}
                     </button>
                   )}
                 </div>
@@ -362,7 +362,7 @@ export default function FirmaFakturering() {
           <div className="p-4 border-b border-white/10 flex items-center justify-between">
             <h2 className="font-semibold flex items-center gap-2">
               <Receipt size={16} className="text-primary" />
-              Omsætningshistorik
+              {t('pricing.revenue_history')}
             </h2>
           </div>
           {revenueHistory.length > 0 ? (
@@ -370,11 +370,11 @@ export default function FirmaFakturering() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">Måned</th>
-                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">Omsætning</th>
-                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">B-Social andel</th>
-                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">Dit udbytte</th>
-                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">Status</th>
+                    <th className="text-left px-4 py-3 text-xs text-muted-foreground font-medium">{t('pricing.month')}</th>
+                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">{t('pricing.revenue')}</th>
+                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">{t('pricing.bsocial_cut')}</th>
+                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">{t('pricing.profit')}</th>
+                    <th className="text-right px-4 py-3 text-xs text-muted-foreground font-medium">{t('pricing.status')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -390,7 +390,7 @@ export default function FirmaFakturering() {
                             ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/20"
                             : "bg-yellow-500/15 text-yellow-400 border-yellow-500/20"
                         }`}>
-                          {r.status === "settled" ? "Afregnet" : "Afventer"}
+                          {r.status === "settled" ? t('pricing.settled') : t('pricing.pending')}
                         </span>
                       </td>
                     </tr>
@@ -401,9 +401,9 @@ export default function FirmaFakturering() {
           ) : (
             <div className="px-6 py-12 text-center">
               <Receipt size={28} className="mx-auto mb-3 text-muted-foreground/40" />
-              <p className="text-sm text-muted-foreground font-medium">Ingen fakturering endnu</p>
+              <p className="text-sm text-muted-foreground font-medium">{t('pricing.no_billing_yet')}</p>
               <p className="text-xs text-muted-foreground/60 mt-1">
-                Du betaler først når du har omsætning via B-Social. Opret events og begynd at sælge!
+                {t('pricing.no_billing_desc')}
               </p>
             </div>
           )}
@@ -414,11 +414,9 @@ export default function FirmaFakturering() {
           <div className="flex items-start gap-3">
             <Sparkles size={20} className="text-primary mt-0.5 shrink-0" />
             <div>
-              <p className="font-semibold text-sm">Du betaler kun når du tjener penge</p>
+              <p className="font-semibold text-sm">{t('pricing.pay_when_earn')}</p>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Alle pakker er 100% gratis at starte. B-Social tjener kun, når du tjener.
-                Ingen bindingsperiode, ingen skjulte gebyrer, ingen overraskelser.
-                Start gratis og opgrader når din forretning vokser.
+                {t('pricing.pay_when_earn_desc')}
               </p>
             </div>
           </div>

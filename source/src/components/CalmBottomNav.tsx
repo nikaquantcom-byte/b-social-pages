@@ -1,18 +1,20 @@
 import { Home, Compass, MapPin, MessageCircle, User } from "lucide-react";
 import { useLocation, Link } from "wouter";
+import { useTranslation } from "react-i18next";
 
 // Sub-pages that belong to Min Side
 const MIN_SIDE_SUBS = ["/indstillinger", "/kalender", "/overblik", "/noter", "/historik", "/inspiration"];
 
 const navItems = [
-  { label: "Feed", icon: Home, href: "/feed" },
-  { label: "Udforsk", icon: Compass, href: "/udforsk" },
-  { label: "Kort", icon: MapPin, href: "/kort" },
-  { label: "Beskeder", icon: MessageCircle, href: "/beskeder" },
-  { label: "Min Side", icon: User, href: "/min-side" },
+  { key: "nav.feed", icon: Home, href: "/feed" },
+  { key: "nav.udforsk", icon: Compass, href: "/udforsk" },
+  { key: "nav.kort", icon: MapPin, href: "/kort" },
+  { key: "nav.beskeder", icon: MessageCircle, href: "/beskeder" },
+  { key: "nav.min_side", icon: User, href: "/min-side" },
 ];
 
 export function CalmBottomNav() {
+  const { t } = useTranslation();
   const [location] = useLocation();
 
   return (
@@ -31,7 +33,7 @@ export function CalmBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              data-testid={`nav-${item.label.toLowerCase().replace(" ", "-")}`}
+              data-testid={`nav-${t(item.key).toLowerCase().replace(" ", "-")}`}
               className="flex flex-col items-center gap-1 px-2 py-1 group transition-all duration-200"
             >
               <div
@@ -58,7 +60,7 @@ export function CalmBottomNav() {
                   isActive ? "text-[#4ECDC4]" : "text-white/40 group-hover:text-white/70"
                 }`}
               >
-                {item.label}
+                {t(item.key)}
               </span>
             </Link>
           );

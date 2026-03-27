@@ -1,5 +1,6 @@
 import { ArrowLeft, Shield } from "lucide-react";
 import { useLocation } from "wouter";
+import { useTranslation } from 'react-i18next';
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -33,6 +34,7 @@ function Li({ children }: { children: React.ReactNode }) {
 }
 
 export default function Privatlivspolitik() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
 
   return (
@@ -49,11 +51,11 @@ export default function Privatlivspolitik() {
         <button
           onClick={() => setLocation(-1 as unknown as string)}
           className="w-9 h-9 rounded-full glass-card flex items-center justify-center"
-          aria-label="Gå tilbage"
+          aria-label={t('legal.go_back')}
         >
           <ArrowLeft size={18} className="text-white" />
         </button>
-        <h1 className="text-white text-xl font-bold">Privatlivspolitik</h1>
+        <h1 className="text-white text-xl font-bold">{t('legal.privacy_title')}</h1>
       </div>
 
       <div className="px-5 mt-2 space-y-4">
@@ -64,239 +66,239 @@ export default function Privatlivspolitik() {
           </div>
           <div>
             <p className="text-white font-semibold text-sm">B-Social.net</p>
-            <p className="text-white/50 text-xs mt-0.5">Sidst opdateret: 27. marts 2026</p>
+            <p className="text-white/50 text-xs mt-0.5">{t('legal.privacy_last_updated')}</p>
             <p className="text-white/60 text-xs mt-2 leading-relaxed">
-              Denne privatlivspolitik beskriver, hvordan B-Social indsamler, behandler og beskytter dine personoplysninger i overensstemmelse med EU's databeskyttelsesforordning (GDPR).
+              {t('legal.privacy_intro_description')}
             </p>
           </div>
         </div>
 
         {/* 1. Dataansvarlig */}
-        <Section title="1. Dataansvarlig">
+        <Section title={t('legal.privacy_section1_title')}>
           <p>
-            Den dataansvarlige for behandlingen af dine personoplysninger er:
+            {t('legal.privacy_section1_responsible')}
           </p>
           <div className="glass-card rounded-xl p-3 space-y-0.5 text-white/60 text-xs">
             <p className="text-white/80 font-medium">B-Social</p>
-            <p>Aalborg, Danmark</p>
-            <p>E-mail: <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a></p>
-            <p>Hjemmeside: <a href="https://b-social.net" className="text-[#4ECDC4] underline underline-offset-2">b-social.net</a></p>
+            <p>{t('legal.privacy_aalborg_denmark')}</p>
+            <p>{t('legal.privacy_email_label')}: <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a></p>
+            <p>{t('legal.privacy_website_label')}: <a href="https://b-social.net" className="text-[#4ECDC4] underline underline-offset-2">b-social.net</a></p>
           </div>
         </Section>
 
         {/* 2. Oplysninger vi indsamler */}
-        <Section title="2. Personoplysninger vi indsamler">
-          <SubSection title="2.1 Profiloplysninger">
+        <Section title={t('legal.privacy_section2_title')}>
+          <SubSection title={t('legal.privacy_section2_1_title')}>
             <ul className="space-y-1.5">
-              <Li>Navn og e-mailadresse</Li>
-              <Li>Profilbillede (avatar)</Li>
-              <Li>By og interesser/tags</Li>
-              <Li>Oplysninger fra Google-konto ved login via Google OAuth (navn, e-mail, profilbillede)</Li>
+              <Li>{t('legal.privacy_profile_name_email')}</Li>
+              <Li>{t('legal.privacy_profile_avatar')}</Li>
+              <Li>{t('legal.privacy_profile_city_interests')}</Li>
+              <Li>{t('legal.privacy_profile_google_oauth')}</Li>
             </ul>
           </SubSection>
-          <SubSection title="2.2 Aktivitetsdata">
+          <SubSection title={t('legal.privacy_section2_2_title')}>
             <ul className="space-y-1.5">
-              <Li>Deltagelse i arrangementer (tilmelding, afmelding, historik)</Li>
-              <Li>Beskeder sendt via vores chatfunktion</Li>
-              <Li>Oprettede arrangementer og interaktioner med andre brugere</Li>
+              <Li>{t('legal.privacy_activity_participation')}</Li>
+              <Li>{t('legal.privacy_activity_messages')}</Li>
+              <Li>{t('legal.privacy_activity_events_interactions')}</Li>
             </ul>
           </SubSection>
-          <SubSection title="2.3 Lokationsdata">
+          <SubSection title={t('legal.privacy_section2_3_title')}>
             <ul className="space-y-1.5">
-              <Li>By og søgeradius-præferencer til filtrering af arrangementer</Li>
-              <Li>Vi gemmer ikke præcis GPS-position permanent</Li>
+              <Li>{t('legal.privacy_location_city_radius')}</Li>
+              <Li>{t('legal.privacy_location_no_gps')}</Li>
             </ul>
           </SubSection>
-          <SubSection title="2.4 Tekniske oplysninger">
+          <SubSection title={t('legal.privacy_section2_4_title')}>
             <ul className="space-y-1.5">
-              <Li>Enhedsoplysninger til push-notifikationer (PWA-token)</Li>
-              <Li>IP-adresse og browsertypeoplysninger via Cloudflare CDN</Li>
-              <Li>Brugsdata og adfærdsanalyse via Google Tag Manager (G-RKKL2TJLKK)</Li>
+              <Li>{t('legal.privacy_technical_push_token')}</Li>
+              <Li>{t('legal.privacy_technical_ip_browser')}</Li>
+              <Li>{t('legal.privacy_technical_gtm')}</Li>
             </ul>
           </SubSection>
-          <SubSection title="2.5 AI-chatassistent">
+          <SubSection title={t('legal.privacy_section2_5_title')}>
             <p>
-              Hvis du bruger vores AI-chatassistent (drevet af Cloudflare Workers AI / Llama 3.1), behandles dine beskeder til assistenten med henblik på at generere svar. Samtaler kan midlertidigt behandles i hukommelsen, men gemmes ikke permanent tilknyttet din identitet.
+              {t('legal.privacy_ai_chat_description')}
             </p>
           </SubSection>
         </Section>
 
         {/* 3. Formål og retsgrundlag */}
-        <Section title="3. Formål med og retsgrundlag for behandlingen">
-          <p>Vi behandler dine oplysninger til følgende formål og på følgende retsgrundlag (GDPR artikel 6):</p>
+        <Section title={t('legal.privacy_section3_title')}>
+          <p>{t('legal.privacy_section3_intro')}</p>
           <div className="space-y-3 mt-1">
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Oprettelse og drift af brugerkonto</p>
-              <p className="text-white/50 text-xs">Retsgrundlag: Opfyldelse af kontrakt (art. 6, stk. 1, litra b)</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_purpose_account')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_legal_basis_contract_b')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Formidling af sociale arrangementer og matchning af brugere</p>
-              <p className="text-white/50 text-xs">Retsgrundlag: Opfyldelse af kontrakt (art. 6, stk. 1, litra b)</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_purpose_events_matching')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_legal_basis_contract_b')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Kommunikation via beskeder og notifikationer</p>
-              <p className="text-white/50 text-xs">Retsgrundlag: Opfyldelse af kontrakt (art. 6, stk. 1, litra b)</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_purpose_communication')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_legal_basis_contract_b')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Forbedring af platformen via analyse og statistik</p>
-              <p className="text-white/50 text-xs">Retsgrundlag: Legitim interesse (art. 6, stk. 1, litra f)</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_purpose_analytics')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_legal_basis_legitimate_f')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Overholdelse af juridiske forpligtelser</p>
-              <p className="text-white/50 text-xs">Retsgrundlag: Juridisk forpligtelse (art. 6, stk. 1, litra c)</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_purpose_legal_obligations')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_legal_basis_obligation_c')}</p>
             </div>
           </div>
         </Section>
 
         {/* 4. Databehandlere og videregivelse */}
-        <Section title="4. Databehandlere og videregivelse af oplysninger">
+        <Section title={t('legal.privacy_section4_title')}>
           <p>
-            Vi deler dine oplysninger med følgende databehandlere og tredjeparter for at drive platformen:
+            {t('legal.privacy_section4_intro')}
           </p>
           <div className="space-y-3 mt-1">
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Supabase (PostgreSQL-database og autentificering)</p>
-              <p className="text-white/50 text-xs">Hosting: Amazon Web Services, eu-west-1 (Irland). Data opbevares inden for EU/EØS.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_processor_supabase')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_processor_supabase_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Cloudflare (CDN og Workers)</p>
-              <p className="text-white/50 text-xs">Hostes globalt af Cloudflare, Inc. Cloudflare behandler trafik igennem europæiske datacentre. Cloudflare er certificeret under EU-US Data Privacy Framework.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_processor_cloudflare')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_processor_cloudflare_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Google LLC (OAuth og Tag Manager)</p>
-              <p className="text-white/50 text-xs">Login via Google OAuth og anonym analysesporing via Google Tag Manager (G-RKKL2TJLKK). Google er certificeret under EU-US Data Privacy Framework.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_processor_google')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_processor_google_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-1">
-              <p className="text-white/80 text-xs font-medium">Cloudflare Workers AI (Llama 3.1)</p>
-              <p className="text-white/50 text-xs">AI-chatassistenten kører via Cloudflare Workers AI. Beskeder behandles til generering af svar og opbevares ikke varigt.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_processor_cf_ai')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_processor_cf_ai_desc')}</p>
             </div>
           </div>
           <p className="mt-2">
-            Vi videregiver ikke dine oplysninger til andre tredjeparter, medmindre det kræves ved lov eller efter din udtrykkelige samtykke.
+            {t('legal.privacy_section4_no_third_party')}
           </p>
         </Section>
 
         {/* 5. Overførsler til tredjelande */}
-        <Section title="5. Overførsler til tredjelande">
+        <Section title={t('legal.privacy_section5_title')}>
           <p>
-            Vores primære database er hostet af Supabase i AWS eu-west-1 (Irland) og forbliver inden for EU/EØS.
+            {t('legal.privacy_section5_eu_hosting')}
           </p>
           <p>
-            Google LLC og Cloudflare, Inc. er amerikanske virksomheder. Overførsler til disse behandles på baggrund af EU-US Data Privacy Framework og EU's standardkontraktbestemmelser (SCC), som sikrer et tilstrækkeligt beskyttelsesniveau for dine personoplysninger.
+            {t('legal.privacy_section5_us_transfers')}
           </p>
         </Section>
 
         {/* 6. Opbevaringsperiode */}
-        <Section title="6. Opbevaringsperiode">
+        <Section title={t('legal.privacy_section6_title')}>
           <ul className="space-y-1.5">
-            <Li>Profiloplysninger: Opbevares så længe din konto er aktiv. Slettes inden 30 dage efter sletning af konto.</Li>
-            <Li>Arrangementhistorik: Opbevares i op til 2 år efter arrangementets afholdelse.</Li>
-            <Li>Chatbeskeder: Opbevares i op til 1 år, medmindre du sletter dem tidligere.</Li>
-            <Li>Push-notifikationstoken: Slettes ved afmelding af notifikationer eller kontosletning.</Li>
-            <Li>Analysedata (Google Tag Manager): Anonymiserede data opbevares i op til 26 måneder i overensstemmelse med Google Analytics' standardindstillinger.</Li>
+            <Li>{t('legal.privacy_retention_profile')}</Li>
+            <Li>{t('legal.privacy_retention_events')}</Li>
+            <Li>{t('legal.privacy_retention_chat')}</Li>
+            <Li>{t('legal.privacy_retention_push')}</Li>
+            <Li>{t('legal.privacy_retention_analytics')}</Li>
           </ul>
         </Section>
 
         {/* 7. Dine rettigheder */}
-        <Section title="7. Dine rettigheder">
+        <Section title={t('legal.privacy_section7_title')}>
           <p>
-            Du har følgende rettigheder i henhold til GDPR. Du kan udøve dem ved at kontakte os på <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>:
+            {t('legal.privacy_section7_intro')} <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>:
           </p>
           <div className="space-y-2 mt-1">
             <div className="glass-card rounded-xl p-3 space-y-0.5">
-              <p className="text-white/80 text-xs font-medium">Ret til indsigt (art. 15)</p>
-              <p className="text-white/50 text-xs">Du kan til enhver tid anmode om at se de oplysninger, vi behandler om dig.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_right_access')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_right_access_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-0.5">
-              <p className="text-white/80 text-xs font-medium">Ret til berigtigelse (art. 16)</p>
-              <p className="text-white/50 text-xs">Du kan anmode om rettelse af urigtige eller ufuldstændige oplysninger.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_right_rectification')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_right_rectification_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-0.5">
-              <p className="text-white/80 text-xs font-medium">Ret til sletning ("retten til at blive glemt") (art. 17)</p>
-              <p className="text-white/50 text-xs">Du kan anmode om sletning af dine oplysninger. Du kan også slette din konto direkte i appen under Indstillinger.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_right_erasure')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_right_erasure_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-0.5">
-              <p className="text-white/80 text-xs font-medium">Ret til dataportabilitet (art. 20)</p>
-              <p className="text-white/50 text-xs">Du kan anmode om at modtage dine data i et struktureret, maskinlæsbart format (JSON).</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_right_portability')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_right_portability_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-0.5">
-              <p className="text-white/80 text-xs font-medium">Ret til indsigelse (art. 21)</p>
-              <p className="text-white/50 text-xs">Du kan gøre indsigelse mod behandling af dine oplysninger, der sker på grundlag af legitim interesse.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_right_objection')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_right_objection_desc')}</p>
             </div>
             <div className="glass-card rounded-xl p-3 space-y-0.5">
-              <p className="text-white/80 text-xs font-medium">Ret til begrænsning af behandling (art. 18)</p>
-              <p className="text-white/50 text-xs">Du kan anmode om, at behandlingen af dine oplysninger begrænses i visse tilfælde.</p>
+              <p className="text-white/80 text-xs font-medium">{t('legal.privacy_right_restriction')}</p>
+              <p className="text-white/50 text-xs">{t('legal.privacy_right_restriction_desc')}</p>
             </div>
           </div>
           <p className="mt-2">
-            Vi besvarer din henvendelse senest inden for 30 dage.
+            {t('legal.privacy_section7_response_time')}
           </p>
         </Section>
 
         {/* 8. Cookies */}
-        <Section title="8. Cookies og sporingsteknologier">
+        <Section title={t('legal.privacy_section8_title')}>
           <p>
-            B-Social anvender cookies og lignende teknologier til at drifte platformen og forbedre brugeroplevelsen.
+            {t('legal.privacy_section8_intro')}
           </p>
-          <SubSection title="Nødvendige cookies">
+          <SubSection title={t('legal.privacy_cookies_necessary_title')}>
             <p>
-              Sessionsdata og autentificeringscookies (Supabase JWT-token) er nødvendige for, at appen kan fungere. Disse kan ikke fravælges.
+              {t('legal.privacy_cookies_necessary_desc')}
             </p>
           </SubSection>
-          <SubSection title="Analytiske cookies (Google Tag Manager)">
+          <SubSection title={t('legal.privacy_cookies_analytics_title')}>
             <p>
-              Vi anvender Google Tag Manager (G-RKKL2TJLKK) til at indsamle anonymiserede brugsdata, som hjælper os med at forstå, hvordan platformen bruges. Disse cookies sættes kun med dit samtykke ved brug af appen.
+              {t('legal.privacy_cookies_analytics_desc')}
             </p>
           </SubSection>
-          <SubSection title="PWA og push-notifikationer">
+          <SubSection title={t('legal.privacy_cookies_pwa_title')}>
             <p>
-              Hvis du accepterer push-notifikationer, gemmes et enhedstoken lokalt og i vores database. Du kan til enhver tid trække dette samtykke tilbage under Indstillinger.
+              {t('legal.privacy_cookies_pwa_desc')}
             </p>
           </SubSection>
         </Section>
 
         {/* 9. Sikkerhed */}
-        <Section title="9. Datasikkerhed">
+        <Section title={t('legal.privacy_section9_title')}>
           <p>
-            Vi tager beskyttelsen af dine personoplysninger alvorligt og har implementeret passende tekniske og organisatoriske sikkerhedsforanstaltninger, herunder:
+            {t('legal.privacy_section9_intro')}
           </p>
           <ul className="space-y-1.5 mt-1">
-            <Li>Krypteret datatransmission via HTTPS/TLS</Li>
-            <Li>Adgangskontrol og rollebaserede tilladelser i databasen (Supabase Row Level Security)</Li>
-            <Li>Krypteret opbevaring i databasen</Li>
-            <Li>DDoS-beskyttelse og firewall via Cloudflare</Li>
+            <Li>{t('legal.privacy_security_https')}</Li>
+            <Li>{t('legal.privacy_security_rls')}</Li>
+            <Li>{t('legal.privacy_security_encryption')}</Li>
+            <Li>{t('legal.privacy_security_ddos')}</Li>
           </ul>
           <p>
-            I tilfælde af et sikkerhedsbrud, der udgør en høj risiko for dine rettigheder og frihedsrettigheder, vil vi underrette dig hurtigst muligt og senest inden for 72 timer efter konstatering.
+            {t('legal.privacy_section9_breach_notice')}
           </p>
         </Section>
 
         {/* 10. Børn */}
-        <Section title="10. Børn og aldersgrænse">
+        <Section title={t('legal.privacy_section10_title')}>
           <p>
-            B-Social er ikke rettet mod personer under 16 år. Vi indsamler ikke bevidst personoplysninger fra børn under 16 år. Hvis vi bliver opmærksomme på, at et barn under 16 år har oprettet en konto, vil vi slette oplysningerne hurtigst muligt. Kontakt os på <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>, hvis du mener dette er sket.
+            {t('legal.privacy_section10_description')} <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">kontakt@b-social.net</a>{t('legal.privacy_section10_contact_suffix')}
           </p>
         </Section>
 
         {/* 11. Ændringer */}
-        <Section title="11. Ændringer til privatlivspolitikken">
+        <Section title={t('legal.privacy_section11_title')}>
           <p>
-            Vi forbeholder os retten til at opdatere denne privatlivspolitik. Væsentlige ændringer vil blive meddelt via e-mail eller en synlig notifikation i appen mindst 14 dage, inden de træder i kraft. Dato for seneste opdatering fremgår øverst på denne side.
+            {t('legal.privacy_section11_description')}
           </p>
         </Section>
 
         {/* 12. Klage */}
-        <Section title="12. Tilsynsmyndighed og klage">
+        <Section title={t('legal.privacy_section12_title')}>
           <p>
-            Du har ret til at indgive en klage til den kompetente tilsynsmyndighed, hvis du mener, at vi behandler dine personoplysninger i strid med GDPR:
+            {t('legal.privacy_section12_intro')}
           </p>
           <div className="glass-card rounded-xl p-3 space-y-0.5 text-white/60 text-xs mt-1">
-            <p className="text-white/80 font-medium">Datatilsynet</p>
+            <p className="text-white/80 font-medium">{t('legal.privacy_authority_name')}</p>
             <p>Carl Jacobsens Vej 35</p>
             <p>2500 Valby</p>
-            <p>Telefon: +45 33 19 32 00</p>
+            <p>{t('legal.privacy_phone_label')}: +45 33 19 32 00</p>
             <p>
-              Hjemmeside:{" "}
+              {t('legal.privacy_website_label')}:{" "}
               <a
                 href="https://www.datatilsynet.dk"
                 target="_blank"
@@ -310,15 +312,15 @@ export default function Privatlivspolitik() {
         </Section>
 
         {/* 13. Kontakt */}
-        <Section title="13. Kontakt">
+        <Section title={t('legal.privacy_section13_title')}>
           <p>
-            Har du spørgsmål til vores behandling af dine personoplysninger, er du altid velkommen til at kontakte os:
+            {t('legal.privacy_section13_intro')}
           </p>
           <div className="glass-card rounded-xl p-3 space-y-0.5 text-white/60 text-xs mt-1">
             <p className="text-white/80 font-medium">B-Social</p>
-            <p>Aalborg, Danmark</p>
+            <p>{t('legal.privacy_aalborg_denmark')}</p>
             <p>
-              E-mail:{" "}
+              {t('legal.privacy_email_label')}:{" "}
               <a href="mailto:kontakt@b-social.net" className="text-[#4ECDC4] underline underline-offset-2">
                 kontakt@b-social.net
               </a>
@@ -328,8 +330,8 @@ export default function Privatlivspolitik() {
 
         {/* Footer */}
         <div className="text-center pt-2 pb-8">
-          <p className="text-white/20 text-[10px]">B-Social · Aalborg, Danmark · 27. marts 2026</p>
-          <p className="text-white/15 text-[10px] mt-1">Denne politik er udformet i overensstemmelse med GDPR (EU 2016/679)</p>
+          <p className="text-white/20 text-[10px]">{t('legal.privacy_footer_line1')}</p>
+          <p className="text-white/15 text-[10px] mt-1">{t('legal.privacy_footer_line2')}</p>
         </div>
       </div>
     </div>

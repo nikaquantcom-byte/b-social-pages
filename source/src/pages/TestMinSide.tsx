@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
 import { Settings, Calendar, Heart, MapPin, TrendingUp, Award, Users } from "lucide-react";
 
 export default function TestMinSide() {
+  const { t } = useTranslation();
   const { data: events = [] } = useQuery({
     queryKey: ["/api/events"],
     queryFn: getEvents,
@@ -18,8 +20,8 @@ export default function TestMinSide() {
   const topInterests = useMemo(() => {
     const tagCounts: Record<string, number> = {};
     events.forEach(e => {
-      (e.interest_tags || []).forEach((t: string) => {
-        tagCounts[t] = (tagCounts[t] || 0) + 1;
+      (e.interest_tags || []).forEach((tag: string) => {
+        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
       });
     });
     return Object.entries(tagCounts)
@@ -46,7 +48,7 @@ export default function TestMinSide() {
     <div className="min-h-screen bg-[#0a0f1a] text-white pb-20">
       <div className="bg-gradient-to-br from-[#4ECDC4] to-[#44A08D] p-6 pb-16">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Min Side</h1>
+          <h1 className="text-2xl font-bold">{t('profile.my_page')}</h1>
           <Link href="/firma/indstillinger">
             <button className="p-2 bg-white/20 rounded-xl hover:bg-white/30">
               <Settings size={20} />
@@ -62,7 +64,7 @@ export default function TestMinSide() {
             <p className="text-white/80 flex items-center gap-1 text-sm">
               <MapPin size={14} /> {userStats.location}
             </p>
-            <p className="text-white/60 text-xs mt-1">Medlem siden {userStats.joined}</p>
+            <p className="text-white/60 text-xs mt-1">{t('profile.member_since')} {userStats.joined}</p>
           </div>
         </div>
       </div>
@@ -72,23 +74,23 @@ export default function TestMinSide() {
           <div className="glass-card rounded-2xl p-4 text-center">
             <Calendar size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
             <p className="text-2xl font-bold">{events.length}</p>
-            <p className="text-xs text-white/50">Events</p>
+            <p className="text-xs text-white/50">{t('profile.events_count')}</p>
           </div>
           <div className="glass-card rounded-2xl p-4 text-center">
             <Users size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
             <p className="text-2xl font-bold">{userStats.friendsCount}</p>
-            <p className="text-xs text-white/50">Venner</p>
+            <p className="text-xs text-white/50">{t('profile.friends_count')}</p>
           </div>
           <div className="glass-card rounded-2xl p-4 text-center">
             <Award size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
             <p className="text-2xl font-bold">{uniqueCategories}</p>
-            <p className="text-xs text-white/50">Kategorier</p>
+            <p className="text-xs text-white/50">{t('profile.tags_count')}</p>
           </div>
         </div>
 
         <div className="glass-card rounded-2xl p-4 mb-6">
           <h3 className="text-sm font-semibold text-white/70 mb-3 flex items-center gap-2">
-            <Heart size={16} className="text-[#4ECDC4]" /> Dine interesser
+            <Heart size={16} className="text-[#4ECDC4]" /> {t('tags.your_interests')}
           </h3>
           <div className="flex flex-wrap gap-2">
             {userStats.interests.map(tag => (
@@ -102,9 +104,9 @@ export default function TestMinSide() {
         <div className="glass-card rounded-2xl p-4 mb-6">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-white/70 flex items-center gap-2">
-              <TrendingUp size={16} className="text-[#4ECDC4]" /> Kommende Events
+              <TrendingUp size={16} className="text-[#4ECDC4]" /> {t('events.upcoming')}
             </h3>
-            <Link href="/udforsk" className="text-xs text-[#4ECDC4]">Se alle</Link>
+            <Link href="/udforsk" className="text-xs text-[#4ECDC4]">{t('events.see_all')}</Link>
           </div>
           <div className="space-y-3">
             {upcomingEvents.map(event => (
@@ -123,13 +125,13 @@ export default function TestMinSide() {
         <div className="grid grid-cols-2 gap-3">
           <Link href="/udforsk" className="glass-card rounded-2xl p-4 hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all">
             <Calendar size={24} className="text-[#4ECDC4] mb-2" />
-            <p className="font-semibold text-sm">Udforsk</p>
-            <p className="text-xs text-white/40">Find nye events</p>
+            <p className="font-semibold text-sm">{t('nav.udforsk')}</p>
+            <p className="text-xs text-white/40">{t('profile.find_events')}</p>
           </Link>
           <Link href="/kort" className="glass-card rounded-2xl p-4 hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all">
             <MapPin size={24} className="text-[#4ECDC4] mb-2" />
-            <p className="font-semibold text-sm">Kort</p>
-            <p className="text-xs text-white/40">Events i nærheden</p>
+            <p className="font-semibold text-sm">{t('nav.kort')}</p>
+            <p className="text-xs text-white/40">{t('profile.events_nearby')}</p>
           </Link>
         </div>
       </div>

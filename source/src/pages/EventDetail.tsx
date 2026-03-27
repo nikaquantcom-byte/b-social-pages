@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useLocation } from "wouter";
 import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
 import { getEventById } from "@/lib/data";
 import { getCategoryEmoji, getEventImage, formatDanishDate } from "@/lib/eventHelpers";
@@ -12,6 +13,7 @@ export default function EventDetail() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [favorited, setFavorited] = useState(false);
   const [joined, setJoined] = useState(false);
   const [joining, setJoining] = useState(false);
@@ -54,12 +56,12 @@ export default function EventDetail() {
         style={{ background: "hsl(230,35%,8%)" }}
       >
         <span className="text-5xl mb-4">🔍</span>
-        <p className="text-white/60 text-base">Event ikke fundet</p>
+        <p className="text-white/60 text-base">{t('events.not_found')}</p>
         <button
           onClick={() => setLocation("/feed")}
           className="mt-4 px-6 py-2.5 rounded-2xl bg-[#4ECDC4] text-white font-medium text-sm"
         >
-          Tilbage til feed
+          {t('events.back_to_feed')}
         </button>
       </div>
     );
@@ -132,7 +134,7 @@ export default function EventDetail() {
               isGratis ? "bg-[#4ECDC4]/90 text-white" : "bg-orange-500/90 text-white"
             }`}
           >
-            {isGratis ? "Gratis" : `${event.price} kr`}
+            {isGratis ? t('events.free') : `${event.price} ${t('events.currency')}`}
           </span>
         </div>
       </div>
@@ -158,7 +160,7 @@ export default function EventDetail() {
           {event.max_participants && (
             <div className="flex items-center gap-2 text-white/60 text-sm">
               <Users size={15} className="text-[#4ECDC4] flex-shrink-0" />
-              <span>Op til {event.max_participants} deltagere</span>
+              <span>{t('events.up_to_participants', { count: event.max_participants })}</span>
             </div>
           )}
         </div>
@@ -166,7 +168,7 @@ export default function EventDetail() {
         {/* Description */}
         {event.description && (
           <div className="glass-card rounded-2xl p-4 mb-5">
-            <h3 className="text-white font-semibold text-sm mb-2">Om oplevelsen</h3>
+            <h3 className="text-white font-semibold text-sm mb-2">{t('events.about_experience')}</h3>
             <p className="text-white/60 text-sm leading-relaxed">{event.description}</p>
           </div>
         )}
@@ -198,7 +200,7 @@ export default function EventDetail() {
           }`}
           data-testid="button-deltag"
         >
-          {joined ? "✓ Du deltager" : joining ? "Tilmelder..." : "Deltag i oplevelsen"}
+          {joined ? t('events.joined') : joining ? t('events.joining') : t('events.join_experience')}
         </button>
       </div>
     </div>
