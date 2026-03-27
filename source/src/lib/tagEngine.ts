@@ -1,9 +1,10 @@
 /*
  B-Social Tag Engine — "Superhjernen"
+ 3-niveau hierarki: OVERKATEGORI → KATEGORI → UNDERKATEGORI
  Forbinder tags på kryds og tværs af alle sider:
  Feed, Udforsk, Kort, Firma, Henvisning
 */
-import { TAG_TREE, type TagNode } from "./tagTree";
+import { TAG_TREE, type TagNode, getOverkategorier } from "./tagTree";
 import type { Event } from "./data";
 
 // --- Tag Storage (localStorage) ---
@@ -11,7 +12,7 @@ const STORAGE_KEY = "bsocial_user_tags";
 const FIRMA_TAGS_KEY = "bsocial_firma_tags";
 
 // Default tags shown to new users before they customize their feed
-const DEFAULT_TAGS = ["musik", "fitness", "sport", "natur", "kultur", "mad", "cykling", "outdoor"];
+const DEFAULT_TAGS = ["motion-fitness", "natur-outdoor", "musik-kultur", "mad-drikke", "cykling", "løb", "outdoor"];
 
 export function getUserTags(): string[] {
   try {
@@ -36,7 +37,7 @@ export function setFirmaTags(tags: string[]) {
   localStorage.setItem(FIRMA_TAGS_KEY, JSON.stringify(tags));
 }
 
-// --- Tag Graph: find related tags ---
+// --- 3-level flatten ---
 function flattenTree(nodes: TagNode[]): TagNode[] {
   const flat: TagNode[] = [];
   for (const n of nodes) {
@@ -48,36 +49,97 @@ function flattenTree(nodes: TagNode[]): TagNode[] {
 
 const ALL_TAGS = flattenTree(TAG_TREE);
 
-export function getTagNode(tag: string): TagNode | undefined {
-  return ALL_TAGS.find(t => t.tag === tag.toLowerCase());
+// --- Pre-built lookup maps for fast hierarchy resolution ---
+type TagLevel = 1 | 2 | 3;
+interface TagInfo {
+  level: TagLevel;
+  node: TagNode;
+  overTag: string;       // level-1 parent tag
+  katTag: string | null;  // level-2 parent tag (null for level 1)
 }
 
-export function getRelatedTags(tag: string): string[] {
-  const node = ALL_TAGS.find(t => t.tag === tag.toLowerCase());
-  if (!node) return [];
-  // Return siblings (same parent) + children
-  const related: string[] = [];
-  for (const parent of TAG_TREE) {
-    if (parent.tag === tag) {
-      related.push(...(parent.children?.map(c => c.tag) || []));
-    }
-    if (parent.children) {
-      const isChild = parent.children.some(c => c.tag === tag);
-      if (isChild) {
-        related.push(parent.tag);
-        related.push(...parent.children.filter(c => c.tag !== tag).map(c => c.tag));
+const TAG_INFO_MAP = new Map<string, TagInfo>();
+for (const over of TAG_TREE) {
+  TAG_INFO_MAP.set(over.tag, { level: 1, node: over, overTag: over.tag, katTag: null });
+  if (over.children) {
+    for (const kat of over.children) {
+      TAG_INFO_MAP.set(kat.tag, { level: 2, node: kat, overTag: over.tag, katTag: kat.tag });
+      if (kat.children) {
+        for (const under of kat.children) {
+          TAG_INFO_MAP.set(under.tag, { level: 3, node: under, overTag: over.tag, katTag: kat.tag });
+        }
       }
-      for (const child of parent.children) {
-        if (child.children) {
-          const isGrandchild = child.children.some(c => c.tag === tag);
-          if (isGrandchild) {
-            related.push(child.tag);
-            related.push(...child.children.filter(c => c.tag !== tag).map(c => c.tag));
+    }
+  }
+}
+
+export function getTagNode(tag: string): TagNode | undefined {
+  return TAG_INFO_MAP.get(tag.toLowerCase())?.node;
+}
+
+// --- Get which overkategori a tag belongs to ---
+export function getOverkategoriForTag(tag: string): string | null {
+  const info = TAG_INFO_MAP.get(tag.toLowerCase());
+  return info ? info.overTag : null;
+}
+
+// --- Get tag level ---
+export function getTagLevel(tag: string): TagLevel | null {
+  return TAG_INFO_MAP.get(tag.toLowerCase())?.level ?? null;
+}
+
+// --- Related tags: 3-level aware ---
+export function getRelatedTags(tag: string): string[] {
+  const info = TAG_INFO_MAP.get(tag.toLowerCase());
+  if (!info) return [];
+  const related: string[] = [];
+
+  if (info.level === 1) {
+    // OVERKATEGORI: return all kategorier + all underkategorier
+    const overNode = info.node;
+    if (overNode.children) {
+      for (const kat of overNode.children) {
+        related.push(kat.tag);
+        if (kat.children) {
+          for (const under of kat.children) {
+            related.push(under.tag);
+          }
+        }
+      }
+    }
+  } else if (info.level === 2) {
+    // KATEGORI: return parent overkategori + sibling kategorier + all children underkategorier
+    related.push(info.overTag);
+    const overNode = TAG_INFO_MAP.get(info.overTag)?.node;
+    if (overNode?.children) {
+      for (const sibling of overNode.children) {
+        if (sibling.tag !== tag.toLowerCase()) {
+          related.push(sibling.tag);
+        }
+        // Own children
+        if (sibling.tag === tag.toLowerCase() && sibling.children) {
+          for (const under of sibling.children) {
+            related.push(under.tag);
+          }
+        }
+      }
+    }
+  } else if (info.level === 3) {
+    // UNDERKATEGORI: return parent kategori + sibling underkategorier + grandparent overkategori
+    related.push(info.overTag);
+    if (info.katTag) {
+      related.push(info.katTag);
+      const katNode = TAG_INFO_MAP.get(info.katTag)?.node;
+      if (katNode?.children) {
+        for (const sibling of katNode.children) {
+          if (sibling.tag !== tag.toLowerCase()) {
+            related.push(sibling.tag);
           }
         }
       }
     }
   }
+
   return [...new Set(related)];
 }
 
@@ -99,7 +161,7 @@ export function buildCoOccurrence(events: Event[]): Map<string, Map<string, numb
   return matrix;
 }
 
-// --- Scoring: rank events by tag match ---
+// --- Scoring: rank events by tag match (3-level weighted) ---
 export function scoreEvent(event: Event, userTags: string[]): number {
   if (userTags.length === 0) return 0;
   const eventTags = new Set([
@@ -107,17 +169,52 @@ export function scoreEvent(event: Event, userTags: string[]): number {
     event.category?.toLowerCase()
   ].filter(Boolean));
   let score = 0;
+
   for (const ut of userTags) {
-    if (eventTags.has(ut.toLowerCase())) score += 10; // Direct match
-    const related = getRelatedTags(ut);
-    for (const rt of related) {
-      if (eventTags.has(rt)) score += 3; // Related match
+    const utLower = ut.toLowerCase();
+    if (eventTags.has(utLower)) {
+      score += 10; // Direct match
+      continue;
+    }
+
+    const utInfo = TAG_INFO_MAP.get(utLower);
+    if (!utInfo) continue;
+
+    for (const et of eventTags) {
+      const etInfo = TAG_INFO_MAP.get(et as string);
+      if (!etInfo) continue;
+
+      // Same overkategori?
+      if (utInfo.overTag === etInfo.overTag) {
+        // Parent↔child (1 level apart)
+        if (
+          (utInfo.level === 1 && etInfo.level === 2) ||
+          (utInfo.level === 2 && etInfo.level === 1) ||
+          (utInfo.level === 2 && etInfo.level === 3 && utInfo.katTag === etInfo.katTag) ||
+          (utInfo.level === 3 && etInfo.level === 2 && utInfo.katTag === etInfo.katTag)
+        ) {
+          score += 5;
+        }
+        // Grandparent↔grandchild or siblings (2 levels apart or same level different branch)
+        else if (
+          (utInfo.level === 1 && etInfo.level === 3) ||
+          (utInfo.level === 3 && etInfo.level === 1) ||
+          (utInfo.level === 2 && etInfo.level === 2) || // sibling kategorier
+          (utInfo.level === 3 && etInfo.level === 3 && utInfo.katTag === etInfo.katTag) // sibling underkategorier
+        ) {
+          score += 2;
+        }
+        // Same overkategori but distant (e.g. underkategori in different kategori)
+        else {
+          score += 1;
+        }
+      }
     }
   }
   return score;
 }
 
-// --- Feed builder: group events by user tags ---
+// --- Feed builder: group events by overkategorier as top-level sections ---
 export interface TagSection {
   tag: string;
   label: string;
@@ -127,39 +224,57 @@ export interface TagSection {
 
 export function buildTagFeed(events: Event[], userTags: string[]): TagSection[] {
   if (userTags.length === 0) return [];
-  const sections: TagSection[] = [];
+
+  // Group user tags by overkategori
+  const overMap = new Map<string, Set<string>>();
   for (const tag of userTags) {
-    const node = getTagNode(tag);
-    const related = [tag, ...getRelatedTags(tag)];
+    const overTag = getOverkategoriForTag(tag) || tag;
+    if (!overMap.has(overTag)) overMap.set(overTag, new Set());
+    overMap.get(overTag)!.add(tag);
+  }
+
+  const sections: TagSection[] = [];
+  for (const [overTag, tagSet] of overMap) {
+    const overNode = getTagNode(overTag);
+    // Expand all tags in this group
+    const expanded = new Set<string>();
+    for (const t of tagSet) {
+      expanded.add(t.toLowerCase());
+      getRelatedTags(t).forEach(r => expanded.add(r.toLowerCase()));
+    }
+
     const matched = events.filter(ev => {
       const eTags = new Set([
         ...(ev.interest_tags || []),
         ev.category?.toLowerCase()
       ].filter(Boolean));
-      return related.some(r => eTags.has(r.toLowerCase()));
+      return [...eTags].some(et => expanded.has((et as string).toLowerCase()));
     });
+
     if (matched.length > 0) {
       sections.push({
-        tag,
-        label: node?.label || tag,
-        emoji: node?.emoji || "\u2B50",
-        events: matched.slice(0, 6)
+        tag: overTag,
+        label: overNode?.label || overTag,
+        emoji: overNode?.emoji || "⭐",
+        events: matched.slice(0, 8),
       });
     }
   }
   return sections;
 }
 
-// --- Firma targeting: match firma tags to user reach ---
+// --- Firma targeting: match firma tags to user reach (3-level aware) ---
 export function estimateFirmaReach(firmaTags: string[], allUserTags: string[][]): number {
-  const firmaSet = new Set(firmaTags.map(t => t.toLowerCase()));
+  // Expand firma tags to include all related
+  const firmaExpanded = new Set<string>();
+  for (const t of firmaTags) {
+    firmaExpanded.add(t.toLowerCase());
+    getRelatedTags(t).forEach(r => firmaExpanded.add(r.toLowerCase()));
+  }
+
   let matchCount = 0;
   for (const userTags of allUserTags) {
-    const hasOverlap = userTags.some(ut => {
-      if (firmaSet.has(ut.toLowerCase())) return true;
-      const related = getRelatedTags(ut);
-      return related.some(r => firmaSet.has(r.toLowerCase()));
-    });
+    const hasOverlap = userTags.some(ut => firmaExpanded.has(ut.toLowerCase()));
     if (hasOverlap) matchCount++;
   }
   return matchCount;
@@ -182,23 +297,27 @@ export function filterEventsForMap(events: Event[], activeTags: string[]): Event
   });
 }
 
-// --- Search: fuzzy tag search across tree ---
+// --- Search: fuzzy tag search across all 3 levels ---
 export function searchAllTags(query: string): TagNode[] {
   if (!query.trim()) return [];
   const q = query.toLowerCase();
-  return ALL_TAGS.filter(t => 
+  return ALL_TAGS.filter(t =>
     t.tag.includes(q) || t.label.toLowerCase().includes(q)
   ).slice(0, 20);
 }
 
 // --- Henvisning: tag-based referral matching ---
 export function getReferralTagMatch(referrerTags: string[], newUserTags: string[]): number {
-  const referrerSet = new Set(referrerTags.map(t => t.toLowerCase()));
+  // Expand referrer tags for broader matching
+  const referrerExpanded = new Set<string>();
+  for (const t of referrerTags) {
+    referrerExpanded.add(t.toLowerCase());
+    getRelatedTags(t).forEach(r => referrerExpanded.add(r.toLowerCase()));
+  }
+
   let matches = 0;
   for (const tag of newUserTags) {
-    if (referrerSet.has(tag.toLowerCase())) matches++;
-    const related = getRelatedTags(tag);
-    if (related.some(r => referrerSet.has(r.toLowerCase()))) matches += 0.5;
+    if (referrerExpanded.has(tag.toLowerCase())) matches++;
   }
   return Math.min(100, Math.round((matches / Math.max(newUserTags.length, 1)) * 100));
 }
@@ -219,7 +338,7 @@ export function getTrendingTags(events: Event[], limit = 15): { tag: string; cou
     .map(([tag, count]) => ({ tag, count }));
 }
 
-// --- Filter events by tag (with related tag expansion) ---
+// --- Filter events by tag (with 3-level related tag expansion) ---
 export function filterByTag(events: Event[], tag: string): Event[] {
   const expanded = new Set<string>();
   expanded.add(tag.toLowerCase());
@@ -237,6 +356,8 @@ export const tagEngine = {
   getFirmaTags,
   setFirmaTags,
   getTagNode,
+  getTagLevel,
+  getOverkategoriForTag,
   getRelatedTags: (tag: string, events?: Event[], limit?: number) => {
     const related = getRelatedTags(tag);
     if (!limit) return related.map(t => ({ tag: t }));
