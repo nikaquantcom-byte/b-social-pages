@@ -10,12 +10,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useTags } from "@/context/TagContext";
 import { FeedTagEditor } from "@/components/FeedTagEditor";
 
-const FRIENDS = [
-  { name: "Anna", initial: "A" },
-  { name: "Mads", initial: "M" },
-  { name: "Sofie", initial: "S" },
-  { name: "Jonas", initial: "J" },
-];
 
 function getPersonalizedGreeting(name?: string | null): string {
   const hour = new Date().getHours();
@@ -49,10 +43,13 @@ export default function Feed() {
 
   const greeting = getPersonalizedGreeting(profile?.name);
 
-  // Build tag-based feed sections using tagEngine
+  // Build tag-based feed sections using tagEngine (only upcoming events)
   const tagSections = useMemo(() => {
     if (events.length === 0 || selectedTags.length === 0) return [];
-    const sections = buildTagFeed(events, selectedTags);
+    const now = new Date().toISOString();
+    const upcomingEvents = events.filter(e => e.date >= now);
+    if (upcomingEvents.length === 0) return [];
+    const sections = buildTagFeed(upcomingEvents, selectedTags);
     // Sort events within each section by relevance score
     return sections.map(section => ({
       ...section,
@@ -105,15 +102,13 @@ export default function Feed() {
           </div>
         </div>
 
-        <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
-          {FRIENDS.map(f => (
-            <div key={f.name} className="flex flex-col items-center gap-1 min-w-[56px]">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#4ECDC4] to-[#556270] flex items-center justify-center text-white font-semibold text-lg">
-                {f.initial}
-              </div>
-              <span className="text-[10px] text-white/50">{f.name}</span>
+        <div className="flex items-center gap-3 mb-8 px-1">
+          <Link href="/beskeder" className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 hover:bg-[#4ECDC4]/20 transition-all">
+            <div className="w-8 h-8 rounded-full bg-[#4ECDC4]/20 flex items-center justify-center">
+              <PenSquare size={14} className="text-[#4ECDC4]" />
             </div>
-          ))}
+            <span className="text-sm text-[#4ECDC4] font-medium">Tilføj venner</span>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">

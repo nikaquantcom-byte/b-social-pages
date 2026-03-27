@@ -3,6 +3,7 @@ import { useHashLocation } from "wouter/use-hash-location";
 import { Home, Compass, MapPin, MessageCircle, User, Bell, Search, Plus, Building2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useNotifications } from "@/context/NotificationContext";
 
 const NAV = [
@@ -94,6 +95,9 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
           </Link>
         </nav>
 
+        <div className="px-3 pb-2">
+          <LanguageSwitcher variant="toggle" />
+        </div>
         <div className="p-4 text-white/20 text-xs">
           v1.0 beta
         </div>

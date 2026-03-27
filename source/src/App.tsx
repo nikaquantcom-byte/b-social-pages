@@ -81,6 +81,7 @@ function FirmaRouter() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
+        <Route path="/firma/auth" component={FirmaAuth} />
         <Route path="/firma/events" component={FirmaEvents} />
         <Route path="/firma/targeting" component={FirmaTargeting} />
         <Route path="/firma/analytics" component={FirmaAnalytics} />

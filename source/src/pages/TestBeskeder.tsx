@@ -67,7 +67,7 @@ function defaultAvatar(name: string | null): string {
 /* ── Component ── */
 
 export default function Beskeder() {
-  const { user, profile, isLoggedIn } = useAuth();
+  const { user, profile, isLoggedIn, loading: authLoading } = useAuth();
   const myId = user?.id ?? null;
 
   // Conversations
@@ -375,6 +375,15 @@ export default function Beskeder() {
         c.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : conversations;
+
+  /* ── Loading state ── */
+  if (authLoading) {
+    return (
+      <div className="flex h-full bg-[#0a0f1a] text-white items-center justify-center">
+        <Loader2 size={24} className="animate-spin text-[#4ECDC4]" />
+      </div>
+    );
+  }
 
   /* ── Not logged in state ── */
   if (!isLoggedIn()) {

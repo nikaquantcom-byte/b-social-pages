@@ -13,8 +13,11 @@ export default function TestMinSide() {
     queryFn: getEvents,
   });
 
-  // Show upcoming events as suggestions
-  const upcomingEvents = events.slice(0, 5);
+  // Show upcoming events as suggestions (filter out past events)
+  const upcomingEvents = useMemo(() => {
+    const now = new Date().toISOString();
+    return events.filter(e => e.date >= now).slice(0, 5);
+  }, [events]);
 
   // Derive dynamic interests from event tags
   const topInterests = useMemo(() => {

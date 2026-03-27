@@ -113,26 +113,30 @@ export default function TestUdforsk() {
         {/* Left Column - Main Content */}
         <div className="lg:col-span-8 space-y-8">
           {/* Category Chips */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            <button
-              onClick={() => setSelectedCategory(null)}
-              className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                !selectedCategory ? "bg-[#4ECDC4] text-[#0a1929]" : "bg-white/5 text-white/60 hover:bg-white/10"
-              }`}
-            >
-              Alle
-            </button>
-            {ALL_CATEGORIES.map((cat) => (
+          <div className="relative">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide pr-8">
               <button
-                key={cat.key}
-                onClick={() => setSelectedCategory(cat.key)}
+                onClick={() => setSelectedCategory(null)}
                 className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                  selectedCategory === cat.key ? "bg-[#4ECDC4] text-[#0a1929]" : "bg-white/5 text-white/60 hover:bg-white/10"
+                  !selectedCategory ? "bg-[#4ECDC4] text-[#0a1929]" : "bg-white/5 text-white/60 hover:bg-white/10"
                 }`}
               >
-                {cat.emoji} {cat.label}
+                Alle
               </button>
-            ))}
+              {ALL_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.key}
+                  onClick={() => setSelectedCategory(cat.key)}
+                  className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                    selectedCategory === cat.key ? "bg-[#4ECDC4] text-[#0a1929]" : "bg-white/5 text-white/60 hover:bg-white/10"
+                  }`}
+                >
+                  {cat.emoji} {cat.label}
+                </button>
+              ))}
+            </div>
+            {/* Fade indicator for more tabs */}
+            <div className="absolute right-0 top-0 bottom-2 w-12 pointer-events-none bg-gradient-to-l from-[#0a1929] to-transparent" />
           </div>
 
           {/* Events Grid/List */}
