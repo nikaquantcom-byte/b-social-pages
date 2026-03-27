@@ -37,6 +37,7 @@ function MainRouter() {
       <Switch>
         <Route path="/" component={TestFeed} />
         <Route path="/test" component={TestFeed} />
+                  <Route path="/feed" component={TestFeed} />
         <Route path="/udforsk" component={TestUdforsk} />
         <Route path="/kort" component={TestKort} />
         <Route path="/beskeder" component={TestBeskeder} />
