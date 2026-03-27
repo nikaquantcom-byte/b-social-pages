@@ -7,7 +7,8 @@
     "min_side": "My Page",
     "firma": "Business",
     "notifications": "Notifications",
-    "kunde": "Client"
+    "kunde": "Client",
+    "henvisning": "Referral"
   },
   "greeting": {
     "morning": "Good morning",
@@ -413,7 +414,248 @@
     "all": "All",
     "places": "Places",
     "events": "Events",
-    "pins": "pins",
+    "pins": {
+      "s1": {
+        "desc": "Home of AaB — Aalborg's professional football stadium with a capacity of 14,000 spectators."
+      },
+      "s2": {
+        "desc": "Northern Jutland's largest sports and event arena. Ice hockey, handball, concerts and fairs."
+      },
+      "s3": {
+        "desc": "Centrally located swimming hall with a 50m pool, heated pool and wellness."
+      },
+      "s4": {
+        "desc": "Popular park for running, football and outdoor training. Perfect for 5-a-side."
+      },
+      "s5": {
+        "desc": "Fitness center, climbing wall and badminton courts in the iconic Nordkraft building."
+      },
+      "k1": {
+        "desc": "Museum of modern and contemporary art. Designed by Alvar Aalto. Sculpture park and exhibitions."
+      },
+      "k2": {
+        "desc": "Architecture and design center named after Jorn Utzon. Located at the waterfront."
+      },
+      "k3": {
+        "desc": "Denmark's oldest provincial stage with theater, musical theater and modern performances."
+      },
+      "k4": {
+        "desc": "Concert hall at the harbor with fantastic acoustics. Classical, jazz and world music."
+      },
+      "k5": {
+        "desc": "Cultural center in a former power station. Cinema, theater, music and dining."
+      },
+      "k6": {
+        "desc": "The city's history from the Middle Ages to the present. Free admission."
+      },
+      "n1": {
+        "desc": "Viking burial site with over 700 graves. Amazing views over the Limfjord and Aalborg."
+      },
+      "n2": {
+        "desc": "Beautiful walking and cycling path along the Limfjord. Perfect for a peaceful stroll with views."
+      },
+      "n3": {
+        "desc": "Northern Jutland's wildlife park with over 1,500 animals. Popular with families and animal lovers."
+      },
+      "n4": {
+        "desc": "Green oasis in the heart of Aalborg. Perfect for a break, picnic or a quiet walk."
+      },
+      "n5": {
+        "desc": "Historic park with large trees, paths and benches. Quiet and peaceful."
+      },
+      "n6": {
+        "desc": "Beach area with views over the Limfjord. Perfect for a sunset walk."
+      },
+      "m1": {
+        "desc": "Aalborg's famous pedestrian street with restaurants, bars and cafes. Always buzzing with life."
+      },
+      "m2": {
+        "desc": "Street food market in Nordkraft with kitchens from around the world. Budget-friendly."
+      },
+      "m3": {
+        "desc": "Cozy cafe with great coffee, brunch and homemade cake. Perfect meeting spot."
+      },
+      "m4": {
+        "desc": "Historic wine cellar from 1624. Wine, food and atmosphere in Aalborg's oldest cellar."
+      },
+      "m5": {
+        "desc": "Charming street with small shops and cafes in historic half-timbered houses."
+      },
+      "sp1": {
+        "desc": "Over 500 board games to choose from. Coffee, beer and snacks. Perfect for a cozy evening."
+      },
+      "sp2": {
+        "desc": "Escape rooms with multiple themes. Team building and fun for friends and family."
+      },
+      "e1": {
+        "desc": "Weekly social walk along the waterfront. Everyone is welcome — meet new people."
+      },
+      "e2": {
+        "desc": "Relaxed walk in the park with coffee afterwards. Perfect for newcomers to the city."
+      },
+      "e3": {
+        "desc": "Casual football in Kildeparken. All levels. We always need more players."
+      },
+      "e4": {
+        "desc": "Settlers, Catan and pizza. All levels welcome."
+      },
+      "mtb1": {
+        "desc": "Technical MTB trails in Hammer Bakker. 3 routes: green, blue, red. Fantastic terrain."
+      },
+      "mtb2": {
+        "desc": "Long MTB trails through Rold Skov. Hilly terrain with technical sections."
+      },
+      "mtb3": {
+        "desc": "Easy MTB route perfect for beginners. Flat forest trail with fun bumps."
+      },
+      "vdr1": {
+        "desc": "Beautiful hiking trail along the Limfjord from Aalborg to Nibe."
+      },
+      "vdr2": {
+        "desc": "Adventurous hiking trail through the gorge valley in Rold Skov. 5 km round trip."
+      },
+      "vdr3": {
+        "desc": "Short hike with Viking history and panoramic views."
+      },
+      "vdr4": {
+        "desc": "Beautiful hiking route with panoramic views over the Limfjord."
+      },
+      "lob1": {
+        "desc": "3-5 km running route in Kildeparken. Flat, lit in the evening."
+      },
+      "lob2": {
+        "desc": "Flat route along the waterfront. Approx. 4 km round trip."
+      },
+      "hnd1": {
+        "desc": "Fenced dog forest with plenty of space. Water station and benches."
+      },
+      "hnd2": {
+        "desc": "Large fenced dog park. Separate areas for big and small dogs."
+      },
+      "fsk1": {
+        "desc": "Good fishing spot by the Limfjord. Sea trout, flatfish and garfish in season."
+      },
+      "fsk2": {
+        "desc": "Well-known fishing spot near Nibe. Good opportunities for sea trout from the coast."
+      },
+      "bad1": {
+        "desc": "Aalborg's popular harbor bath at Vestre Bådehavn. Sauna and sun terrace. Free."
+      },
+      "bad2": {
+        "desc": "Natural sandy beach on Egholm. Perfect summer day."
+      },
+      "shl1": {
+        "desc": "Primitive shelter on Egholm with fire pit. Amazing starry sky."
+      },
+      "shl2": {
+        "desc": "Forest shelter in the heart of Rold Skov. Fire pit, water and toilet nearby."
+      },
+      "dyr1": {
+        "desc": "See wild red deer, wild boar and eagles. Best at sunrise."
+      },
+      "dyr2": {
+        "desc": "Wild horses and cattle on Egholm. Up close and freely accessible."
+      },
+      "cph1": {
+        "desc": "The world's second oldest amusement park. Concerts, food and adventure."
+      },
+      "cph2": {
+        "desc": "Iconic waterfront promenade with colorful houses, restaurants and cafes."
+      },
+      "cph3": {
+        "desc": "Trendy meatpacking district with galleries, restaurants and nightclubs."
+      },
+      "aar1": {
+        "desc": "Iconic art museum with Rainbow Panorama on the rooftop."
+      },
+      "aar2": {
+        "desc": "Open-air museum with historic buildings from all over Denmark."
+      },
+      "ode1": {
+        "desc": "Museum dedicated to Hans Christian Andersen with interactive exhibitions."
+      },
+      "nib1": {
+        "desc": "Cozy little fishing harbor with cafes and views over the Limfjord."
+      },
+      "nib2": {
+        "desc": "Home of Nibe Festival — a popular summer music festival."
+      },
+      "ska1": {
+        "desc": "Denmark's northernmost point. Where the Skagerrak and Kattegat meet."
+      },
+      "rol1": {
+        "desc": "Beautiful national park in Rold Skov. Hiking trails and gorge valley."
+      },
+      "mu1": {
+        "desc": "Aalborg's legendary music venue in Nordkraft. Live music."
+      },
+      "mu2": {
+        "desc": "Live music, jam sessions and cultural events."
+      },
+      "kr1": {
+        "desc": "Modern art museum with studios and workshops."
+      },
+      "kr2": {
+        "desc": "Open studios. Ceramics, painting, photography and DIY workshops."
+      },
+      "kr3": {
+        "desc": "Photo club with weekly photo walks and workshops."
+      },
+      "fi1": {
+        "desc": "CrossFit box with a focus on community. WODs and open gym."
+      },
+      "fi2": {
+        "desc": "Indoor climbing center with bouldering and top rope."
+      },
+      "fi3": {
+        "desc": "Winter swimming with sauna. Cold plunge and warm community."
+      },
+      "ou1": {
+        "desc": "Bird sanctuary with observation tower. Wetlands and wading birds."
+      },
+      "ou2": {
+        "desc": "Guided tours in Northern Europe's largest raised bog. Red deer and eagles."
+      },
+      "ou3": {
+        "desc": "Kayak club at the Limfjord. Borrow a kayak or SUP board."
+      },
+      "ou4": {
+        "desc": "Riding school with horses for all levels."
+      },
+      "so1": {
+        "desc": "Cozy cafe with board games and book club."
+      },
+      "so2": {
+        "desc": "Cultural center with language cafe, film club and social events."
+      },
+      "so3": {
+        "desc": "Meeting place for volunteers. Parent groups and networking."
+      },
+      "ev1": {
+        "desc": "Stand-up comedy with local and national comedians."
+      },
+      "ev2": {
+        "desc": "Weekly pub quiz with beer from their own brewery."
+      },
+      "ev3": {
+        "desc": "Monthly flea market with vintage and second-hand goods."
+      },
+      "ka1": {
+        "desc": "Co-working space and startup hub."
+      },
+      "ka2": {
+        "desc": "Northern Jutland's largest innovation hub."
+      },
+      "ka3": {
+        "desc": "Aalborg University's startup environment."
+      },
+      "te1": {
+        "desc": "Maker space with 3D printers and coding meetups."
+      },
+      "te2": {
+        "desc": "Tech hub with gaming events and drone workshops."
+      }
+    },
     "categories": {
       "events": "Events",
       "logi": "Accommodation & base",
@@ -449,88 +691,6 @@
       "easy": "Easy",
       "medium": "Medium",
       "medium_hard": "Medium/Hard"
-    },
-    "pins": {
-      "s1": { "desc": "Home of AaB — Aalborg's professional football stadium with a capacity of 14,000 spectators." },
-      "s2": { "desc": "Northern Jutland's largest sports and event arena. Ice hockey, handball, concerts and fairs." },
-      "s3": { "desc": "Centrally located swimming hall with a 50m pool, heated pool and wellness." },
-      "s4": { "desc": "Popular park for running, football and outdoor training. Perfect for 5-a-side." },
-      "s5": { "desc": "Fitness center, climbing wall and badminton courts in the iconic Nordkraft building." },
-      "k1": { "desc": "Museum of modern and contemporary art. Designed by Alvar Aalto. Sculpture park and exhibitions." },
-      "k2": { "desc": "Architecture and design center named after Jorn Utzon. Located at the waterfront." },
-      "k3": { "desc": "Denmark's oldest provincial stage with theater, musical theater and modern performances." },
-      "k4": { "desc": "Concert hall at the harbor with fantastic acoustics. Classical, jazz and world music." },
-      "k5": { "desc": "Cultural center in a former power station. Cinema, theater, music and dining." },
-      "k6": { "desc": "The city's history from the Middle Ages to the present. Free admission." },
-      "n1": { "desc": "Viking burial site with over 700 graves. Amazing views over the Limfjord and Aalborg." },
-      "n2": { "desc": "Beautiful walking and cycling path along the Limfjord. Perfect for a peaceful stroll with views." },
-      "n3": { "desc": "Northern Jutland's wildlife park with over 1,500 animals. Popular with families and animal lovers." },
-      "n4": { "desc": "Green oasis in the heart of Aalborg. Perfect for a break, picnic or a quiet walk." },
-      "n5": { "desc": "Historic park with large trees, paths and benches. Quiet and peaceful." },
-      "n6": { "desc": "Beach area with views over the Limfjord. Perfect for a sunset walk." },
-      "m1": { "desc": "Aalborg's famous pedestrian street with restaurants, bars and cafes. Always buzzing with life." },
-      "m2": { "desc": "Street food market in Nordkraft with kitchens from around the world. Budget-friendly." },
-      "m3": { "desc": "Cozy cafe with great coffee, brunch and homemade cake. Perfect meeting spot." },
-      "m4": { "desc": "Historic wine cellar from 1624. Wine, food and atmosphere in Aalborg's oldest cellar." },
-      "m5": { "desc": "Charming street with small shops and cafes in historic half-timbered houses." },
-      "sp1": { "desc": "Over 500 board games to choose from. Coffee, beer and snacks. Perfect for a cozy evening." },
-      "sp2": { "desc": "Escape rooms with multiple themes. Team building and fun for friends and family." },
-      "e1": { "desc": "Weekly social walk along the waterfront. Everyone is welcome — meet new people." },
-      "e2": { "desc": "Relaxed walk in the park with coffee afterwards. Perfect for newcomers to the city." },
-      "e3": { "desc": "Casual football in Kildeparken. All levels. We always need more players." },
-      "e4": { "desc": "Settlers, Catan and pizza. All levels welcome." },
-      "mtb1": { "desc": "Technical MTB trails in Hammer Bakker. 3 routes: green, blue, red. Fantastic terrain." },
-      "mtb2": { "desc": "Long MTB trails through Rold Skov. Hilly terrain with technical sections." },
-      "mtb3": { "desc": "Easy MTB route perfect for beginners. Flat forest trail with fun bumps." },
-      "vdr1": { "desc": "Beautiful hiking trail along the Limfjord from Aalborg to Nibe." },
-      "vdr2": { "desc": "Adventurous hiking trail through the gorge valley in Rold Skov. 5 km round trip." },
-      "vdr3": { "desc": "Short hike with Viking history and panoramic views." },
-      "vdr4": { "desc": "Beautiful hiking route with panoramic views over the Limfjord." },
-      "lob1": { "desc": "3-5 km running route in Kildeparken. Flat, lit in the evening." },
-      "lob2": { "desc": "Flat route along the waterfront. Approx. 4 km round trip." },
-      "hnd1": { "desc": "Fenced dog forest with plenty of space. Water station and benches." },
-      "hnd2": { "desc": "Large fenced dog park. Separate areas for big and small dogs." },
-      "fsk1": { "desc": "Good fishing spot by the Limfjord. Sea trout, flatfish and garfish in season." },
-      "fsk2": { "desc": "Well-known fishing spot near Nibe. Good opportunities for sea trout from the coast." },
-      "bad1": { "desc": "Aalborg's popular harbor bath at Vestre Bådehavn. Sauna and sun terrace. Free." },
-      "bad2": { "desc": "Natural sandy beach on Egholm. Perfect summer day." },
-      "shl1": { "desc": "Primitive shelter on Egholm with fire pit. Amazing starry sky." },
-      "shl2": { "desc": "Forest shelter in the heart of Rold Skov. Fire pit, water and toilet nearby." },
-      "dyr1": { "desc": "See wild red deer, wild boar and eagles. Best at sunrise." },
-      "dyr2": { "desc": "Wild horses and cattle on Egholm. Up close and freely accessible." },
-      "cph1": { "desc": "The world's second oldest amusement park. Concerts, food and adventure." },
-      "cph2": { "desc": "Iconic waterfront promenade with colorful houses, restaurants and cafes." },
-      "cph3": { "desc": "Trendy meatpacking district with galleries, restaurants and nightclubs." },
-      "aar1": { "desc": "Iconic art museum with Rainbow Panorama on the rooftop." },
-      "aar2": { "desc": "Open-air museum with historic buildings from all over Denmark." },
-      "ode1": { "desc": "Museum dedicated to Hans Christian Andersen with interactive exhibitions." },
-      "nib1": { "desc": "Cozy little fishing harbor with cafes and views over the Limfjord." },
-      "nib2": { "desc": "Home of Nibe Festival — a popular summer music festival." },
-      "ska1": { "desc": "Denmark's northernmost point. Where the Skagerrak and Kattegat meet." },
-      "rol1": { "desc": "Beautiful national park in Rold Skov. Hiking trails and gorge valley." },
-      "mu1": { "desc": "Aalborg's legendary music venue in Nordkraft. Live music." },
-      "mu2": { "desc": "Live music, jam sessions and cultural events." },
-      "kr1": { "desc": "Modern art museum with studios and workshops." },
-      "kr2": { "desc": "Open studios. Ceramics, painting, photography and DIY workshops." },
-      "kr3": { "desc": "Photo club with weekly photo walks and workshops." },
-      "fi1": { "desc": "CrossFit box with a focus on community. WODs and open gym." },
-      "fi2": { "desc": "Indoor climbing center with bouldering and top rope." },
-      "fi3": { "desc": "Winter swimming with sauna. Cold plunge and warm community." },
-      "ou1": { "desc": "Bird sanctuary with observation tower. Wetlands and wading birds." },
-      "ou2": { "desc": "Guided tours in Northern Europe's largest raised bog. Red deer and eagles." },
-      "ou3": { "desc": "Kayak club at the Limfjord. Borrow a kayak or SUP board." },
-      "ou4": { "desc": "Riding school with horses for all levels." },
-      "so1": { "desc": "Cozy cafe with board games and book club." },
-      "so2": { "desc": "Cultural center with language cafe, film club and social events." },
-      "so3": { "desc": "Meeting place for volunteers. Parent groups and networking." },
-      "ev1": { "desc": "Stand-up comedy with local and national comedians." },
-      "ev2": { "desc": "Weekly pub quiz with beer from their own brewery." },
-      "ev3": { "desc": "Monthly flea market with vintage and second-hand goods." },
-      "ka1": { "desc": "Co-working space and startup hub." },
-      "ka2": { "desc": "Northern Jutland's largest innovation hub." },
-      "ka3": { "desc": "Aalborg University's startup environment." },
-      "te1": { "desc": "Maker space with 3D printers and coding meetups." },
-      "te2": { "desc": "Tech hub with gaming events and drone workshops." }
     }
   },
   "common": {
