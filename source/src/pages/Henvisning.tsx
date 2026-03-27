@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
-import { Copy, Check, Users, MousePointerClick, DollarSign, TrendingUp, Loader2, LogIn, Link2, ArrowLeft, Gift } from "lucide-react";
+import { Copy, Check, Users, MousePointerClick, DollarSign, TrendingUp, Loader2, LogIn, Link2, ArrowLeft, Gift, Tag, Calendar } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { useTags } from "@/context/TagContext";
+import { supabase, fetchEvents, type Event } from "@/lib/supabase";
+import { getReferralTagMatch, getTagNode } from "@/lib/tagEngine";
 import { motion } from "framer-motion";
 
 interface DashboardStats {
@@ -15,13 +17,26 @@ interface DashboardStats {
   stripe_onboarding_complete: boolean;
 }
 
+interface ReferredUser {
+  id: string;
+  name: string | null;
+  avatar_url: string | null;
+  interests: string[] | null;
+  created_at: string;
+}
+
 export default function Henvisning() {
   const [, setLocation] = useLocation();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
+  const { selectedTags } = useTags();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [notInfluencer, setNotInfluencer] = useState(false);
+  const [referredUsers, setReferredUsers] = useState<ReferredUser[]>([]);
+  const [sharedEvents, setSharedEvents] = useState<Event[]>([]);
+
+  const myTags = profile?.interests || selectedTags || [];
 
   useEffect(() => {
     if (!user) { setLoading(false); return; }
@@ -36,17 +51,45 @@ export default function Henvisning() {
       .single();
     if (error || !data) {
       setNotInfluencer(true);
-    } else {
-      setStats({
-        code: data.code,
-        commission_pct: data.commission_pct,
-        total_referrals: Number(data.total_referrals),
-        total_clicks: Number(data.total_clicks),
-        total_paid_dkk: Number(data.total_paid_dkk),
-        total_pending_dkk: Number(data.total_pending_dkk),
-        stripe_onboarding_complete: data.stripe_onboarding_complete,
-      });
+      setLoading(false);
+      return;
     }
+    setStats({
+      code: data.code,
+      commission_pct: data.commission_pct,
+      total_referrals: Number(data.total_referrals),
+      total_clicks: Number(data.total_clicks),
+      total_paid_dkk: Number(data.total_paid_dkk),
+      total_pending_dkk: Number(data.total_pending_dkk),
+      stripe_onboarding_complete: data.stripe_onboarding_complete,
+    });
+
+    // Load referred users with their tags
+    const { data: refs } = await supabase
+      .from("referrals")
+      .select("referred_user_id")
+      .eq("referrer_id", user!.id);
+    if (refs && refs.length > 0) {
+      const ids = refs.map((r: any) => r.referred_user_id);
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, name, avatar_url, interests, created_at")
+        .in("id", ids)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (profiles) setReferredUsers(profiles);
+    }
+
+    // Load events matching referrer's tags for "shared events" section
+    if (myTags.length > 0) {
+      const events = await fetchEvents();
+      const tagSet = new Set(myTags.map((t: string) => t.toLowerCase()));
+      const matched = events.filter((e) =>
+        e.interest_tags?.some((t) => tagSet.has(t.toLowerCase()))
+      ).slice(0, 4);
+      setSharedEvents(matched);
+    }
+
     setLoading(false);
   }
 
@@ -186,6 +229,27 @@ export default function Henvisning() {
           </div>
         </div>
 
+        {/* Your tag profile */}
+        {myTags.length > 0 && (
+          <div className="bg-white/5 border border-white/8 rounded-2xl p-5 mb-6">
+            <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <Tag size={16} className="text-[#4ECDC4]" />
+              Din tagprofil
+            </h3>
+            <div className="flex flex-wrap gap-1.5">
+              {myTags.map((tag: string) => {
+                const node = getTagNode(tag);
+                return (
+                  <span key={tag} className="px-2.5 py-1 rounded-full text-xs font-medium bg-[#4ECDC4]/10 text-[#4ECDC4] border border-[#4ECDC4]/20">
+                    {node?.emoji && <span className="mr-1">{node.emoji}</span>}
+                    {node?.label || tag}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {[
@@ -207,6 +271,109 @@ export default function Henvisning() {
             </motion.div>
           ))}
         </div>
+
+        {/* Referred users with tag match */}
+        {referredUsers.length > 0 && (
+          <div className="bg-white/5 border border-white/8 rounded-2xl mb-6 overflow-hidden">
+            <div className="p-5 border-b border-white/8">
+              <h3 className="font-semibold flex items-center gap-2">
+                <Users size={16} className="text-green-400" />
+                Henviste brugere
+              </h3>
+            </div>
+            <div className="divide-y divide-white/5">
+              {referredUsers.map((ru) => {
+                const matchPct = myTags.length > 0 && ru.interests
+                  ? getReferralTagMatch(myTags, ru.interests)
+                  : 0;
+                const sharedTags = ru.interests?.filter((t) =>
+                  myTags.some((mt: string) => mt.toLowerCase() === t.toLowerCase())
+                ) || [];
+
+                return (
+                  <div key={ru.id} className="px-5 py-3 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {ru.avatar_url ? (
+                        <img src={ru.avatar_url} alt="" className="w-9 h-9 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/50">
+                          {(ru.name || "?")[0]}
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-medium">{ru.name || "Anonym"}</p>
+                        {sharedTags.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-0.5">
+                            {sharedTags.slice(0, 3).map((t) => {
+                              const node = getTagNode(t);
+                              return (
+                                <span key={t} className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/10 text-[#4ECDC4]">
+                                  {node?.emoji} {node?.label || t}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {matchPct > 0 && (
+                      <div className="text-right">
+                        <div className={`text-sm font-bold ${matchPct >= 70 ? "text-green-400" : matchPct >= 40 ? "text-yellow-400" : "text-white/50"}`}>
+                          {matchPct}%
+                        </div>
+                        <div className="text-[10px] text-white/40">tag match</div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Shared-tag events to promote */}
+        {sharedEvents.length > 0 && (
+          <div className="bg-white/5 border border-white/8 rounded-2xl mb-6 overflow-hidden">
+            <div className="p-5 border-b border-white/8">
+              <h3 className="font-semibold flex items-center gap-2">
+                <Calendar size={16} className="text-[#4ECDC4]" />
+                Events der matcher dine tags
+              </h3>
+              <p className="text-xs text-white/40 mt-1">Del disse events med dit henvisningslink for bedre konvertering</p>
+            </div>
+            <div className="divide-y divide-white/5">
+              {sharedEvents.map((ev) => (
+                <button
+                  key={ev.id}
+                  onClick={() => setLocation(`/event/${ev.id}`)}
+                  className="w-full px-5 py-3 flex items-center gap-3 text-left hover:bg-white/5 transition-colors"
+                >
+                  {ev.image_url ? (
+                    <img src={ev.image_url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-white/30 flex-shrink-0">
+                      <Calendar size={18} />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{ev.title}</p>
+                    <div className="flex items-center gap-2 text-xs text-white/40 mt-0.5">
+                      <span>{new Date(ev.date).toLocaleDateString("da-DK", { day: "numeric", month: "short" })}</span>
+                      {ev.interest_tags?.slice(0, 2).map((t) => {
+                        const node = getTagNode(t);
+                        return (
+                          <span key={t} className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/10 text-[#4ECDC4] text-[10px]">
+                            {node?.emoji} {node?.label || t}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Pending payout */}
         {stats!.total_pending_dkk > 0 && (
@@ -232,4 +399,4 @@ export default function Henvisning() {
       </div>
     </div>
   );
-}
+                          }
