@@ -5,81 +5,52 @@ import "./index.css";
 import { supabase } from "./lib/supabase";
 
 // ── Step 1: Unregister any old Service Workers ──
-// This must happen FIRST, before any other logic, to prevent
-// stale SW from intercepting auth callbacks or serving old HTML.
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (const reg of registrations) {
-      reg.unregister().then(() => {
-        console.log("[SW] Unregistered:", reg.scope);
-      });
-    }
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    for (const r of regs) r.unregister();
   });
-  // Also clear all caches left behind by old SW
   if ("caches" in window) {
-    caches.keys().then((names) => {
-      for (const name of names) {
-        caches.delete(name);
-        console.log("[Cache] Deleted:", name);
-      }
-    });
+    caches.keys().then((names) => names.forEach((n) => caches.delete(n)));
   }
 }
 
-// ── Step 2: Handle Supabase OAuth callback ──
-// Tokens arrive as hash fragments: #access_token=xxx&refresh_token=xxx
-// We must intercept BEFORE React router sees them as routes.
-const hash = window.location.hash;
+// ── Step 2: Handle OAuth callback tokens in URL hash ──
+// Google OAuth redirects back with #access_token=xxx&refresh_token=xxx
+// We intercept these BEFORE the hash router sees them.
+const rawHash = window.location.hash;
 
-if (hash && hash.includes("access_token")) {
-  // Let Supabase client pick up the tokens from the URL hash
-  supabase.auth
-    .getSession()
-    .then(({ data }) => {
-      if (data.session) {
-        // Successfully authenticated — redirect to feed
-        window.location.replace(
-          window.location.origin + window.location.pathname + "#/feed"
-        );
-      } else {
-        // Session not established — try setting session from URL explicitly
-        const params = new URLSearchParams(hash.substring(1));
-        const accessToken = params.get("access_token");
-        const refreshToken = params.get("refresh_token");
-        if (accessToken && refreshToken) {
-          supabase.auth
-            .setSession({ access_token: accessToken, refresh_token: refreshToken })
-            .then(({ data: sessionData }) => {
-              if (sessionData.session) {
-                window.location.replace(
-                  window.location.origin + window.location.pathname + "#/feed"
-                );
-              } else {
-                window.location.replace(
-                  window.location.origin + window.location.pathname + "#/auth"
-                );
-              }
-            });
-        } else {
-          window.location.replace(
-            window.location.origin + window.location.pathname + "#/auth"
-          );
-        }
-      }
-    })
-    .catch(() => {
-      window.location.replace(
-        window.location.origin + window.location.pathname + "#/auth"
-      );
-    });
-} else if (hash && hash.includes("error_description")) {
-  // OAuth error — go to auth page
-  window.location.replace(
-    window.location.origin + window.location.pathname + "#/auth"
-  );
+if (rawHash && rawHash.includes("access_token")) {
+  // Parse tokens from the hash fragment
+  const params = new URLSearchParams(rawHash.substring(1));
+  const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
+
+  if (accessToken && refreshToken) {
+    // Set session explicitly, then set hash and mount React
+    supabase.auth
+      .setSession({ access_token: accessToken, refresh_token: refreshToken })
+      .then(() => {
+        // Change hash to /feed and mount React
+        window.location.hash = "#/feed";
+        createRoot(document.getElementById("root")!).render(<App />);
+      })
+      .catch(() => {
+        // Even on error, mount React so the user sees something
+        window.location.hash = "#/feed";
+        createRoot(document.getElementById("root")!).render(<App />);
+      });
+  } else {
+    // Tokens missing — just mount React on feed
+    window.location.hash = "#/feed";
+    createRoot(document.getElementById("root")!).render(<App />);
+  }
+} else if (rawHash && rawHash.includes("error_description")) {
+  // OAuth error — mount React on auth page
+  window.location.hash = "#/auth";
+  createRoot(document.getElementById("root")!).render(<App />);
 } else {
-  // Normal app load — mount React immediately
-  if (!hash || hash === "#" || hash === "#/") {
+  // ── Step 3: Normal app load — always mount React ──
+  if (!rawHash || rawHash === "#" || rawHash === "#/") {
     window.location.hash = "#/";
   }
   createRoot(document.getElementById("root")!).render(<App />);
