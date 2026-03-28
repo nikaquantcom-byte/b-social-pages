@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Send, Smile, Paperclip, Phone, Video, MoreVertical, Check, CheckCheck, Newspaper, ExternalLink, MessageCircle, Plus, ArrowLeft, X, Loader2, Users } from "lucide-react";
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { supabase } from "@/lib/supabase";
@@ -67,6 +68,7 @@ function defaultAvatar(name: string | null): string {
 /* ── Component ── */
 
 export default function Beskeder() {
+  const { t } = useTranslation();
   const { user, profile, isLoggedIn, loading: authLoading } = useAuth();
   const myId = user?.id ?? null;
 
@@ -130,7 +132,7 @@ export default function Beskeder() {
           .neq("user_id", myId);
 
         const otherUserId = otherParts?.[0]?.user_id;
-        let otherUser: ProfileRow = { id: otherUserId ?? "", name: "Ukendt", avatar_url: null };
+        let otherUser: ProfileRow = { id: otherUserId ?? "", name: t('beskeder.unknown'), avatar_url: null };
 
         if (otherUserId) {
           const { data: prof } = await supabase
@@ -154,7 +156,7 @@ export default function Beskeder() {
         convos.push({
           id: cid,
           otherUser,
-          lastMessage: lastMsg?.content ?? "Ingen beskeder endnu",
+          lastMessage: lastMsg?.content ?? t('beskeder.no_messages_yet'),
           lastMessageTime: lastMsg?.created_at ?? new Date().toISOString(),
           unread: false,
         });
@@ -424,8 +426,8 @@ export default function Beskeder() {
       <div className="flex h-full bg-[#0a0f1a] text-white items-center justify-center">
         <div className="text-center space-y-4 max-w-sm px-6">
           <MessageCircle size={48} className="text-[#4ECDC4] mx-auto" />
-          <h2 className="text-xl font-bold">Beskeder</h2>
-          <p className="text-white/50 text-sm">Log ind for at sende og modtage beskeder fra andre brugere.</p>
+          <h2 className="text-xl font-bold">{t('beskeder.title')}</h2>
+          <p className="text-white/50 text-sm">{t('beskeder.login_prompt')}</p>
         </div>
       </div>
     );
@@ -437,11 +439,11 @@ export default function Beskeder() {
       <div className="w-72 border-r border-white/10 flex flex-col flex-shrink-0">
         <div className="px-6 pt-8 pb-4 border-b border-white/10">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-bold">Beskeder</h1>
+            <h1 className="text-xl font-bold">{t('beskeder.title')}</h1>
             <button
               onClick={() => setShowNewConvo(true)}
               className="w-8 h-8 rounded-lg bg-[#4ECDC4]/15 text-[#4ECDC4] flex items-center justify-center hover:bg-[#4ECDC4]/25 transition-colors"
-              title="Ny samtale"
+              title={t('beskeder.new_conversation')}
             >
               <Plus size={16} />
             </button>
@@ -450,7 +452,7 @@ export default function Beskeder() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" size={14} />
             <input
               type="search"
-              placeholder="Søg i beskeder..."
+              placeholder={t('beskeder.search_placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white/90 placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
@@ -468,15 +470,15 @@ export default function Beskeder() {
               <MessageCircle size={32} className="text-white/15 mx-auto" />
               <p className="text-white/30 text-sm">
                 {conversations.length === 0
-                  ? "Ingen beskeder endnu"
-                  : "Ingen resultater"}
+                  ? t('beskeder.no_messages_yet')
+                  : t('beskeder.no_results')}
               </p>
               {conversations.length === 0 && (
                 <button
                   onClick={() => setShowNewConvo(true)}
                   className="text-[#4ECDC4] text-xs font-semibold hover:underline"
                 >
-                  Start en samtale
+                  {t('beskeder.start_conversation')}
                 </button>
               )}
             </div>
@@ -499,7 +501,7 @@ export default function Beskeder() {
                 <div className="flex-1 min-w-0 text-left">
                   <div className="flex items-center justify-between mb-0.5">
                     <span className="font-bold text-sm truncate text-white/70">
-                      {convo.otherUser.name ?? "Ukendt bruger"}
+                      {convo.otherUser.name ?? t('beskeder.unknown_user')}
                     </span>
                     <span className="text-[10px] text-white/30 ml-2">
                       {formatTime(convo.lastMessageTime)}
@@ -527,11 +529,11 @@ export default function Beskeder() {
                 />
                 <div>
                   <h3 className="font-bold text-sm leading-none mb-1">
-                    {activeConvo.otherUser.name ?? "Ukendt bruger"}
+                    {activeConvo.otherUser.name ?? t('beskeder.unknown_user')}
                   </h3>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 bg-[#4ECDC4] rounded-full" />
-                    <span className="text-[10px] text-white/40">Online</span>
+                    <span className="text-[10px] text-white/40">{t('beskeder.online')}</span>
                   </div>
                 </div>
               </div>
@@ -550,7 +552,7 @@ export default function Beskeder() {
                 </div>
               ) : messages.length === 0 ? (
                 <div className="flex items-center justify-center h-full">
-                  <p className="text-white/20 text-sm">Skriv den første besked!</p>
+                  <p className="text-white/20 text-sm">{t('beskeder.write_first_message')}</p>
                 </div>
               ) : (
                 messages.map(msg => {
@@ -585,7 +587,7 @@ export default function Beskeder() {
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder="Skriv en besked..."
+                  placeholder={t('beskeder.message_placeholder')}
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                   className="flex-1 bg-transparent border-none focus:outline-none text-sm text-white/90 placeholder:text-white/30"
@@ -606,15 +608,15 @@ export default function Beskeder() {
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center space-y-4 max-w-xs">
               <MessageCircle size={48} className="text-white/10 mx-auto" />
-              <h3 className="text-white/40 font-semibold">Vælg en samtale</h3>
+              <h3 className="text-white/40 font-semibold">{t('beskeder.select_conversation')}</h3>
               <p className="text-white/20 text-sm">
-                Eller start en ny samtale med en anden bruger.
+                {t('beskeder.or_start_new')}
               </p>
               <button
                 onClick={() => setShowNewConvo(true)}
                 className="px-5 py-2.5 rounded-xl bg-[#4ECDC4]/15 text-[#4ECDC4] text-sm font-semibold hover:bg-[#4ECDC4]/25 transition-all"
               >
-                Ny samtale
+                {t('beskeder.new_conversation')}
               </button>
             </div>
           </div>
@@ -627,7 +629,7 @@ export default function Beskeder() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Newspaper size={16} className="text-[#4ECDC4]" />
-              <h3 className="text-sm font-bold">Seneste Nyt</h3>
+              <h3 className="text-sm font-bold">{t('beskeder.latest_news')}</h3>
             </div>
             <span className="text-[9px] font-bold text-[#4ECDC4] bg-[#4ECDC4]/10 px-2 py-0.5 rounded-full">LIVE</span>
           </div>
@@ -667,7 +669,7 @@ export default function Beskeder() {
               ))}
             </div>
           ) : (
-            <p className="text-xs text-white/30 text-center py-4">Ingen nyheder tilgængelige</p>
+            <p className="text-xs text-white/30 text-center py-4">{t('beskeder.no_news')}</p>
           )}
         </div>
       </div>
@@ -677,7 +679,7 @@ export default function Beskeder() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="bg-[#0d1225] border border-white/10 rounded-2xl w-full max-w-md mx-4 overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-              <h2 className="text-white font-bold">Ny samtale</h2>
+              <h2 className="text-white font-bold">{t('beskeder.new_conversation')}</h2>
               <button
                 onClick={() => { setShowNewConvo(false); setUserSearch(""); setUserResults([]); }}
                 className="p-1.5 text-white/40 hover:text-white rounded-lg hover:bg-white/5 transition-all"
@@ -691,7 +693,7 @@ export default function Beskeder() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" size={14} />
                 <input
                   type="text"
-                  placeholder="Søg efter bruger..."
+                  placeholder={t('beskeder.search_user_placeholder')}
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
                   autoFocus
@@ -705,7 +707,7 @@ export default function Beskeder() {
                     <Loader2 size={18} className="animate-spin text-white/30" />
                   </div>
                 ) : userSearch.trim() && userResults.length === 0 ? (
-                  <p className="text-center py-8 text-white/30 text-sm">Ingen brugere fundet</p>
+                  <p className="text-center py-8 text-white/30 text-sm">{t('beskeder.no_users_found')}</p>
                 ) : (
                   userResults.map(u => (
                     <button
@@ -718,13 +720,13 @@ export default function Beskeder() {
                         alt={u.name ?? ""}
                         className="w-10 h-10 rounded-xl object-cover"
                       />
-                      <span className="text-white/80 text-sm font-medium">{u.name ?? "Ukendt"}</span>
+                      <span className="text-white/80 text-sm font-medium">{u.name ?? t('beskeder.unknown')}</span>
                     </button>
                   ))
                 )}
                 {!userSearch.trim() && (
                   <p className="text-center py-8 text-white/20 text-xs">
-                    Skriv et navn for at finde brugere
+                    {t('beskeder.type_name_to_search')}
                   </p>
                 )}
               </div>
