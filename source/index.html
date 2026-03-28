@@ -17,10 +17,31 @@
     <link rel="author" href="https://www.perplexity.ai/computer">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+    <!-- SEO -->
     <title>B-Social – Oplev verden sammen</title>
-    <meta name="description" content="B-Social er appen til at finde og dele oplevelser. Appen over alle apps til at bruge verden på et samlet sted." />
+    <meta name="description" content="B-Social er appen til at finde og dele oplevelser i hele Danmark. Find events, steder, aktiviteter og mød nye mennesker." />
+    <meta name="keywords" content="B-Social, oplevelser, events, Danmark, Aalborg, aktiviteter, fællesskab, social app" />
+    <link rel="canonical" href="https://b-social.net/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="B-Social" />
     <meta property="og:title" content="B-Social – Oplev verden sammen" />
     <meta property="og:description" content="Find oplevelser, mød mennesker og del din verden med B-Social." />
+    <meta property="og:url" content="https://b-social.net/" />
+    <meta property="og:image" content="https://b-social.net/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="da_DK" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="B-Social – Oplev verden sammen" />
+    <meta name="twitter:description" content="Find oplevelser, mød mennesker og del din verden med B-Social." />
+    <meta name="twitter:image" content="https://b-social.net/og-image.png" />
+
+    <!-- Favicons & PWA -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -29,19 +50,86 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="B-Social" />
     <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "B-Social",
+      "url": "https://b-social.net",
+      "description": "B-Social er appen til at finde og dele oplevelser i hele Danmark.",
+      "applicationCategory": "SocialNetworkingApplication",
+      "operatingSystem": "Web",
+      "inLanguage": ["da", "en"],
+      "creator": {
+        "@type": "SoftwareApplication",
+        "name": "Perplexity Computer",
+        "url": "https://www.perplexity.ai/computer"
+      }
+    }
+    </script>
+
+    <!-- Google Analytics (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- Cookie Consent Banner (inline, lightweight) -->
+    <style>
+      #cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(13,18,32,0.97);border-top:1px solid rgba(255,255,255,0.1);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:system-ui,sans-serif;font-size:13px;color:rgba(255,255,255,0.7);backdrop-filter:blur(12px);transform:translateY(100%);transition:transform 0.3s ease;}
+      #cookie-banner.visible{transform:translateY(0);}
+      #cookie-banner button{padding:8px 16px;border-radius:10px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:all 0.2s;}
+      #cookie-accept{background:#4ECDC4;color:#0a0f1a;}
+      #cookie-decline{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);}
+    </style>
+
+    <!-- External CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Cookie Consent Logic -->
+    <div id="cookie-banner">
+      <span>Vi bruger cookies for at forbedre din oplevelse. <a href="#/privatlivspolitik" style="color:#4ECDC4;text-decoration:underline;">Læs mere</a></span>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button id="cookie-decline">Afvis</button>
+        <button id="cookie-accept">Acceptér</button>
+      </div>
+    </div>
+    <script>
+      (function(){
+        var consent = localStorage.getItem('b-social-cookie-consent');
+        var banner = document.getElementById('cookie-banner');
+        if (!consent && banner) {
+          setTimeout(function(){ banner.classList.add('visible'); }, 1000);
+          document.getElementById('cookie-accept').addEventListener('click', function(){
+            localStorage.setItem('b-social-cookie-consent', 'accepted');
+            banner.classList.remove('visible');
+          });
+          document.getElementById('cookie-decline').addEventListener('click', function(){
+            localStorage.setItem('b-social-cookie-consent', 'declined');
+            banner.classList.remove('visible');
+          });
+        }
+      })();
+    </script>
+
+    <!-- Self-destructing Service Worker registration -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('sw.js').then(function(reg) {
-            console.log('SW registered:', reg.scope);
+            console.log('SW registered (self-destruct):', reg.scope);
           }).catch(function(err) {
             console.log('SW registration failed:', err);
           });

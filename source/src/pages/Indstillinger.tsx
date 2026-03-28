@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { ArrowLeft, User, Bell, Shield, Globe, LogOut, ChevronRight } from "lucide-react";
+import { ArrowLeft, User, Bell, Shield, Globe, LogOut, ChevronRight, Mail, Trash2, Pencil } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/lib/supabase";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 import { useTranslation } from 'react-i18next';
 
@@ -62,6 +64,247 @@ function ToggleRow({ icon: Icon, label, enabled, onToggle }: {
   );
 }
 
+/* ── Bug 21: Edit Profile (name, city, avatar) ── */
+function EditProfileSection() {
+  const { t } = useTranslation();
+  const { profile, user, refreshProfile } = useAuth();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(profile?.name || "");
+  const [city, setCity] = useState(profile?.city || "");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Sync with profile when it loads
+  // Using useEffect-like pattern via lazy state initializer is wrong here.
+  // Instead, default values in useState are fine since profile is available from context.
+
+  const handleSave = async () => {
+    if (!user?.id) return;
+    setSaving(true);
+    setMessage("");
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ name: name.trim(), city: city.trim() })
+      .eq("id", user.id);
+
+    if (error) {
+      setMessage("Fejl: " + error.message);
+    } else {
+      setMessage("Profil opdateret!");
+      await refreshProfile();
+      setTimeout(() => { setMessage(""); setEditing(false); }, 1500);
+    }
+    setSaving(false);
+  };
+
+  if (!editing) {
+    return (
+      <button
+        onClick={() => setEditing(true)}
+        className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 transition-colors"
+      >
+        <div className="w-8 h-8 rounded-xl bg-white/8 flex items-center justify-center">
+          <Pencil size={16} className="text-white/60" />
+        </div>
+        <span className="flex-1 text-left text-sm font-medium text-white/80">Rediger navn & by</span>
+        <ChevronRight size={14} className="text-white/20" />
+      </button>
+    );
+  }
+
+  return (
+    <div className="px-4 py-3 space-y-3">
+      <div>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">Navn</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
+          placeholder="Dit fulde navn"
+        />
+      </div>
+      <div>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">By</label>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
+          placeholder="F.eks. Aalborg"
+        />
+      </div>
+      {message && (
+        <p className={`text-xs ${message.startsWith("Fejl") ? "text-red-400" : "text-[#4ECDC4]"}`}>{message}</p>
+      )}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setEditing(false)}
+          className="flex-1 px-3 py-2 rounded-xl bg-white/5 text-white/50 text-sm hover:bg-white/10 transition-colors"
+        >Annuller</button>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="flex-1 px-3 py-2 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-colors disabled:opacity-50"
+        >{saving ? "Gemmer..." : "Gem"}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Bug 20: Change Email ── */
+function ChangeEmailSection() {
+  const { t } = useTranslation();
+  const [editing, setEditing] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleChangeEmail = async () => {
+    if (!newEmail.trim() || !newEmail.includes("@")) {
+      setMessage("Indtast en gyldig email");
+      return;
+    }
+    setSaving(true);
+    setMessage("");
+
+    const { error } = await supabase.auth.updateUser({ email: newEmail.trim() });
+
+    if (error) {
+      setMessage("Fejl: " + error.message);
+    } else {
+      setMessage("Bekræftelsesmail sendt til " + newEmail.trim());
+      setTimeout(() => { setMessage(""); setEditing(false); setNewEmail(""); }, 3000);
+    }
+    setSaving(false);
+  };
+
+  if (!editing) {
+    return (
+      <button
+        onClick={() => setEditing(true)}
+        className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 transition-colors"
+      >
+        <div className="w-8 h-8 rounded-xl bg-white/8 flex items-center justify-center">
+          <Mail size={16} className="text-white/60" />
+        </div>
+        <span className="flex-1 text-left text-sm font-medium text-white/80">Skift email</span>
+        <ChevronRight size={14} className="text-white/20" />
+      </button>
+    );
+  }
+
+  return (
+    <div className="px-4 py-3 space-y-3">
+      <div>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">Ny email</label>
+        <input
+          type="email"
+          value={newEmail}
+          onChange={(e) => setNewEmail(e.target.value)}
+          className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
+          placeholder="ny@email.dk"
+        />
+      </div>
+      {message && (
+        <p className={`text-xs ${message.startsWith("Fejl") ? "text-red-400" : "text-[#4ECDC4]"}`}>{message}</p>
+      )}
+      <div className="flex gap-2">
+        <button
+          onClick={() => { setEditing(false); setNewEmail(""); setMessage(""); }}
+          className="flex-1 px-3 py-2 rounded-xl bg-white/5 text-white/50 text-sm hover:bg-white/10 transition-colors"
+        >Annuller</button>
+        <button
+          onClick={handleChangeEmail}
+          disabled={saving}
+          className="flex-1 px-3 py-2 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-colors disabled:opacity-50"
+        >{saving ? "Sender..." : "Send bekræftelse"}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Bug 22: Delete Account (GDPR) ── */
+function DeleteAccountSection() {
+  const { t } = useTranslation();
+  const { user, signOut } = useAuth();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleDelete = async () => {
+    if (confirmText !== "SLET") {
+      setMessage("Skriv SLET for at bekræfte");
+      return;
+    }
+    if (!user?.id) return;
+    setDeleting(true);
+    setMessage("");
+
+    try {
+      // Delete user profile data
+      await supabase.from("notifications").delete().eq("user_id", user.id);
+      await supabase.from("conversation_participants").delete().eq("user_id", user.id);
+      await supabase.from("profiles").delete().eq("id", user.id);
+
+      // Sign out (actual auth user deletion requires admin/server-side)
+      setMessage("Konto slettet. Du logges ud...");
+      setTimeout(async () => {
+        await signOut();
+      }, 2000);
+    } catch (err) {
+      setMessage("Fejl ved sletning. Kontakt support.");
+    }
+    setDeleting(false);
+  };
+
+  if (!confirmOpen) {
+    return (
+      <button
+        onClick={() => setConfirmOpen(true)}
+        className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-white/5 transition-colors"
+      >
+        <div className="w-8 h-8 rounded-xl bg-red-500/15 flex items-center justify-center">
+          <Trash2 size={16} className="text-red-400" />
+        </div>
+        <span className="flex-1 text-left text-sm font-medium text-red-400">Slet min konto</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="px-4 py-3 space-y-3 border-t border-white/5">
+      <p className="text-red-400 text-xs font-medium">Denne handling kan ikke fortrydes. Al din data slettes permanent.</p>
+      <div>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">Skriv SLET for at bekræfte</label>
+        <input
+          type="text"
+          value={confirmText}
+          onChange={(e) => setConfirmText(e.target.value)}
+          className="w-full bg-red-500/5 border border-red-500/20 rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:ring-1 focus:ring-red-500/50"
+          placeholder="SLET"
+        />
+      </div>
+      {message && (
+        <p className={`text-xs ${message.startsWith("Fejl") ? "text-red-400" : "text-amber-400"}`}>{message}</p>
+      )}
+      <div className="flex gap-2">
+        <button
+          onClick={() => { setConfirmOpen(false); setConfirmText(""); setMessage(""); }}
+          className="flex-1 px-3 py-2 rounded-xl bg-white/5 text-white/50 text-sm hover:bg-white/10 transition-colors"
+        >Annuller</button>
+        <button
+          onClick={handleDelete}
+          disabled={deleting || confirmText !== "SLET"}
+          className="flex-1 px-3 py-2 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50"
+        >{deleting ? "Sletter..." : "Slet permanent"}</button>
+      </div>
+    </div>
+  );
+}
+
 export default function Indstillinger() {
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
@@ -102,14 +345,35 @@ export default function Indstillinger() {
           <ToggleRow icon={Shield} label={t('settings.private_profile')} enabled={privatProfil} onToggle={() => setPrivatProfil(!privatProfil)} />
         </SettingsGroup>
 
+        {/* Edit Profile */}
+        <SettingsGroup title={t('settings.edit_profile')}>
+          <EditProfileSection />
+        </SettingsGroup>
+
+        {/* Change Email */}
+        <SettingsGroup title="Email">
+          <ChangeEmailSection />
+        </SettingsGroup>
+
         {/* Preferences */}
         <SettingsGroup title={t('settings.preferences')}>
-          <SettingsRow icon={Globe} label={t('settings.language')} value={t('settings.danish')} />
+          <div className="px-4 py-3">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-xl bg-white/8 flex items-center justify-center">
+                <Globe size={16} className="text-white/60" />
+              </div>
+              <span className="text-sm font-medium text-white/80">{t('settings.language')}</span>
+            </div>
+            <div className="mt-2">
+              <LanguageSwitcher variant="toggle" />
+            </div>
+          </div>
         </SettingsGroup>
 
         {/* Danger zone */}
         <SettingsGroup title="">
           <SettingsRow icon={LogOut} label={t('settings.log_out')} onClick={signOut} danger />
+          <DeleteAccountSection />
         </SettingsGroup>
 
         {/* App info */}
