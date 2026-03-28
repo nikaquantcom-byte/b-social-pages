@@ -1,5 +1,4 @@
 import { Link, useLocation } from "wouter";
-import { useHashLocation } from "wouter/use-hash-location";
 import {
   LayoutDashboard,
   CalendarPlus,
@@ -31,7 +30,7 @@ const NAV_ITEMS = [
 
 export default function FirmaLayout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
-  const [location] = useHashLocation();
+  const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 

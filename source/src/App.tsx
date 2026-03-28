@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Switch, Route, Router, Redirect } from "wouter";
-import { useHashLocation } from "wouter/use-hash-location";
+import { useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -96,7 +96,7 @@ function FirmaRouter() {
 }
 
 function RootRouter() {
-  const [location] = useHashLocation();
+  const [location] = useLocation();
   const isFirmaAuth = location === "/firma/auth";
   const isFirma = location.startsWith("/firma");
   const isHenvisning = location === "/henvisning";
@@ -125,7 +125,7 @@ function App() {
         <TagProvider>
           <NotificationProvider>
             <JoinProvider>
-              <Router hook={useHashLocation}>
+              <Router>
                 <RootRouter />
               </Router>
               <Toaster />

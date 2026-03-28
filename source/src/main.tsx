@@ -32,14 +32,16 @@ async function bootstrap() {
     }
     // NOW clean the URL (code has been consumed)
     const dest = returnTo || "/feed";
-    window.history.replaceState(null, "", window.location.pathname + "#" + dest);
+    window.history.replaceState(null, "", dest);
   } else if (errorDescription) {
-    window.history.replaceState(null, "", window.location.pathname + "#/auth");
+    window.history.replaceState(null, "", "/auth");
   } else {
-    // Normal app load
+    // Normal app load — path routing, no hash needed
+    // Redirect old hash URLs to clean paths for returning users
     const rawHash = window.location.hash;
-    if (!rawHash || rawHash === "#" || rawHash === "#/") {
-      window.location.hash = "#/";
+    if (rawHash && rawHash.startsWith("#/")) {
+      const cleanPath = rawHash.slice(1); // "#/feed" → "/feed"
+      window.history.replaceState(null, "", cleanPath);
     }
   }
 

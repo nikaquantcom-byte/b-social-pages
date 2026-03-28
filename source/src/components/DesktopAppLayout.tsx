@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { useHashLocation } from "wouter/use-hash-location";
+import { useLocation } from "wouter";
 import { Home, Compass, MapPin, MessageCircle, User, Bell, Building2, UserPlus, CircleDollarSign, LogIn, LogOut, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -16,7 +16,7 @@ const NAV_MAIN = [
 
 export default function DesktopAppLayout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
-  const [location, setLocation] = useHashLocation();
+  const [location, setLocation] = useLocation();
   const { unreadCount } = useNotifications();
   const { isLoggedIn, profile, signOut, loading: authLoading } = useAuth();
   const loggedIn = !authLoading && isLoggedIn;
