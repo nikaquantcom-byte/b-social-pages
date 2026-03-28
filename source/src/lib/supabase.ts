@@ -133,12 +133,23 @@ export async function fetchRoutes(): Promise<SupabaseRoute[]> {
 }
 
 export async function fetchEvents(): Promise<Event[]> {
-  const { data, error } = await supabase
-    .from("events")
-    .select("*")
-    .order("date", { ascending: true });
-  if (error) { console.error("fetchEvents error:", error); return []; }
-  return data || [];
+  // Paginate to get ALL events (Supabase defaults to 1000 row limit)
+  const all: Event[] = [];
+  let from = 0;
+  const PAGE = 1000;
+  while (true) {
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .order("date", { ascending: true })
+      .range(from, from + PAGE - 1);
+    if (error) { console.error("fetchEvents error:", error); break; }
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < PAGE) break;
+    from += PAGE;
+  }
+  return all;
 }
 
 export async function fetchReviews(): Promise<Review[]> {

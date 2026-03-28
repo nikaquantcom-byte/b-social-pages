@@ -318,20 +318,22 @@ export default function Beskeder() {
   }, [userSearch, showNewConvo, myId]);
 
   /* ── Start new conversation ── */
+  const [startingConvo, setStartingConvo] = useState<string | null>(null);
+  const [convoError, setConvoError] = useState<string | null>(null);
+
   const startConversation = async (otherUserId: string) => {
-    if (!myId) {
-      console.warn("[Beskeder] Cannot start conversation — not logged in");
-      return;
-    }
+    if (!myId) return;
+    setStartingConvo(otherUserId);
+    setConvoError(null);
 
     try {
-      // Check if conversation already exists between these two users
-      const { data: myConvos, error: partsErr } = await supabase
+      // Check if conversation already exists
+      const { data: myConvos } = await supabase
         .from("conversation_participants")
         .select("conversation_id")
         .eq("user_id", myId);
 
-      if (!partsErr && myConvos) {
+      if (myConvos) {
         for (const mc of myConvos) {
           const { data: otherInConvo } = await supabase
             .from("conversation_participants")
@@ -340,11 +342,11 @@ export default function Beskeder() {
             .eq("user_id", otherUserId);
 
           if (otherInConvo && otherInConvo.length > 0) {
-            // Conversation already exists — navigate to it
             setActiveConvoId(mc.conversation_id);
             setShowNewConvo(false);
             setUserSearch("");
             setUserResults([]);
+            setStartingConvo(null);
             return;
           }
         }
@@ -353,32 +355,13 @@ export default function Beskeder() {
       // Create new conversation
       const { data: newConvo, error: convoErr } = await supabase
         .from("conversations")
-        .insert({ created_at: new Date().toISOString() })
+        .insert({})
         .select("id")
         .single();
 
       if (convoErr || !newConvo) {
-        console.error("Create conversation error:", convoErr);
-        // Fallback: try without created_at
-        const { data: fallbackConvo, error: fallbackErr } = await supabase
-          .from("conversations")
-          .insert({})
-          .select("id")
-          .single();
-        if (fallbackErr || !fallbackConvo) {
-          console.error("Fallback create conversation error:", fallbackErr);
-          return;
-        }
-        // Use fallback
-        await supabase.from("conversation_participants").insert([
-          { conversation_id: fallbackConvo.id, user_id: myId },
-          { conversation_id: fallbackConvo.id, user_id: otherUserId },
-        ]);
-        await loadConversations();
-        setActiveConvoId(fallbackConvo.id);
-        setShowNewConvo(false);
-        setUserSearch("");
-        setUserResults([]);
+        setConvoError("Kunne ikke oprette samtale: " + (convoErr?.message || "ukendt fejl"));
+        setStartingConvo(null);
         return;
       }
 
@@ -389,20 +372,21 @@ export default function Beskeder() {
       ]);
 
       if (insertErr) {
-        console.error("Insert participants error:", insertErr);
-        // Clean up the orphaned conversation row so we don't leave dangling data
+        setConvoError("Kunne ikke tilføje deltagere: " + insertErr.message);
         await supabase.from("conversations").delete().eq("id", newConvo.id);
+        setStartingConvo(null);
         return;
       }
 
-      // Reload and select
       await loadConversations();
       setActiveConvoId(newConvo.id);
       setShowNewConvo(false);
       setUserSearch("");
       setUserResults([]);
-    } catch (err) {
-      console.error("startConversation error:", err);
+    } catch (err: any) {
+      setConvoError("Fejl: " + (err?.message || String(err)));
+    } finally {
+      setStartingConvo(null);
     }
   };
 
@@ -716,14 +700,21 @@ export default function Beskeder() {
                     <button
                       key={u.id}
                       onClick={() => startConversation(u.id)}
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-left"
+                      disabled={startingConvo === u.id}
+                      className={`w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-left ${startingConvo === u.id ? "opacity-50 cursor-wait" : ""}`}
                     >
-                      <img
-                        src={u.avatar_url || defaultAvatar(u.name)}
-                        alt={u.name ?? ""}
-                        className="w-10 h-10 rounded-xl object-cover"
-                      />
-                      <span className="text-white/80 text-sm font-medium">{u.name ?? t('beskeder.unknown')}</span>
+                      {startingConvo === u.id ? (
+                        <Loader2 size={20} className="w-10 h-10 animate-spin text-[#4ECDC4]" />
+                      ) : (
+                        <img
+                          src={u.avatar_url || defaultAvatar(u.name)}
+                          alt={u.name ?? ""}
+                          className="w-10 h-10 rounded-xl object-cover"
+                        />
+                      )}
+                      <span className="text-white/80 text-sm font-medium">
+                        {startingConvo === u.id ? "Opretter samtale..." : (u.name ?? t('beskeder.unknown'))}
+                      </span>
                     </button>
                   ))
                 )}

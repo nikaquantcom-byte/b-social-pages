@@ -33,16 +33,27 @@ export async function getEvents(): Promise<Event[]> {
   if (_cachedEvents) return _cachedEvents;
 
   try {
-    // Only fetch events from today onwards (filter out past events)
+    // Paginate to get ALL future events (Supabase defaults to 1000 row limit)
     const todayISO = new Date().toISOString().split("T")[0];
-    const { data, error } = await supabase
-      .from("events")
-      .select("*")
-      .gte("date", todayISO)
-      .order("date", { ascending: true });
+    const all: Event[] = [];
+    let from = 0;
+    const PAGE = 1000;
+    while (true) {
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .gte("date", todayISO)
+        .order("date", { ascending: true })
+        .range(from, from + PAGE - 1);
+      if (error) { console.warn("Supabase fetch error:", error); break; }
+      if (!data || data.length === 0) break;
+      all.push(...(data as Event[]));
+      if (data.length < PAGE) break;
+      from += PAGE;
+    }
 
-    if (!error && data && data.length > 0) {
-      _cachedEvents = data as Event[];
+    if (all.length > 0) {
+      _cachedEvents = all;
       // Refresh cache every 10 minutes
       setTimeout(() => { _cachedEvents = null; }, 10 * 60 * 1000);
       return _cachedEvents;
