@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
-import { Home, Compass, MapPin, MessageCircle, User, Bell, Building2, Gift, LogIn, LogOut, Settings } from "lucide-react";
+import { Home, Compass, MapPin, MessageCircle, User, Bell, Building2, UserPlus, CircleDollarSign, LogIn, LogOut, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useNotifications } from "@/context/NotificationContext";
@@ -75,8 +75,11 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
           {/* Notifikationer */}
           {navLink("/notifikationer", Bell, t("nav.notifications") || "Notifikationer", { badge: unreadCount })}
 
-          {/* Henvisning */}
-          {navLink("/henvisning", Gift, t("nav.henvisning") || "Henvisning")}
+          {/* Invitér venner */}
+          {navLink("/inviter", UserPlus, "Invitér")}
+
+          {/* Henvisning (affiliate/earnings) */}
+          {navLink("/henvisning", CircleDollarSign, t("nav.henvisning") || "Henvisning")}
 
           {/* Firma / Kunde */}
           {navLink("/firma", Building2, t("nav.firma") || "Firma")}

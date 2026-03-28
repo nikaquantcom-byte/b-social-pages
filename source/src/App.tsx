@@ -35,6 +35,7 @@ const Indstillinger = lazy(() => import("@/pages/Indstillinger"));
 const Privatlivspolitik = lazy(() => import("@/pages/Privatlivspolitik"));
 const Vilkaar = lazy(() => import("@/pages/Vilkaar"));
 const Henvisning = lazy(() => import("@/pages/Henvisning"));
+const InviterVenner = lazy(() => import("@/pages/InviterVenner"));
 const Notifikationer = lazy(() => import("@/pages/Notifikationer"));
 // Firma pages
 const FirmaAuth = lazy(() => import("@/pages/FirmaAuth"));
@@ -99,6 +100,7 @@ function RootRouter() {
   const isFirmaAuth = location === "/firma/auth";
   const isFirma = location.startsWith("/firma");
   const isHenvisning = location === "/henvisning";
+  const isInviter = location === "/inviter";
   const isAuth = location === "/auth";
   const isOnboarding = location === "/onboarding";
   const isPrivatlivspolitik = location === "/privatlivspolitik";
@@ -109,6 +111,7 @@ function RootRouter() {
   if (isFirmaAuth) return <Suspense fallback={<PageLoader />}><FirmaAuth /></Suspense>;
   if (isFirma) return <FirmaRouter />;
   if (isHenvisning) return <DesktopAppLayout><Suspense fallback={<PageLoader />}><Henvisning /></Suspense></DesktopAppLayout>;
+  if (isInviter) return <DesktopAppLayout><Suspense fallback={<PageLoader />}><InviterVenner /></Suspense></DesktopAppLayout>;
   if (isAuth) return <Suspense fallback={<PageLoader />}><Auth /></Suspense>;
   if (isOnboarding) return <Suspense fallback={<PageLoader />}><Onboarding /></Suspense>;
   return <MainRouter />;
