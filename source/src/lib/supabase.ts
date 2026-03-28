@@ -3,17 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://rbengtfrthqdfbcdcugp.supabase.co";
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZW5ndGZydGhxZGZiY2RjdWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2MjUwNjksImV4cCI6MjA4ODIwMTA2OX0.9RXVN3u0UzXO2ideDFA8Un34jqUEf6hiG8ZJki5RAXk";
 
-// Custom in-memory storage to avoid localStorage (blocked in sandboxed iframes)
-const memoryStorage: Record<string, string> = {};
-const customStorage = {
-  getItem: (key: string) => memoryStorage[key] ?? null,
-  setItem: (key: string, value: string) => { memoryStorage[key] = value; },
-  removeItem: (key: string) => { delete memoryStorage[key]; },
-};
-
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-    storage: customStorage,
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,

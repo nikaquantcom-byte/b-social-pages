@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
-import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal } from "lucide-react";
+import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal, Compass } from "lucide-react";
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { buildTagFeed, scoreEvent, getTrendingTags, getTagNode, type TagSection } from "@/lib/tagEngine";
 import { useAuth } from "@/context/AuthContext";
@@ -103,7 +103,7 @@ export default function Feed() {
         </div>
 
         <div className="flex items-center gap-3 mb-8 px-1">
-          <Link href="/beskeder" className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 hover:bg-[#4ECDC4]/20 transition-all">
+          <Link href="/udforsk" className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 hover:bg-[#4ECDC4]/20 transition-all">
             <div className="w-8 h-8 rounded-full bg-[#4ECDC4]/20 flex items-center justify-center">
               <PenSquare size={14} className="text-[#4ECDC4]" />
             </div>
@@ -114,14 +114,30 @@ export default function Feed() {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
           <div>
             {tagSections.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-white/40 mb-3">Ingen events matcher dine tags</p>
-                <button
-                  onClick={() => setTagEditorOpen(true)}
-                  className="text-sm text-[#4ECDC4] hover:underline"
-                >
-                  Vælg tags for at se personlige forslag
-                </button>
+              <div className="text-center py-16 max-w-md mx-auto">
+                <div className="w-16 h-16 rounded-2xl bg-[#4ECDC4]/10 flex items-center justify-center mx-auto mb-5">
+                  <Compass size={28} className="text-[#4ECDC4]" />
+                </div>
+                <h2 className="text-lg font-bold text-white/80 mb-2">Kom i gang med dit feed</h2>
+                <p className="text-white/40 text-sm mb-6">
+                  {selectedTags.length === 0
+                    ? "Vælg dine interesser, så finder vi de bedste events til dig."
+                    : "Der er ingen kommende events for dine tags lige nu. Prøv at tilføje flere tags eller udforsk alle events."}
+                </p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button
+                    onClick={() => setTagEditorOpen(true)}
+                    className="px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all"
+                  >
+                    {selectedTags.length === 0 ? "Vælg dine interesser" : "Rediger tags"}
+                  </button>
+                  <Link
+                    href="/udforsk"
+                    className="px-5 py-2.5 rounded-xl bg-white/10 text-white/70 text-sm font-medium hover:bg-white/15 transition-all"
+                  >
+                    Udforsk alle events
+                  </Link>
+                </div>
               </div>
             ) : (
               tagSections.map(section => (
