@@ -56,20 +56,29 @@ export default function FirmaAuth() {
   const [, setLocation] = useLocation();
   const { user, isLoggedIn, refreshProfile } = useAuth();
 
-  const [companyName, setCompanyName] = useState("");
-  const [cvr, setCvr] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState<Plan>("starter");
+  // Restore form data from sessionStorage (in case user was redirected to auth)
+  const savedForm = typeof window !== 'undefined' ? sessionStorage.getItem('firma_form_data') : null;
+  const parsed = savedForm ? JSON.parse(savedForm) : null;
+
+  const [companyName, setCompanyName] = useState(parsed?.companyName || "");
+  const [cvr, setCvr] = useState(parsed?.cvr || "");
+  const [email, setEmail] = useState(parsed?.email || "");
+  const [phone, setPhone] = useState(parsed?.phone || "");
+  const [selectedPlan, setSelectedPlan] = useState<Plan>(parsed?.selectedPlan || "starter");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Clear saved form data once restored
+  if (parsed) sessionStorage.removeItem('firma_form_data');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
     if (!isLoggedIn) {
-      setError(t('firma.must_be_logged_in_error'));
+      // Save form data before redirecting to auth
+      sessionStorage.setItem('firma_form_data', JSON.stringify({ companyName, cvr, email, phone, selectedPlan }));
+      setLocation('/auth?returnTo=/firma/auth');
       return;
     }
 

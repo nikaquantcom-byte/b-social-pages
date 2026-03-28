@@ -17,8 +17,8 @@ export default function Overblik() {
   const [, setLocation] = useLocation();
 
   const { data: places } = useQuery<Place[]>({
-    queryKey: ["supabase-places"],
-    queryFn: fetchPlaces,
+    queryKey: ["supabase-places-overview"],
+    queryFn: () => fetchPlaces({ limit: 500 }),
     staleTime: 5 * 60 * 1000,
   });
 

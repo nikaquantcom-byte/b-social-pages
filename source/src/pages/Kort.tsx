@@ -1,4 +1,14 @@
 import { useState, useMemo, useEffect, useRef } from "react";
+
+// Dynamically load Leaflet CSS (removed from index.html to avoid render-blocking)
+if (typeof document !== "undefined" && !document.querySelector('link[href*="leaflet"]')) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  link.crossOrigin = '';
+  document.head.appendChild(link);
+}
+
 import { MapContainer, TileLayer, Marker, useMap, CircleMarker } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
@@ -589,8 +599,11 @@ export default function Kort() {
 
   // Fetch Supabase places
   const { data: supabasePlaces } = useQuery<Place[]>({
-    queryKey: ["supabase-places"],
-    queryFn: fetchPlaces,
+    queryKey: ["supabase-places-map", selectedCountry],
+    queryFn: () => fetchPlaces({
+      limit: 2000,
+      country: selectedCountry && selectedCountry !== 'ALL' ? (selectedCountry === 'DK' ? 'Denmark' : selectedCountry) : undefined,
+    }),
     staleTime: 5 * 60 * 1000,
   });
 
