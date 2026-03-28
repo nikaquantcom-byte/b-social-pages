@@ -391,32 +391,61 @@ async function fetchTicketmasterByCountry(
 
   // Ticketmaster requires YYYY-MM-DDTHH:mm:ssZ (no milliseconds)
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
-  const url = `https://app.ticketmaster.com/discovery/v2/events.json?countryCode=${countryCode}&size=50&apikey=${apiKey}&sort=date,asc&startDateTime=${encodeURIComponent(now)}`;
+  
+  // Single page of 200 events per country (edge functions have 60s timeout)
+  // The weekly cron handles all 27 countries, so we get broad coverage over time
+  const MAX_PAGES = 1;
+  const PAGE_SIZE = 200;
+  let allItems: any[] = [];
 
-  let data: any;
-  try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(20000) });
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?countryCode=${countryCode}&size=${PAGE_SIZE}&page=${page}&apikey=${apiKey}&sort=date,asc&startDateTime=${encodeURIComponent(now)}`;
 
-    if (!response.ok) {
-      const body = await response.text();
-      errors.push(`Ticketmaster ${countryCode}: HTTP ${response.status} - ${body.slice(0, 200)}`);
-      return { events, errors };
+    let data: any;
+    try {
+      const response = await fetch(url, { signal: AbortSignal.timeout(20000) });
+
+      if (!response.ok) {
+        const body = await response.text();
+        if (response.status === 429) {
+          // Rate limited — wait and retry
+          console.log(`[import-events] Ticketmaster ${countryCode}: rate limited on page ${page}, waiting 2s...`);
+          await sleep(2000);
+          continue;
+        }
+        errors.push(`Ticketmaster ${countryCode} page ${page}: HTTP ${response.status} - ${body.slice(0, 200)}`);
+        break;
+      }
+
+      data = await response.json();
+
+      if (data.fault) {
+        errors.push(`Ticketmaster ${countryCode}: ${data.fault.faultstring}`);
+        break;
+      }
+    } catch (err) {
+      errors.push(`Ticketmaster ${countryCode} page ${page}: fetch error - ${err}`);
+      break;
     }
 
-    data = await response.json();
+    const pageItems = data._embedded?.events || [];
+    allItems.push(...pageItems);
 
-    // Check for API key error
-    if (data.fault) {
-      errors.push(`Ticketmaster ${countryCode}: ${data.fault.faultstring}`);
-      return { events, errors };
+    // Check if there are more pages
+    const totalPages = data.page?.totalPages || 1;
+    const totalElements = data.page?.totalElements || 0;
+    console.log(`[import-events] Ticketmaster ${countryCode}: page ${page}/${totalPages} — got ${pageItems.length} events (total available: ${totalElements})`);
+
+    if (page >= totalPages - 1 || pageItems.length < PAGE_SIZE) {
+      break; // No more pages
     }
-  } catch (err) {
-    errors.push(`Ticketmaster ${countryCode}: fetch error - ${err}`);
-    return { events, errors };
+
+    // Rate limit: wait between pages
+    await sleep(250);
   }
 
-  const items = data._embedded?.events || [];
-  console.log(`[import-events] Ticketmaster ${countryCode}: found ${items.length} events`);
+  const items = allItems;
+  console.log(`[import-events] Ticketmaster ${countryCode}: total ${items.length} events fetched across pages`);
 
   for (const item of items) {
     try {
