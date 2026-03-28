@@ -1,106 +1,40 @@
-/* ═══════════════════════════════════════════════
-   B-Social Service Worker — Offline-first caching
-   ═══════════════════════════════════════════════ */
+/*
+ * B-Social Service Worker — SELF-DESTRUCT
+ * This SW exists only to unregister itself and clear all caches.
+ * It replaces the old caching SW that caused stale page issues.
+ */
 
-const CACHE_NAME = 'b-social-v1';
-const RUNTIME_CACHE = 'b-social-runtime-v1';
-
-// Core app shell — cached on install
-const APP_SHELL = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192x192.png',
-  './icon-512x512.png',
-  './favicon.png',
-];
-
-// Install — cache app shell
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(APP_SHELL);
-    })
-  );
+// On install, skip waiting so we activate immediately
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
-// Activate — clean old caches
+// On activate, clear all caches and unregister
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then((names) => {
       return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME && key !== RUNTIME_CACHE)
-          .map((key) => caches.delete(key))
+        names.map((name) => {
+          console.log('[SW Self-Destruct] Deleting cache:', name);
+          return caches.delete(name);
+        })
       );
+    }).then(() => {
+      console.log('[SW Self-Destruct] All caches cleared. Unregistering...');
+      return self.registration.unregister();
+    }).then(() => {
+      // Notify all clients to reload for clean state
+      return self.clients.matchAll();
+    }).then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({ type: 'SW_DESTROYED' });
+      });
     })
   );
-  self.clients.claim();
 });
 
-// Fetch — stale-while-revalidate for pages, cache-first for assets
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Skip non-GET, chrome-extension, and Supabase API calls
-  if (request.method !== 'GET') return;
-  if (url.protocol === 'chrome-extension:') return;
-  if (url.hostname.includes('supabase')) return;
-  if (url.pathname.startsWith('/api/')) return;
-
-  // Static assets (JS, CSS, images, fonts) — cache-first
-  if (
-    url.pathname.startsWith('/assets/') ||
-    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|woff2?|ttf|eot)$/)
-  ) {
-    event.respondWith(
-      caches.match(request).then((cached) => {
-        if (cached) return cached;
-        return fetch(request).then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone));
-          }
-          return response;
-        });
-      })
-    );
-    return;
-  }
-
-  // HTML navigation — network-first with offline fallback
-  if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone));
-          return response;
-        })
-        .catch(() => {
-          return caches.match(request).then((cached) => {
-            return cached || caches.match('./index.html');
-          });
-        })
-    );
-    return;
-  }
-
-  // External resources (fonts, CDN) — stale-while-revalidate
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      const fetchPromise = fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || fetchPromise;
-    })
-  );
+// Don't intercept any fetches — let everything pass through to network
+self.addEventListener('fetch', () => {
+  // No-op: do not call event.respondWith()
+  // This lets the browser handle all requests normally
 });

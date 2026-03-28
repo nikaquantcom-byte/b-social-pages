@@ -32,9 +32,12 @@ export async function getEvents(): Promise<Event[]> {
   if (_cachedEvents) return _cachedEvents;
 
   try {
+    // Only fetch events from today onwards (filter out past events)
+    const todayISO = new Date().toISOString().split("T")[0];
     const { data, error } = await supabase
       .from("events")
       .select("*")
+      .gte("date", todayISO)
       .order("date", { ascending: true });
 
     if (!error && data && data.length > 0) {
@@ -47,10 +50,11 @@ export async function getEvents(): Promise<Event[]> {
     console.warn("Supabase fetch failed, using static fallback:", e);
   }
 
-  // Fallback: static JSON sorted by date
-  const fallback = (staticEvents as Event[]).sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  // Fallback: static JSON sorted by date, filter out past events
+  const now = new Date().toISOString().split("T")[0];
+  const fallback = (staticEvents as Event[])
+    .filter((e) => e.date >= now)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   return fallback;
 }
 

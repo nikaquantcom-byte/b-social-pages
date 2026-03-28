@@ -5,9 +5,14 @@ import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
 import { Settings, Calendar, Heart, MapPin, TrendingUp, Award, Users } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useTags } from "@/context/TagContext";
 
 export default function TestMinSide() {
   const { t } = useTranslation();
+  const { profile, user } = useAuth();
+  const { selectedTags } = useTags();
+
   const { data: events = [] } = useQuery({
     queryKey: ["/api/events"],
     queryFn: getEvents,
@@ -19,8 +24,16 @@ export default function TestMinSide() {
     return events.filter(e => e.date >= now).slice(0, 5);
   }, [events]);
 
-  // Derive dynamic interests from event tags
+  // Derive dynamic interests from user profile tags first, then event tags as fallback
   const topInterests = useMemo(() => {
+    // Use profile interests/tags if available
+    if (profile?.interests && profile.interests.length > 0) {
+      return profile.interests.slice(0, 5);
+    }
+    if (selectedTags.length > 0) {
+      return selectedTags.slice(0, 5);
+    }
+    // Fallback: derive from event tags
     const tagCounts: Record<string, number> = {};
     events.forEach(e => {
       (e.interest_tags || []).forEach((tag: string) => {
@@ -31,7 +44,7 @@ export default function TestMinSide() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([tag]) => tag);
-  }, [events]);
+  }, [events, profile, selectedTags]);
 
   // Derive unique categories count as "badges"
   const uniqueCategories = useMemo(() => {
@@ -39,35 +52,39 @@ export default function TestMinSide() {
     return cats.size;
   }, [events]);
 
-  const userStats = {
-    name: "Nicolaj",
-    location: "Aalborg, Danmark",
-    joined: "Januar 2026",
-    friendsCount: 42,
-    interests: topInterests.length > 0 ? topInterests : ["Cykling", "Løb", "Musik", "Outdoor", "Ski"],
-  };
+  // Use real profile data
+  const displayName = profile?.name || user?.user_metadata?.name || user?.email?.split("@")[0] || t('settings.default_user');
+  const displayCity = profile?.city || "Danmark";
+  const displayInitial = displayName[0]?.toUpperCase() || "?";
+  const joinedDate = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString("da-DK", { month: "long", year: "numeric" })
+    : "2026";
 
   return (
     <div className="min-h-screen bg-[#0a0f1a] text-white pb-20">
       <div className="bg-gradient-to-br from-[#4ECDC4] to-[#44A08D] p-6 pb-16">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">{t('profile.my_page')}</h1>
-          <Link href="/firma/indstillinger">
+          <Link href="/indstillinger">
             <button className="p-2 bg-white/20 rounded-xl hover:bg-white/30">
               <Settings size={20} />
             </button>
           </Link>
         </div>
         <div className="flex items-center gap-4">
-          <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#4ECDC4] text-3xl font-bold">
-            N
-          </div>
+          {profile?.avatar_url ? (
+            <img src={profile.avatar_url} alt={displayName} className="w-20 h-20 rounded-full object-cover border-2 border-white/30" />
+          ) : (
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#4ECDC4] text-3xl font-bold">
+              {displayInitial}
+            </div>
+          )}
           <div>
-            <h2 className="text-2xl font-bold">{userStats.name}</h2>
+            <h2 className="text-2xl font-bold">{displayName}</h2>
             <p className="text-white/80 flex items-center gap-1 text-sm">
-              <MapPin size={14} /> {userStats.location}
+              <MapPin size={14} /> {displayCity}
             </p>
-            <p className="text-white/60 text-xs mt-1">{t('profile.member_since')} {userStats.joined}</p>
+            <p className="text-white/60 text-xs mt-1">{t('profile.member_since')} {joinedDate}</p>
           </div>
         </div>
       </div>
@@ -81,12 +98,12 @@ export default function TestMinSide() {
           </div>
           <div className="glass-card rounded-2xl p-4 text-center">
             <Users size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
-            <p className="text-2xl font-bold">{userStats.friendsCount}</p>
+            <p className="text-2xl font-bold">{profile?.connections ?? 0}</p>
             <p className="text-xs text-white/50">{t('profile.friends_count')}</p>
           </div>
           <div className="glass-card rounded-2xl p-4 text-center">
             <Award size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
-            <p className="text-2xl font-bold">{uniqueCategories}</p>
+            <p className="text-2xl font-bold">{selectedTags.length || uniqueCategories}</p>
             <p className="text-xs text-white/50">{t('profile.tags_count')}</p>
           </div>
         </div>
@@ -96,11 +113,15 @@ export default function TestMinSide() {
             <Heart size={16} className="text-[#4ECDC4]" /> {t('tags.your_interests')}
           </h3>
           <div className="flex flex-wrap gap-2">
-            {userStats.interests.map(tag => (
-              <span key={tag} className="px-3 py-1.5 bg-[#4ECDC4]/15 text-[#4ECDC4] rounded-full text-xs font-medium">
-                {tag}
-              </span>
-            ))}
+            {topInterests.length > 0 ? (
+              topInterests.map(tag => (
+                <span key={tag} className="px-3 py-1.5 bg-[#4ECDC4]/15 text-[#4ECDC4] rounded-full text-xs font-medium">
+                  {tag}
+                </span>
+              ))
+            ) : (
+              <p className="text-white/30 text-xs">Ingen tags valgt endnu — vælg tags i Feed</p>
+            )}
           </div>
         </div>
 

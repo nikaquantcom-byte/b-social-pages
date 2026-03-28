@@ -25,11 +25,11 @@ function PageLoader() {
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Auth = lazy(() => import("@/pages/Auth"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
-const Feed = lazy(() => import("@/pages/TestFeed"));
-const Udforsk = lazy(() => import("@/pages/TestUdforsk"));
-const KortPage = lazy(() => import("@/pages/TestKort"));
-const Beskeder = lazy(() => import("@/pages/TestBeskeder"));
-const MinSide = lazy(() => import("@/pages/TestMinSide"));
+const Feed = lazy(() => import("@/pages/Feed"));
+const Udforsk = lazy(() => import("@/pages/Udforsk"));
+const KortPage = lazy(() => import("@/pages/Kort"));
+const Beskeder = lazy(() => import("@/pages/Beskeder"));
+const MinSide = lazy(() => import("@/pages/MinSide"));
 const EventDetail = lazy(() => import("@/pages/EventDetail"));
 const Indstillinger = lazy(() => import("@/pages/Indstillinger"));
 const Privatlivspolitik = lazy(() => import("@/pages/Privatlivspolitik"));
@@ -118,8 +118,8 @@ function App() {
   useReferralCapture();
   return (
     <QueryClientProvider client={queryClient}>
-      <TagProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <TagProvider>
           <NotificationProvider>
             <JoinProvider>
               <Router hook={useHashLocation}>
@@ -128,8 +128,8 @@ function App() {
               <Toaster />
             </JoinProvider>
           </NotificationProvider>
-        </AuthProvider>
-      </TagProvider>
+        </TagProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
