@@ -104,24 +104,43 @@ export type Review = {
 
 /* ── API helpers ── */
 
-export async function fetchPlaces(): Promise<Place[]> {
-  // Supabase defaults to 1000 rows — we need all places
-  const all: Place[] = [];
-  let from = 0;
-  const PAGE = 1000;
-  while (true) {
-    const { data, error } = await supabase
-      .from("places")
-      .select("*")
-      .order("rating_avg", { ascending: false })
-      .range(from, from + PAGE - 1);
-    if (error) { console.error("fetchPlaces error:", error); break; }
-    if (!data || data.length === 0) break;
-    all.push(...data);
-    if (data.length < PAGE) break;
-    from += PAGE;
+export async function fetchPlaces(options?: {
+  country?: string;
+  categories?: string[];
+  limit?: number;
+  offset?: number;
+  bbox?: { minLat: number; maxLat: number; minLon: number; maxLon: number };
+}): Promise<Place[]> {
+  const limit = options?.limit || 500;
+  const offset = options?.offset || 0;
+
+  let query = supabase
+    .from("places")
+    .select("*")
+    .order("rating_avg", { ascending: false, nullsFirst: false });
+
+  // Geographic bounding box filter (most efficient for map views)
+  if (options?.bbox) {
+    query = query
+      .gte("latitude", options.bbox.minLat)
+      .lte("latitude", options.bbox.maxLat)
+      .gte("longitude", options.bbox.minLon)
+      .lte("longitude", options.bbox.maxLon);
   }
-  return all;
+
+  // Country filter
+  if (options?.country) {
+    query = query.eq("country", options.country);
+  }
+
+  // Category filter
+  if (options?.categories && options.categories.length > 0) {
+    query = query.overlaps("main_categories", options.categories);
+  }
+
+  const { data, error } = await query.range(offset, offset + limit - 1);
+  if (error) { console.error("fetchPlaces error:", error); return []; }
+  return data || [];
 }
 
 export async function fetchRoutes(): Promise<SupabaseRoute[]> {

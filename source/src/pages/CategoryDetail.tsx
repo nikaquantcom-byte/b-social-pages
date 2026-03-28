@@ -374,7 +374,7 @@ export default function CategoryDetail() {
 
   /* ── Data sources ── */
   const { data: allJsonEvents } = useQuery<Event[]>({ queryKey: ["events"], queryFn: () => Promise.resolve(getEvents()) });
-  const { data: supabasePlaces } = useQuery<Place[]>({ queryKey: ["supabase-places"], queryFn: fetchPlaces, staleTime: 5 * 60 * 1000 });
+  const { data: supabasePlaces } = useQuery<Place[]>({ queryKey: ["supabase-places-500"], queryFn: () => fetchPlaces({ limit: 500 }), staleTime: 5 * 60 * 1000 });
   const { data: supabaseEvents } = useQuery({ queryKey: ["supabase-events"], queryFn: fetchSupabaseEvents, staleTime: 5 * 60 * 1000 });
 
   /* ── Smart suggestions from tag tree ── */
