@@ -320,7 +320,13 @@ const SUPABASE_CAT_MAP: Record<string, PinCategory> = {
   aktiv: "aktiv",
 };
 
-function placeToPin(place: Place): MapPin {
+function placeToPin(place: Place): MapPin | null {
+  // Guard: skip places with missing or invalid coordinates
+  const lat = place.latitude;
+  const lng = place.longitude;
+  if (lat == null || lng == null || !isFinite(lat) || !isFinite(lng)) return null;
+  if (lat === 0 && lng === 0) return null; // (0,0) is ocean — invalid placeholder
+
   let cat: PinCategory = "natur";
   const cats = [...(place.main_categories || []), ...(place.tags || [])];
   for (const c of cats) {
@@ -331,7 +337,7 @@ function placeToPin(place: Place): MapPin {
     if (cat !== "natur") break;
   }
   return {
-    id: `sb-${place.id}`, name: place.name, lat: place.latitude, lng: place.longitude,
+    id: `sb-${place.id}`, name: place.name, lat, lng,
     category: cat, description: place.description, rating: place.rating_avg || 0,
     ratingCount: place.rating_count || 0, tags: place.tags, city: place.city, fromSupabase: true,
   };
@@ -573,18 +579,22 @@ export default function Kort() {
 
   // Merge pins
   const allPins = useMemo(() => {
-    const sbPins = (supabasePlaces || []).map(placeToPin);
+    const sbPinsRaw = (supabasePlaces || []).map(placeToPin);
+    // Filter out places with invalid coordinates (placeToPin returns null for those)
+    const sbPins = sbPinsRaw.filter((p): p is MapPin => p !== null);
     const sbNames = new Set(sbPins.map(p => p.name.toLowerCase()));
     const hardcodedFiltered = HARDCODED_PINS.filter(p => !sbNames.has(p.name.toLowerCase()));
     const placePins = [...sbPins, ...hardcodedFiltered];
     return [...placePins, ...eventPins];
   }, [supabasePlaces, eventPins]);
 
-  const PREMIUM_CATS = new Set(["kultur", "mad", "mad_hangout", "musik", "events", "karriere", "tech", "rejser", "logi"]);
-  const GRATIS_CATS = new Set(["natur", "vandring", "mtb", "loeb", "hund", "fiskeri", "badning", "shelter", "dyrespot", "outdoor", "sport", "aktiv_sport", "aktiv", "fitness", "socialt", "spil", "kreativt", "ture", "communities", "wellness"]);
+  const PREMIUM_CATS = useMemo(() => new Set(["kultur", "mad", "mad_hangout", "musik", "events", "karriere", "tech", "rejser", "logi"]), []);
+  const GRATIS_CATS = useMemo(() => new Set(["natur", "vandring", "mtb", "loeb", "hund", "fiskeri", "badning", "shelter", "dyrespot", "outdoor", "sport", "aktiv_sport", "aktiv", "fitness", "socialt", "spil", "kreativt", "ture", "communities", "wellness"]), []);
 
   const filteredPins = useMemo(() => {
     return allPins.filter((p) => {
+      // Guard: skip pins with invalid coordinates
+      if (!isFinite(p.lat) || !isFinite(p.lng)) return false;
       // Layer toggle: events vs places
       if (showLayer === "events" && !p.isSupabaseEvent) return false;
       if (showLayer === "steder" && p.isSupabaseEvent) return false;
@@ -603,7 +613,7 @@ export default function Kort() {
         (p.tags && p.tags.some(tag => tag.toLowerCase().includes(term)))
       );
     });
-  }, [priceFilter, search, allPins, showLayer, t]);
+  }, [priceFilter, search, allPins, showLayer, t, PREMIUM_CATS, GRATIS_CATS]);
 
   // Pre-create emoji icons for each category
   const categoryIcons = useMemo(() => {
