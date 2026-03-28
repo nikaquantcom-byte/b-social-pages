@@ -9,6 +9,7 @@ import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { buildTagFeed, scoreEvent, getTrendingTags, getTagNode, type TagSection } from "@/lib/tagEngine";
 import { useAuth } from "@/context/AuthContext";
 import { useTags } from "@/context/TagContext";
+import { useNotifications } from "@/context/NotificationContext";
 import { FeedTagEditor } from "@/components/FeedTagEditor";
 
 
@@ -25,6 +26,7 @@ export default function Feed() {
   const { t } = useTranslation();
   const { profile, user } = useAuth();
   const { selectedTags, city } = useTags();
+  const { unreadCount } = useNotifications();
   const [tagEditorOpen, setTagEditorOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
@@ -203,7 +205,7 @@ export default function Feed() {
             </div>
             <Link href="/notifikationer" className="relative p-2 rounded-lg bg-white/5 hover:bg-white/10">
               <Bell size={18} className="text-white/60" />
-              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
+              {unreadCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />}
             </Link>
           </div>
         </div>

@@ -1,17 +1,19 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
-import { Settings, Calendar, Heart, MapPin, TrendingUp, Award, Users } from "lucide-react";
+import { Settings, Calendar, Heart, MapPin, TrendingUp, Award, Users, Pencil } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useTags } from "@/context/TagContext";
+import { FeedTagEditor } from "@/components/FeedTagEditor";
 
 export default function TestMinSide() {
   const { t } = useTranslation();
   const { profile, user } = useAuth();
   const { selectedTags } = useTags();
+  const [tagEditorOpen, setTagEditorOpen] = useState(false);
 
   const { data: events = [] } = useQuery({
     queryKey: ["/api/events"],
@@ -109,9 +111,18 @@ export default function TestMinSide() {
         </div>
 
         <div className="glass-card rounded-2xl p-4 mb-6">
-          <h3 className="text-sm font-semibold text-white/70 mb-3 flex items-center gap-2">
-            <Heart size={16} className="text-[#4ECDC4]" /> {t('tags.your_interests')}
-          </h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white/70 flex items-center gap-2">
+              <Heart size={16} className="text-[#4ECDC4]" /> {t('tags.your_interests')}
+            </h3>
+            <button
+              onClick={() => setTagEditorOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#4ECDC4]/15 text-[#4ECDC4] text-xs font-medium hover:bg-[#4ECDC4]/25 transition-colors"
+            >
+              <Pencil size={12} />
+              Rediger interesser
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
             {topInterests.length > 0 ? (
               topInterests.map(tag => (
@@ -120,7 +131,12 @@ export default function TestMinSide() {
                 </span>
               ))
             ) : (
-              <p className="text-white/30 text-xs">Ingen tags valgt endnu — vælg tags i Feed</p>
+              <button
+                onClick={() => setTagEditorOpen(true)}
+                className="text-white/30 text-xs hover:text-[#4ECDC4]/70 transition-colors"
+              >
+                Ingen tags valgt endnu — tryk for at vælge interesser
+              </button>
             )}
           </div>
         </div>
@@ -159,6 +175,8 @@ export default function TestMinSide() {
           </Link>
         </div>
       </div>
+
+      <FeedTagEditor open={tagEditorOpen} onClose={() => setTagEditorOpen(false)} />
     </div>
   );
 }

@@ -390,6 +390,9 @@ export default function Beskeder() {
 
       if (insertErr) {
         console.error("Insert participants error:", insertErr);
+        // Clean up the orphaned conversation row so we don't leave dangling data
+        await supabase.from("conversations").delete().eq("id", newConvo.id);
+        return;
       }
 
       // Reload and select
