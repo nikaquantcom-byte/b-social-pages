@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
-import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal, Compass } from "lucide-react";
+import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal, Compass, X } from "lucide-react";
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { buildTagFeed, scoreEvent, getTrendingTags, getTagNode, type TagSection } from "@/lib/tagEngine";
 import { useAuth } from "@/context/AuthContext";
@@ -26,6 +26,8 @@ export default function Feed() {
   const { profile, user } = useAuth();
   const { selectedTags, city } = useTags();
   const [tagEditorOpen, setTagEditorOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
 
   const { data: events = [], isLoading } = useQuery({
     queryKey: ["/api/events"],
@@ -91,6 +93,47 @@ export default function Feed() {
       }));
   }, [events]);
 
+  // Search filtering: filter demoSections or tagSections by activeSearch query
+  const filteredDemoSections = useMemo(() => {
+    if (!activeSearch) return demoSections;
+    const q = activeSearch.toLowerCase();
+    return demoSections
+      .map(section => ({
+        ...section,
+        events: section.events.filter(e =>
+          e.title?.toLowerCase().includes(q) ||
+          e.description?.toLowerCase().includes(q) ||
+          e.location?.toLowerCase().includes(q) ||
+          e.category?.toLowerCase().includes(q) ||
+          (e.interest_tags && e.interest_tags.some((tag: string) => tag.toLowerCase().includes(q)))
+        ),
+      }))
+      .filter(section => section.events.length > 0);
+  }, [demoSections, activeSearch]);
+
+  const filteredTagSections = useMemo(() => {
+    if (!activeSearch) return tagSections;
+    const q = activeSearch.toLowerCase();
+    return tagSections
+      .map(section => ({
+        ...section,
+        events: section.events.filter(e =>
+          e.title?.toLowerCase().includes(q) ||
+          e.description?.toLowerCase().includes(q) ||
+          e.location?.toLowerCase().includes(q) ||
+          e.category?.toLowerCase().includes(q) ||
+          (e.interest_tags && e.interest_tags.some((tag: string) => tag.toLowerCase().includes(q)))
+        ),
+      }))
+      .filter(section => section.events.length > 0);
+  }, [tagSections, activeSearch]);
+
+  const searchResultCount = useMemo(() => {
+    if (!activeSearch) return 0;
+    const sections = isAnonymous && tagSections.length === 0 ? filteredDemoSections : filteredTagSections;
+    return sections.reduce((acc, s) => acc + s.events.length, 0);
+  }, [activeSearch, isAnonymous, tagSections, filteredDemoSections, filteredTagSections]);
+
   // Subtitle line
   const subtitle = profile
     ? `${city || profile.city || t('feed.denmark')} \u00B7 ${selectedTags.length} ${t('feed.tags_selected')}`
@@ -124,7 +167,26 @@ export default function Feed() {
             </button>
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
-              <input type="text" placeholder="Søg events, steder..." className="bg-white/10 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-cyan-500 w-48" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setActiveSearch(searchQuery.trim());
+                  if (e.key === "Escape") { setSearchQuery(""); setActiveSearch(""); }
+                }}
+                placeholder="Søg events, steder..."
+                className="bg-white/10 border border-white/10 rounded-xl pl-9 pr-8 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-1 focus:ring-cyan-500 w-48"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => { setSearchQuery(""); setActiveSearch(""); }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                  aria-label="Ryd søgning"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </div>
             <Link href="/notifikationer" className="relative p-2 rounded-lg bg-white/5 hover:bg-white/10">
               <Bell size={18} className="text-white/60" />
@@ -132,6 +194,23 @@ export default function Feed() {
             </Link>
           </div>
         </div>
+
+        {/* Search results banner */}
+        {activeSearch && (
+          <div className="flex items-center justify-between mb-4 px-1 py-2.5 bg-white/5 rounded-xl border border-white/10">
+            <span className="text-sm text-white/70">
+              <span className="text-white font-medium">{searchResultCount}</span> {searchResultCount === 1 ? "resultat" : "resultater"} for{" "}
+              <span className="text-[#4ECDC4] font-medium">&ldquo;{activeSearch}&rdquo;</span>
+            </span>
+            <button
+              onClick={() => { setSearchQuery(""); setActiveSearch(""); }}
+              className="flex items-center gap-1 text-xs text-white/40 hover:text-white/70 transition-colors px-2 py-1 rounded-lg hover:bg-white/5"
+            >
+              <X size={12} />
+              Ryd
+            </button>
+          </div>
+        )}
 
         <div className="flex items-center gap-3 mb-8 px-1">
           <Link href="/udforsk" className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 hover:bg-[#4ECDC4]/20 transition-all">
@@ -159,7 +238,12 @@ export default function Feed() {
                 </div>
 
                 {/* Event rows by category */}
-                {demoSections.map(section => (
+                {filteredDemoSections.length === 0 && activeSearch ? (
+                  <div className="text-center py-12 text-white/40">
+                    <Search size={32} className="mx-auto mb-3 opacity-30" />
+                    <p className="text-sm">Ingen events fundet for &ldquo;{activeSearch}&rdquo;</p>
+                  </div>
+                ) : filteredDemoSections.map(section => (
                   <div key={section.tag} className="mb-10">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-xl font-bold">
@@ -227,7 +311,12 @@ export default function Feed() {
               </div>
             ) : (
               // ── PERSONALIZED FEED for logged-in users with tags ─────────
-              tagSections.map(section => (
+              filteredTagSections.length === 0 && activeSearch ? (
+                <div className="text-center py-12 text-white/40">
+                  <Search size={32} className="mx-auto mb-3 opacity-30" />
+                  <p className="text-sm">Ingen events fundet for &ldquo;{activeSearch}&rdquo;</p>
+                </div>
+              ) : filteredTagSections.map(section => (
                 <div key={section.tag} className="mb-10">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold">

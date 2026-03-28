@@ -545,7 +545,7 @@
 
   .dsk-main {
     margin-left: 0;
-    padding-bottom: 80px;
+    padding-bottom: 96px; /* Increased to match taller bottom nav (h-20 = 80px + safe area) */
   }
 
   .dsk-bottom-nav {

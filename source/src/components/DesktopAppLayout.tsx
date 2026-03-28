@@ -56,14 +56,14 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
       {/* Desktop sidebar */}
       <aside className="dsk-sidebar">
         {/* Logo */}
-        <div className="p-5 mb-2">
+        <Link href="/feed" className="block p-5 mb-2 cursor-pointer">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-[#4ECDC4]/20 flex items-center justify-center">
               <span className="text-[#4ECDC4] font-bold text-sm">B</span>
             </div>
             <span className="font-bold text-sm">B-Social</span>
           </div>
-        </div>
+        </Link>
 
         {/* Main navigation */}
         <nav className="flex-1 px-3">
@@ -145,7 +145,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
 
       {/* Mobile bottom nav */}
       <div className="dsk-bottom-nav glass-nav">
-        <div className="flex items-center justify-around h-16">
+        <div className="flex items-center justify-around h-20">
           {NAV_MAIN.map((item) => {
             const Icon = item.icon;
             const isActive = item.href === "/feed"
@@ -155,13 +155,13 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center gap-0.5 text-[10px] py-1 px-3 ${
+                className={`flex flex-col items-center justify-center gap-1 text-[10px] py-3 px-4 min-h-[44px] min-w-[44px] ${
                   isActive ? "text-[#4ECDC4]" : "text-white/40"
                 }`}
               >
-                <Icon size={20} />
+                <Icon size={22} />
                 <span>{t(item.key)}</span>
-                {isActive && <div className="w-1 h-1 rounded-full bg-[#4ECDC4] mt-0.5" />}
+                {isActive && <div className="w-1 h-1 rounded-full bg-[#4ECDC4]" />}
               </Link>
             );
           })}
