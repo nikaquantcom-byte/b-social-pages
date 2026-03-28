@@ -108,7 +108,7 @@ function RootRouter() {
   if (isVilkaar) return <Suspense fallback={<PageLoader />}><Vilkaar /></Suspense>;
   if (isFirmaAuth) return <Suspense fallback={<PageLoader />}><FirmaAuth /></Suspense>;
   if (isFirma) return <FirmaRouter />;
-  if (isHenvisning) return <Suspense fallback={<PageLoader />}><Henvisning /></Suspense>;
+  if (isHenvisning) return <DesktopAppLayout><Suspense fallback={<PageLoader />}><Henvisning /></Suspense></DesktopAppLayout>;
   if (isAuth) return <Suspense fallback={<PageLoader />}><Auth /></Suspense>;
   if (isOnboarding) return <Suspense fallback={<PageLoader />}><Onboarding /></Suspense>;
   return <MainRouter />;

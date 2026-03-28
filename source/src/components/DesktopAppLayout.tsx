@@ -18,8 +18,8 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
   const { t } = useTranslation();
   const [location, setLocation] = useHashLocation();
   const { unreadCount } = useNotifications();
-  const { isLoggedIn, profile, signOut } = useAuth();
-  const loggedIn = isLoggedIn();
+  const { isLoggedIn, profile, signOut, loading: authLoading } = useAuth();
+  const loggedIn = !authLoading && isLoggedIn();
 
   const navLink = (href: string, icon: any, label: string, opts?: { badge?: number; mt?: boolean }) => {
     const Icon = icon;
@@ -83,7 +83,15 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
         {/* Bottom section: Auth + Language + Version */}
         <div className="px-3 space-y-2 pb-2">
           {/* Login / Logout button */}
-          {loggedIn ? (
+          {authLoading ? (
+            <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5 animate-pulse">
+              <div className="w-8 h-8 rounded-full bg-white/10" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 bg-white/10 rounded w-20" />
+                <div className="h-2 bg-white/5 rounded w-14" />
+              </div>
+            </div>
+          ) : loggedIn ? (
             <div className="space-y-1">
               {/* User info */}
               <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/5">

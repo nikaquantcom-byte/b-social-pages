@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, User, Bell, Shield, Globe, LogOut, ChevronRight } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/context/AuthContext";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 import { useTranslation } from 'react-i18next';
 
 function SettingsGroup({ title, children }: { title: string; children: React.ReactNode }) {
@@ -118,7 +118,6 @@ export default function Indstillinger() {
           <p className="text-white/15 text-[10px]">{t('settings.made_with_love')}</p>
         </div>
       </div>
-      <CalmBottomNav />
     </div>
   );
 }
