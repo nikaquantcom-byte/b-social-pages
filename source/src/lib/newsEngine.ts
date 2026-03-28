@@ -755,8 +755,17 @@ export async function fetchNews(): Promise<NewsItem[]> {
     if (r.status === "fulfilled") allItems.push(...r.value);
   }
 
-  // Sort by date (newest first)
-  allItems.sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+  // Prioritize Danish sources, then sort by date (newest first)
+  const isDanish = (source: string) =>
+    ['nordjyske', 'dr ', 'jyllands', 'politiken', 'tv2', 'tipsbladet', 'version2', 'soundvenue', 'gaffa', 'altinget', 'børsen', 'finans']
+    .some(dk => source.toLowerCase().includes(dk));
+
+  allItems.sort((a, b) => {
+    const aDK = isDanish(a.source) ? 1 : 0;
+    const bDK = isDanish(b.source) ? 1 : 0;
+    if (aDK !== bDK) return bDK - aDK; // Danish first
+    return b.pubDate.getTime() - a.pubDate.getTime(); // Then newest
+  });
 
   // Only cache non-empty results
   if (allItems.length > 0) setCache(allItems);

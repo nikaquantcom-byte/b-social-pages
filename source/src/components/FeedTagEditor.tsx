@@ -125,6 +125,16 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
     }
   }, [open, contextTags, priceTier]);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [open, onClose]);
+
   // Filter tag tree
   const filteredTree = useMemo(() => {
     if (!tagSearch.trim()) return TAG_TREE;

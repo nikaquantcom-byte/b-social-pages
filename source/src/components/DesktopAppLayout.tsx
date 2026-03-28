@@ -68,15 +68,14 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
         {/* Main navigation */}
         <nav className="flex-1 px-3">
           {NAV_MAIN.map((item) => navLink(item.href, item.icon, t(item.key)))}
+          {/* Invitér — right under Beskeder/Min Side */}
+          {navLink("/inviter", UserPlus, "Invitér")}
 
           {/* Separator */}
           <div className="h-px bg-white/10 my-3 mx-2" />
 
           {/* Notifikationer */}
           {navLink("/notifikationer", Bell, t("nav.notifications") || "Notifikationer", { badge: unreadCount })}
-
-          {/* Invitér venner */}
-          {navLink("/inviter", UserPlus, "Invitér")}
 
           {/* Henvisning (affiliate/earnings) */}
           {navLink("/henvisning", CircleDollarSign, t("nav.henvisning") || "Henvisning")}
@@ -158,9 +157,10 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 text-[10px] py-3 px-4 min-h-[44px] min-w-[44px] ${
+                className={`flex flex-col items-center justify-center gap-1 text-[10px] py-3 px-4 min-h-[44px] min-w-[44px] select-none ${
                   isActive ? "text-[#4ECDC4]" : "text-white/40"
                 }`}
+                style={{ touchAction: "manipulation" }}
               >
                 <Icon size={22} />
                 <span>{t(item.key)}</span>
