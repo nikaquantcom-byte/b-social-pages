@@ -1,0 +1,24 @@
+-- Friends system migration
+-- NOTE: The database already has a 'friendships' table with requester_id, receiver_id, status
+-- and a 'my_friends' view (accepted friendships for current user)
+-- and a 'pending_friend_requests' view
+-- This migration is a NO-OP reference file — the schema already exists.
+--
+-- Original planned schema (now superseded by existing friendships table):
+--
+-- CREATE TABLE IF NOT EXISTS public.friends (
+--   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+--   user_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+--   friend_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+--   status TEXT NOT NULL DEFAULT 'pending', -- pending, accepted, rejected
+--   created_at timestamptz NOT NULL DEFAULT now(),
+--   UNIQUE(user_id, friend_id)
+-- );
+--
+-- Existing schema uses:
+--   friendships (id, requester_id, receiver_id, status, created_at, updated_at)
+--   my_friends view (friend_id, full_name, avatar_url, location, city, status, friends_since)
+--   pending_friend_requests view (friendship_id, requester_id, requester_name, requester_avatar, requester_city, created_at)
+
+-- This migration is intentionally empty — schema already exists in production.
+SELECT 1;

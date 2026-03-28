@@ -1,19 +1,29 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
-import { Settings, Calendar, Heart, MapPin, TrendingUp, Award, Users, Pencil } from "lucide-react";
+import { Settings, Calendar, Heart, MapPin, TrendingUp, Award, Users, Pencil, UserPlus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useTags } from "@/context/TagContext";
 import { FeedTagEditor } from "@/components/FeedTagEditor";
+import { supabase } from "@/lib/supabase";
 
 export default function TestMinSide() {
   const { t } = useTranslation();
   const { profile, user } = useAuth();
   const { selectedTags } = useTags();
   const [tagEditorOpen, setTagEditorOpen] = useState(false);
+  const [friendCount, setFriendCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("my_friends")
+      .select("friend_id", { count: "exact", head: true })
+      .then(({ count }) => setFriendCount(count ?? 0));
+  }, [user]);
 
   const { data: events = [] } = useQuery({
     queryKey: ["/api/events"],
@@ -100,7 +110,7 @@ export default function TestMinSide() {
           </div>
           <div className="glass-card rounded-2xl p-4 text-center">
             <Users size={20} className="mx-auto mb-2 text-[#4ECDC4]" />
-            <p className="text-2xl font-bold">{profile?.connections ?? 0}</p>
+            <p className="text-2xl font-bold">{friendCount !== null ? friendCount : (profile?.connections ?? 0)}</p>
             <p className="text-xs text-white/50">{t('profile.friends_count')}</p>
           </div>
           <div className="glass-card rounded-2xl p-4 text-center">
@@ -160,6 +170,28 @@ export default function TestMinSide() {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* Venner section */}
+        <div className="glass-card rounded-2xl p-4 mb-6">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white/70 flex items-center gap-2">
+              <Users size={16} className="text-[#4ECDC4]" /> Venner
+            </h3>
+            <Link href="/henvisning" className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#4ECDC4]/15 text-[#4ECDC4] text-xs font-medium hover:bg-[#4ECDC4]/25 transition-colors">
+              <UserPlus size={12} />
+              Invitér venner
+            </Link>
+          </div>
+          {friendCount !== null && friendCount > 0 ? (
+            <p className="text-sm text-white/50">
+              Du har <span className="text-white font-semibold">{friendCount}</span> {friendCount === 1 ? "ven" : "venner"} på B-Social.
+            </p>
+          ) : (
+            <p className="text-sm text-white/30">
+              Ingen venner endnu — <Link href="/henvisning" className="text-[#4ECDC4] hover:underline">invitér dine venner</Link> og kom i gang.
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
