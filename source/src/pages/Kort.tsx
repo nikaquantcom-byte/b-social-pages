@@ -11,7 +11,7 @@ delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({ iconUrl: '', iconRetinaUrl: '', shadowUrl: '' });
 
 import { Search, X, Plus, Minus, Navigation, Star, ExternalLink, Users, MapPin as MapPinIcon } from "lucide-react";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 import { OPLEVELSER_NAER_DIG } from "@/data/feedData";
 import { searchTags } from "@/lib/tagTree";
 import { useJoin } from "@/context/JoinContext";
@@ -773,8 +773,6 @@ export default function Kort() {
 
       {/* ── Pin Detail ── */}
       {selectedPin && <PinDetail pin={selectedPin} onClose={() => setSelectedPin(null)} />}
-
-      <CalmBottomNav />
 
       <style>{`
         @keyframes b-event-pulse {

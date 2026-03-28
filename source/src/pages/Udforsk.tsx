@@ -8,7 +8,7 @@ import { getEvents } from "@/lib/data";
 import { fetchPlacesWithLimit, type Place } from "@/lib/supabase";
 import { getCategoryEmoji, getEventImage, formatDanishDate } from "@/lib/eventHelpers";
 import { useTags } from "@/context/TagContext";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 import { searchTags, getParentCategories, TAG_TREE } from "@/lib/tagTree";
 import { OPLEVELSER_NAER_DIG } from "@/data/feedData";
 import type { SocialActivity } from "@/data/feedData";
@@ -563,7 +563,6 @@ export default function Udforsk() {
         </div>
       )}
 
-      <CalmBottomNav />
     </div>
   );
 }

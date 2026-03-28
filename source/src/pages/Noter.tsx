@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, Plus, Search, X } from "lucide-react";
 import { useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 
 interface Note {
   id: string;
@@ -188,7 +188,6 @@ export default function Noter() {
           )}
         </div>
       </div>
-      <CalmBottomNav />
     </div>
   );
 }
