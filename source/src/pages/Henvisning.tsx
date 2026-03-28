@@ -322,7 +322,7 @@ export default function Henvisning() {
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className={`text-sm font-bold ${row.accent}`}>{row.yourCut}</p>
-                  <p className="text-white/30 text-[10px]">din provision</p>
+                  <p className="text-white/30 text-xs">din provision</p>
                 </div>
               </div>
             ))}

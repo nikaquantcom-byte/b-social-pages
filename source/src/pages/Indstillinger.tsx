@@ -369,8 +369,8 @@ export default function Indstillinger() {
 
         {/* App info */}
         <div className="text-center pt-4 pb-8">
-          <p className="text-white/20 text-[10px]">{t('settings.app_version', { version: '1.0' })}</p>
-          <p className="text-white/15 text-[10px]">{t('settings.made_with_love')}</p>
+          <p className="text-white/20 text-xs">{t('settings.app_version', { version: '1.0' })}</p>
+          <p className="text-white/15 text-xs">{t('settings.made_with_love')}</p>
         </div>
       </div>
     </div>

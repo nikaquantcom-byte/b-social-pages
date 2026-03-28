@@ -58,13 +58,13 @@ function PopularCard({ event }: { event: Event }) {
         <div className="relative h-28">
           <img src={getEventImage(event)} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-          <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${isGratis ? "bg-[#4ECDC4]/80 text-white" : "bg-amber-500/80 text-white"}`}>
+          <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded-full text-xs font-semibold ${isGratis ? "bg-[#4ECDC4]/80 text-white" : "bg-amber-500/80 text-white"}`}>
             {isGratis ? t('events.free') : `${event.price} kr`}
           </span>
         </div>
         <div className="p-2.5">
           <h3 className="text-white text-xs font-semibold line-clamp-2 leading-tight">{event.title}</h3>
-          <p className="text-white/40 text-[10px] mt-0.5 flex items-center gap-1">
+          <p className="text-white/40 text-xs mt-0.5 flex items-center gap-1">
             {getCategoryEmoji(event.category || "")} {event.category}
           </p>
         </div>
@@ -85,8 +85,8 @@ function CalendarListCard({ event }: { event: Event }) {
         </div>
         <div className="flex flex-col justify-center py-2 min-w-0 flex-1">
           <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-[10px] text-white/50">{getCategoryEmoji(event.category || "")} {event.category}</span>
-            <span className={`px-1.5 py-0 rounded-full text-[10px] font-semibold ${isGratis ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" : "bg-amber-500/20 text-amber-400"}`}>
+            <span className="text-xs text-white/50">{getCategoryEmoji(event.category || "")} {event.category}</span>
+            <span className={`px-1.5 py-0 rounded-full text-xs font-semibold ${isGratis ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" : "bg-amber-500/20 text-amber-400"}`}>
               {isGratis ? t('events.free') : `${event.price} kr`}
             </span>
           </div>
@@ -117,11 +117,11 @@ function TrendingCard({ activity }: { activity: SocialActivity }) {
         <div className="flex-1 min-w-0">
           <h3 className="text-white text-sm font-semibold">{activity.title}</h3>
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-0.5 text-white/40 text-[10px]"><MapPin size={8} />{activity.location}</span>
-            <span className="flex items-center gap-0.5 text-white/40 text-[10px]"><Users size={8} />{activity.spots.current}/{activity.spots.total}</span>
+            <span className="flex items-center gap-0.5 text-white/40 text-xs"><MapPin size={8} />{activity.location}</span>
+            <span className="flex items-center gap-0.5 text-white/40 text-xs"><Users size={8} />{activity.spots.current}/{activity.spots.total}</span>
           </div>
         </div>
-        <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4] text-[#0a0f1a] text-[9px] font-bold flex-shrink-0">{t('events.free')}</span>
+        <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4] text-[#0a0f1a] text-[11px] font-bold flex-shrink-0">{t('events.free')}</span>
       </div>
     </Link>
   );
@@ -147,7 +147,7 @@ function PlaceCard({ place }: { place: Place }) {
         <div className="relative h-28">
           <img src={catImg} alt={place.name} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-          <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/80 text-white text-[10px] font-semibold">
+          <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/80 text-white text-xs font-semibold">
             {emoji} {place.main_categories?.[0] || "Sted"}
           </span>
         </div>
@@ -156,11 +156,11 @@ function PlaceCard({ place }: { place: Place }) {
           <div className="flex items-center gap-1.5 mt-1">
             <div className="flex items-center gap-0.5">
               <Star size={10} className="text-amber-400 fill-amber-400" />
-              <span className="text-white/60 text-[10px]">{place.rating_avg?.toFixed(1) || "–"}</span>
-              <span className="text-white/30 text-[9px]">({place.rating_count || 0})</span>
+              <span className="text-white/60 text-xs">{place.rating_avg?.toFixed(1) || "–"}</span>
+              <span className="text-white/30 text-[11px]">({place.rating_count || 0})</span>
             </div>
             <span className="text-white/30">·</span>
-            <span className="text-white/40 text-[10px]">{place.city}</span>
+            <span className="text-white/40 text-xs">{place.city}</span>
           </div>
           {place.tags && place.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-1.5">
@@ -231,7 +231,7 @@ function SupabasePlacesSection() {
         <div className="flex items-center gap-2">
           <span className="text-sm">📍</span>
           <h2 className="text-white font-semibold text-sm">{t('udforsk.places_in_area')}</h2>
-          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold">{places.length}</span>
+          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">{places.length}</span>
         </div>
         <Link href="/kort">
           <span className="text-white/30 text-xs flex items-center gap-0.5 hover:text-white/60 transition-colors cursor-pointer">
@@ -272,10 +272,10 @@ function SupabasePlacesSection() {
                 <div className="flex items-center gap-1.5 mt-1">
                   <div className="flex items-center gap-0.5">
                     <Star size={10} className="text-amber-400 fill-amber-400" />
-                    <span className="text-white/60 text-[10px]">{p.rating_avg?.toFixed(1) || "–"}</span>
+                    <span className="text-white/60 text-xs">{p.rating_avg?.toFixed(1) || "–"}</span>
                   </div>
                   <span className="text-white/30">·</span>
-                  <span className="text-white/40 text-[10px] truncate">{p.city}</span>
+                  <span className="text-white/40 text-xs truncate">{p.city}</span>
                 </div>
               </div>
             </Link>
@@ -419,7 +419,7 @@ export default function Udforsk() {
             if (results.length === 0) return null;
             return (
               <div>
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.categories')}</p>
+                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">{t('udforsk.categories')}</p>
                 <div className="flex flex-wrap gap-2">
                   {results.slice(0, 6).map((tr) => {
                     const isParentCat = TAG_TREE.some(p => p.tag === tr.tag);
@@ -441,7 +441,7 @@ export default function Udforsk() {
           {/* Events */}
           {filtered.length > 0 && (
             <div>
-              <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_events')}</p>
+              <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_events')}</p>
               <div className="space-y-2">
                 {filtered.slice(0, 3).map(e => <CalendarListCard key={e.id} event={e} />)}
               </div>
@@ -461,7 +461,7 @@ export default function Udforsk() {
             const catEmoji: Record<string, string> = { sport: "⚽", kultur: "🎭", natur: "🌿", musik: "🎵", mad: "🍽️", spil: "🎲", events: "🎉", mtb: "🚵", vandring: "🥾", loeb: "🏃", hund: "🐕", fiskeri: "🎣", badning: "🏊", shelter: "⛺", dyrespot: "🦌", kreativt: "🖌️", fitness: "💪", outdoor: "🌲", socialt: "❤️", karriere: "💼", tech: "💻", rejser: "🚆", logi: "🏕️", wellness: "🧘", communities: "👥", ture: "🥾", aktiv: "⚽" };
             return (
               <div>
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_places')}</p>
+                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_places')}</p>
                 <div className="space-y-2">
                   {matchedPlaces.map(p => (
                     <Link key={p.id} href="/kort">
@@ -469,7 +469,7 @@ export default function Udforsk() {
                         <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-sm">{catEmoji[p.category] || "📍"}</div>
                         <div>
                           <span className="text-white text-xs font-medium block">{p.name}</span>
-                          <span className="text-white/40 text-[10px]">{p.category}</span>
+                          <span className="text-white/40 text-xs">{p.category}</span>
                         </div>
                         <MapPin size={12} className="ml-auto text-white/30" />
                       </div>
@@ -487,7 +487,7 @@ export default function Udforsk() {
             if (matchedUsers.length === 0) return null;
             return (
               <div>
-                <p className="text-white/40 text-[10px] font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_users')}</p>
+                <p className="text-white/40 text-xs font-semibold uppercase tracking-wider mb-2">{t('udforsk.search_users')}</p>
                 <div className="space-y-2">
                   {matchedUsers.map(b => (
                     <div key={b.name} className="flex items-center gap-3 p-2.5 rounded-xl glass-card hover:bg-white/8 transition-colors cursor-pointer">

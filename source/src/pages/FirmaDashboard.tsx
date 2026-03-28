@@ -179,7 +179,7 @@ function StatusBadge({ status }: { status: string }) {
     afsluttet: "bg-white/5 text-muted-foreground border-white/10",
   };
   return (
-    <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${colors[status] || colors.afsluttet}`}>
+    <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${colors[status] || colors.afsluttet}`}>
       {status}
     </span>
   );
@@ -198,11 +198,11 @@ function WeeklyChart({ data }: { data: { day: string; views: number }[] }) {
               className="w-full rounded-t-lg transition-all relative"
               style={{ height: `${Math.max((d.views / maxViews) * 112, 4)}px`, background: "rgba(78,205,196,0.4)" }}
             >
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1e2535] text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 border border-white/10">
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#1e2535] text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 border border-white/10">
                 {d.views}
               </div>
             </div>
-            <span className="text-[10px] text-white/40">{d.day}</span>
+            <span className="text-xs text-white/40">{d.day}</span>
           </div>
         ))}
       </div>
@@ -229,7 +229,7 @@ function EngagementRing({ eventsCount, signups }: { eventsCount: number; signups
           <span className="text-2xl font-bold text-white">{displayRate}%</span>
         </div>
       </div>
-      <p className="text-[10px] text-white/40">{t('events.signups_per_events', { signups, events: eventsCount })}</p>
+      <p className="text-xs text-white/40">{t('events.signups_per_events', { signups, events: eventsCount })}</p>
     </div>
   );
 }
@@ -357,7 +357,7 @@ export default function FirmaDashboard() {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-3xl font-bold text-white tracking-tight">{company.name}</h1>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#4ECDC4]/15 text-[#4ECDC4] border border-[#4ECDC4]/20">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#4ECDC4]/15 text-[#4ECDC4] border border-[#4ECDC4]/20">
                 {company.plan === "vaekst" ? "Vækst" : company.plan === "partner" ? "Partner" : "Starter"} · {company.plan === "vaekst" ? "5%" : company.plan === "partner" ? "3%" : "0%"} {t('firma.revenue_share')}
               </span>
             </div>
@@ -416,7 +416,7 @@ export default function FirmaDashboard() {
                     <CalendarPlus size={20} />
                   </div>
                   <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.create_event')}</div>
-                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.create_event_desc')}</div>
+                  <div className="text-xs text-white/30">{t('firma.quick_actions.create_event_desc')}</div>
                 </a>
               </Link>
               <Link href="/firma/targeting">
@@ -425,7 +425,7 @@ export default function FirmaDashboard() {
                     <Megaphone size={20} />
                   </div>
                   <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.targeting')}</div>
-                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.targeting_desc')}</div>
+                  <div className="text-xs text-white/30">{t('firma.quick_actions.targeting_desc')}</div>
                 </a>
               </Link>
               <Link href="/firma/analytics">
@@ -434,7 +434,7 @@ export default function FirmaDashboard() {
                     <BarChart3 size={20} />
                   </div>
                   <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.analytics')}</div>
-                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.analytics_desc')}</div>
+                  <div className="text-xs text-white/30">{t('firma.quick_actions.analytics_desc')}</div>
                 </a>
               </Link>
               <Link href="/firma/rekruttering">
@@ -443,7 +443,7 @@ export default function FirmaDashboard() {
                     <UserPlus size={20} />
                   </div>
                   <div className="text-xs font-bold text-white mb-1">{t('firma.quick_actions.recruitment')}</div>
-                  <div className="text-[10px] text-white/30">{t('firma.quick_actions.recruitment_desc')}</div>
+                  <div className="text-xs text-white/30">{t('firma.quick_actions.recruitment_desc')}</div>
                 </a>
               </Link>
             </div>
@@ -453,7 +453,7 @@ export default function FirmaDashboard() {
               <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
                 <h3 className="font-bold text-white">{t('events.upcoming_events')}</h3>
                 <Link href="/firma/events">
-                  <a className="text-[10px] font-bold text-[#4ECDC4] uppercase tracking-wider">{t('events.see_all')}</a>
+                  <a className="text-xs font-bold text-[#4ECDC4] uppercase tracking-wider">{t('events.see_all')}</a>
                 </Link>
               </div>
               <div className="divide-y divide-white/5">
@@ -461,11 +461,11 @@ export default function FirmaDashboard() {
                   <div key={event.id} className="px-6 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
                     <div>
                       <div className="text-sm font-bold text-white mb-1">{event.title}</div>
-                      <div className="text-[10px] text-white/40 flex items-center gap-2">
+                      <div className="text-xs text-white/40 flex items-center gap-2">
                         <Clock size={12} /> {new Date(event.date).toLocaleDateString("da-DK")}
                       </div>
                     </div>
-                    <div className="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-bold text-white/60 uppercase tracking-tighter">
+                    <div className="px-3 py-1 rounded-lg bg-white/5 text-xs font-bold text-white/60 uppercase tracking-tighter">
                       om {event.daysUntil} dag{event.daysUntil !== 1 ? "e" : ""}
                     </div>
                   </div>
@@ -494,7 +494,7 @@ export default function FirmaDashboard() {
                       <div key={tag.tag} className="space-y-2">
                         <div className="flex justify-between text-xs font-medium">
                           <span className="text-white/80 capitalize">{tag.tag}</span>
-                          <span className="text-white/40 text-[10px] tracking-widest">{tag.count}</span>
+                          <span className="text-white/40 text-xs tracking-widest">{tag.count}</span>
                         </div>
                         <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                           <div
@@ -539,7 +539,7 @@ export default function FirmaDashboard() {
                       rel="noopener noreferrer"
                       className="block p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.08] transition-all group"
                     >
-                      <div className="flex items-center gap-2 text-[9px] text-white/30 font-bold uppercase tracking-widest mb-2">
+                      <div className="flex items-center gap-2 text-[11px] text-white/30 font-bold uppercase tracking-widest mb-2">
                         <span>{news.sourceEmoji} {news.source}</span>
                         <span>•</span>
                         <span>{formatNewsTime(news.pubDate)}</span>
@@ -552,7 +552,7 @@ export default function FirmaDashboard() {
                 </div>
               ) : (
                 <div className="py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
-                  <p className="text-white/30 text-[10px]">{t('firma.no_news')}</p>
+                  <p className="text-white/30 text-xs">{t('firma.no_news')}</p>
                 </div>
               )}
             </div>
@@ -566,7 +566,7 @@ export default function FirmaDashboard() {
                     <div className="w-1.5 h-1.5 rounded-full bg-[#4ECDC4] mt-1 flex-shrink-0" />
                     <div>
                       <div className="text-xs text-white/80 leading-relaxed mb-1">{item.text}</div>
-                      <div className="text-[10px] text-white/30 font-medium">{item.time}</div>
+                      <div className="text-xs text-white/30 font-medium">{item.time}</div>
                     </div>
                   </div>
                 ))}

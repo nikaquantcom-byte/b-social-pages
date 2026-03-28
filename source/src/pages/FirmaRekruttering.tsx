@@ -458,7 +458,7 @@ export default function FirmaRekruttering() {
                                         {sharedTags.slice(0, 3).map((item) => {
                                           const node = getTagNode(item);
                                           return (
-                                            <span key={item} className="px-1.5 py-0.5 rounded text-[10px] bg-primary/15 text-primary">
+                                            <span key={item} className="px-1.5 py-0.5 rounded text-xs bg-primary/15 text-primary">
                                               {node?.emoji} {node?.label || item}
                                             </span>
                                           );
@@ -580,7 +580,7 @@ export default function FirmaRekruttering() {
                                 {sharedTags.slice(0, 4).map((item) => {
                                   const node = getTagNode(item);
                                   return (
-                                    <span key={item} className="px-1.5 py-0.5 rounded text-[10px] bg-primary/15 text-primary font-medium">
+                                    <span key={item} className="px-1.5 py-0.5 rounded text-xs bg-primary/15 text-primary font-medium">
                                       {node?.emoji} {node?.label || item}
                                     </span>
                                   );
@@ -588,7 +588,7 @@ export default function FirmaRekruttering() {
                                 {relatedMatches.slice(0, 2).map((item) => {
                                   const node = getTagNode(item);
                                   return (
-                                    <span key={item} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">
+                                    <span key={item} className="px-1.5 py-0.5 rounded text-xs bg-white/5 text-muted-foreground">
                                       {node?.emoji} {node?.label || item}
                                     </span>
                                   );

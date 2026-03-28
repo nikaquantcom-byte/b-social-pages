@@ -83,7 +83,7 @@ function NotificationRow({ n, onClick }: { n: Notification; onClick: () => void 
           )}
         </div>
         <p className="text-xs text-white/40 truncate mt-0.5">{n.body}</p>
-        <p className="text-[10px] text-white/25 mt-1">{timeAgo(n.created_at, t)}</p>
+        <p className="text-xs text-white/25 mt-1">{timeAgo(n.created_at, t)}</p>
       </div>
       <ChevronRight size={14} className="text-white/20 flex-shrink-0 mt-3" />
     </button>

@@ -515,7 +515,7 @@ export default function Beskeder() {
                     <span className="font-bold text-sm truncate text-white/70">
                       {convo.otherUser.name ?? t('beskeder.unknown_user')}
                     </span>
-                    <span className="text-[10px] text-white/30 ml-2">
+                    <span className="text-xs text-white/30 ml-2">
                       {formatTime(convo.lastMessageTime)}
                     </span>
                   </div>
@@ -545,7 +545,7 @@ export default function Beskeder() {
                   </h3>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 bg-[#4ECDC4] rounded-full" />
-                    <span className="text-[10px] text-white/40">{t('beskeder.online')}</span>
+                    <span className="text-xs text-white/40">{t('beskeder.online')}</span>
                   </div>
                 </div>
               </div>
@@ -575,7 +575,7 @@ export default function Beskeder() {
                         isMe ? "bg-[#4ECDC4] text-[#0a0f1a]" : "bg-white/8 text-white/90"
                       }`}>
                         <p className="mb-1">{msg.content}</p>
-                        <div className={`flex items-center justify-end gap-1 text-[9px] ${
+                        <div className={`flex items-center justify-end gap-1 text-[11px] ${
                           isMe ? "text-[#0a0f1a]/50" : "text-white/30"
                         }`}>
                           {formatMessageTime(msg.created_at)}
@@ -643,7 +643,7 @@ export default function Beskeder() {
               <Newspaper size={16} className="text-[#4ECDC4]" />
               <h3 className="text-sm font-bold">{t('beskeder.latest_news')}</h3>
             </div>
-            <span className="text-[9px] font-bold text-[#4ECDC4] bg-[#4ECDC4]/10 px-2 py-0.5 rounded-full">LIVE</span>
+            <span className="text-[11px] font-bold text-[#4ECDC4] bg-[#4ECDC4]/10 px-2 py-0.5 rounded-full">LIVE</span>
           </div>
           {newsLoading ? (
             <div className="space-y-3">
@@ -671,7 +671,7 @@ export default function Beskeder() {
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-white/80 group-hover:text-[#4ECDC4] transition-colors line-clamp-2 mb-1">{news.title}</p>
-                    <div className="flex items-center gap-1 text-[9px] text-white/30">
+                    <div className="flex items-center gap-1 text-[11px] text-white/30">
                       <span>{news.sourceEmoji} {news.source}</span>
                       <span>•</span>
                       <span>{formatNewsTime(news.pubDate)}</span>

@@ -109,7 +109,7 @@ export default function Kalender() {
 
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {DAY_KEYS.map(dk => <div key={dk} className="text-center text-white/40 text-[10px] font-medium">{t(dk)}</div>)}
+            {DAY_KEYS.map(dk => <div key={dk} className="text-center text-white/40 text-xs font-medium">{t(dk)}</div>)}
           </div>
 
           {/* Calendar grid */}
@@ -162,7 +162,7 @@ export default function Kalender() {
               <h3 className="text-white text-sm font-semibold">{event.title}</h3>
               <p className="text-white/40 text-xs">{event.date.split("-").reverse().join("/")}</p>
             </div>
-            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+            <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
               (event as any).fromDB ? "bg-purple-500/20 text-purple-400" :
               event.type === "tilmeldt" ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" :
               "bg-amber-500/20 text-amber-400"

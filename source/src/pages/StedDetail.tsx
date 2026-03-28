@@ -234,14 +234,14 @@ export default function StedDetail() {
         {/* Organization info */}
         {meta.organization && meta.organization.trim() && (
           <div className="glass-card rounded-xl p-4 mb-6">
-            <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">{t('place.responsible')}</p>
+            <p className="text-white/30 text-xs uppercase tracking-wider mb-1">{t('place.responsible')}</p>
             <p className="text-white/70 text-sm">{meta.organization}</p>
           </div>
         )}
 
         {/* Attribution */}
         {meta.attribution && (
-          <p className="text-white/20 text-[10px] text-center mb-4">{meta.attribution}</p>
+          <p className="text-white/20 text-xs text-center mb-4">{meta.attribution}</p>
         )}
       </div>
 

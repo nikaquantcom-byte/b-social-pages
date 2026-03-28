@@ -284,7 +284,7 @@ export default function FirmaAnalytics() {
               <div key={stat.label} className="glass-card rounded-xl p-4">
                 <div className="flex items-center justify-between mb-2">
                   <Icon size={18} className="text-primary" />
-                  {stat.note && <span className="text-[9px] text-white/30 font-medium">{stat.note}</span>}
+                  {stat.note && <span className="text-[11px] text-white/30 font-medium">{stat.note}</span>}
                 </div>
                 <p className="text-2xl font-bold">{stat.value}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">{stat.label}</p>

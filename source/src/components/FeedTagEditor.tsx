@@ -60,7 +60,7 @@ function TagTreeRow({ parent, selectedTags, onToggle, forceExpand }: {
           {parent.label}
         </span>
         {childCount > 0 && (
-          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[8px] font-bold">
+          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">
             {childCount}
           </span>
         )}
@@ -87,14 +87,14 @@ function TagTreeRow({ parent, selectedTags, onToggle, forceExpand }: {
                 <button
                   key={child.tag}
                   onClick={() => onToggle(child.tag)}
-                  className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all ${
+                  className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all min-h-[36px] ${
                     active
                       ? "bg-[#4ECDC4]/20 text-[#4ECDC4] ring-1 ring-[#4ECDC4]/40"
                       : "bg-white/5 text-white/40 hover:bg-white/8 hover:text-white/60"
                   }`}
                   data-testid={`feed-tag-child-${child.tag}`}
                 >
-                  <span className="text-[10px]">{child.emoji}</span>
+                  <span className="text-xs">{child.emoji}</span>
                   <span>{child.label}</span>
                   {active && <Check size={8} className="ml-0.5" />}
                 </button>
@@ -201,7 +201,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
 
         {/* Price filter */}
         <div className="mb-3">
-          <p className="text-white/40 text-[10px] font-medium mb-1.5">{t('tags.show_experiences')}</p>
+          <p className="text-white/40 text-xs font-medium mb-1.5">{t('tags.show_experiences')}</p>
           <div className="flex gap-2">
             {PRICE_OPTIONS.map(p => {
               const active = localPrice === p.value;
@@ -246,15 +246,15 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <Sparkles size={12} className="text-[#4ECDC4]" />
-            <p className="text-white/40 text-[10px] font-medium">{t('tags.your_tags')}</p>
+            <p className="text-white/40 text-xs font-medium">{t('tags.your_tags')}</p>
             {tagCount > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4]/15 text-[#4ECDC4] text-[9px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4]/15 text-[#4ECDC4] text-[11px] font-bold">
                 {tagCount}
               </span>
             )}
           </div>
           {tagCount > 0 && (
-            <button onClick={() => setLocalTags(new Set())} className="text-[#4ECDC4] text-[10px] font-medium">
+            <button onClick={() => setLocalTags(new Set())} className="text-[#4ECDC4] text-xs font-medium">
               {t('tags.reset')}
             </button>
           )}
@@ -282,7 +282,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
           )}
 
           {tagCount === 0 && !tagSearch && (
-            <p className="text-white/20 text-[10px] mt-1 px-1">{t('tags.none_selected_shows_all')}</p>
+            <p className="text-white/20 text-xs mt-1 px-1">{t('tags.none_selected_shows_all')}</p>
           )}
         </div>
 

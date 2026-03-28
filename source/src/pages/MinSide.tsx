@@ -127,7 +127,7 @@ export default function TestMinSide() {
             </h3>
             <button
               onClick={() => setTagEditorOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#4ECDC4]/15 text-[#4ECDC4] text-xs font-medium hover:bg-[#4ECDC4]/25 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#4ECDC4]/15 text-[#4ECDC4] text-xs font-medium hover:bg-[#4ECDC4]/25 transition-colors min-h-[44px]"
             >
               <Pencil size={12} />
               Rediger interesser

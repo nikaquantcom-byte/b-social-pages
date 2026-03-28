@@ -456,11 +456,11 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
           <img src={headerImg} alt={pin.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0f142d] via-[#0f142d]/40 to-transparent" />
           {/* Category badge */}
-          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: pin.isSupabaseEvent ? "#f97316" : meta.hex }}>
-            {pin.isSupabaseEvent ? `🎉 ${t('map.event_label')}` : `${meta.emoji} ${t(meta.labelKey)}`}
+          <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-xs font-bold text-white" style={{ background: pin.isSupabaseEvent ? "#f97316" : meta.hex }}>
+            {pin.isSupabaseEvent ? `🎉 ${typeof t('map.event_label') === 'string' ? t('map.event_label') : 'Event'}` : `${meta.emoji} ${typeof t(meta.labelKey) === 'string' ? t(meta.labelKey) : meta.labelKey.split('.').pop() || ''}`}
           </span>
           {pin.fromSupabase && (
-            <span className="absolute top-2.5 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/90 text-white text-[9px] font-bold">DB</span>
+            <span className="absolute top-2.5 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/90 text-white text-[11px] font-bold">DB</span>
           )}
           <button onClick={onClose} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white/80 hover:bg-black/60" data-testid="button-close-detail">
             <X size={14} />
@@ -483,11 +483,11 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
             {pin.difficultyKey && (
               <>
                 <span className="text-white/20">·</span>
-                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                <span className={`px-1.5 py-0.5 rounded text-[11px] font-bold ${
                   pin.difficultyKey === "map.difficulty.easy" ? "bg-green-500/20 text-green-400" :
                   pin.difficultyKey === "map.difficulty.medium" ? "bg-amber-500/20 text-amber-400" :
                   "bg-red-500/20 text-red-400"
-                }`}>{t(pin.difficultyKey)}</span>
+                }`}>{typeof pin.difficultyKey === 'string' && typeof t(pin.difficultyKey) === 'string' ? t(pin.difficultyKey) : pin.difficultyKey?.split('.').pop() || ''}</span>
               </>
             )}
           </div>
@@ -496,7 +496,7 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
           {pin.tags && pin.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-2">
               {pin.tags.slice(0, 5).map(tag => (
-                <span key={tag} className="px-1.5 py-0.5 rounded-full bg-white/8 text-white/40 text-[9px]">{tag}</span>
+                <span key={tag} className="px-1.5 py-0.5 rounded-full bg-white/8 text-white/40 text-[11px]">{tag}</span>
               ))}
             </div>
           )}
@@ -516,14 +516,14 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
             </div>
           )}
 
-          <p className="text-white/55 text-xs leading-relaxed mb-3">{pin.descriptionKey ? (typeof t(pin.descriptionKey) === 'string' ? t(pin.descriptionKey) : (pin.description || '')) : pin.description}</p>
+          <p className="text-white/55 text-xs leading-relaxed mb-3">{pin.descriptionKey ? (typeof pin.descriptionKey === 'string' && typeof t(pin.descriptionKey) === 'string' ? t(pin.descriptionKey) : (pin.description || '')) : (pin.description || '')}</p>
 
           {/* Event spots */}
           {pin.isEvent && pin.spots && (
             <div className="mb-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-white/40 text-[10px] flex items-center gap-1"><Users size={10} />{pin.spots.current}/{pin.spots.total} {t('map.signed_up')}</span>
-                <span className={`text-[10px] font-semibold ${(pin.spots.total - pin.spots.current) <= 1 ? "text-orange-400" : "text-[#4ECDC4]"}`}>
+                <span className="text-white/40 text-xs flex items-center gap-1"><Users size={10} />{pin.spots.current}/{pin.spots.total} {t('map.signed_up')}</span>
+                <span className={`text-xs font-semibold ${(pin.spots.total - pin.spots.current) <= 1 ? "text-orange-400" : "text-[#4ECDC4]"}`}>
                   {pin.spots.total - pin.spots.current} {t('map.spots')}
                 </span>
               </div>
@@ -641,7 +641,7 @@ export default function Kort() {
       // Tag-tree-aware search
       const tagResults = searchTags(q);
       const expandedTerms = [q, ...tagResults.map(item => item.tag.toLowerCase()), ...tagResults.map(item => item.label.toLowerCase())];
-      const desc = p.descriptionKey ? t(p.descriptionKey) : (p.description || "");
+      const desc = p.descriptionKey && typeof p.descriptionKey === 'string' ? (typeof t(p.descriptionKey) === 'string' ? t(p.descriptionKey) as string : (p.description || '')) : (p.description || "");
       return expandedTerms.some(term =>
         p.name.toLowerCase().includes(term) ||
         desc.toLowerCase().includes(term) ||
@@ -743,7 +743,7 @@ export default function Kort() {
               <button
                 key={layer}
                 onClick={() => { setShowLayer(layer); setSelectedPin(null); }}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all ${
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
                   showLayer === layer
                     ? layer === "events"
                       ? "bg-[#f97316] text-white"
@@ -752,18 +752,18 @@ export default function Kort() {
                 }`}
                 data-testid={`filter-layer-${layer}`}
               >
-                {layer === "alle" ? `📍 ${t('map.all')}` : layer === "steder" ? `🏛️ ${t('map.places')}` : `🎉 ${t('map.events')}`}
+                {layer === "alle" ? `📍 ${typeof t('map.all') === 'string' ? t('map.all') : 'Alle'}` : layer === "steder" ? `🏛️ ${typeof t('map.places') === 'string' ? t('map.places') : 'Steder'}` : `🎉 ${typeof t('map.events') === 'string' ? t('map.events') : 'Events'}`}
               </button>
             ))}
           </div>
-          <span className="text-white/30 text-[10px]">
-            {filteredPins.length} {showLayer === "events" ? t('map.events') : showLayer === "steder" ? t('map.places') : t('map.pins')}
+          <span className="text-white/30 text-xs">
+            {filteredPins.length} {showLayer === "events" ? t('map.events') : showLayer === "steder" ? t('map.places') : t('map.places')}
             {showLayer === "alle" && eventPins.length > 0 && ` (${eventPins.length} ${t('map.events')})`}
           </span>
         </div>
 
         {/* Country / Region chip bar */}
-        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
           {MAP_COUNTRY_CHIPS.map((code) => {
             const region = MAP_REGIONS[code];
             if (!region) return null;
@@ -772,7 +772,7 @@ export default function Kort() {
               <button
                 key={code}
                 onClick={() => handleCountrySelect(code)}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all whitespace-nowrap flex-shrink-0 ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap flex-shrink-0 ${
                   isActive
                     ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
                     : "text-white/60 hover:text-white/80"

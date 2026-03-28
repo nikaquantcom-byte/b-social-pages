@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Safe area for iPhone notch and home indicator */
+:root {
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sat: env(safe-area-inset-top, 0px);
+}
+
+/* Apply safe area to bottom nav and main content */
+@media (max-width: 768px), (max-width: 932px) and (max-height: 500px) {
+  .dsk-bottom-nav {
+    padding-bottom: calc(var(--sab) + 8px) !important;
+  }
+
+  .dsk-main {
+    padding-bottom: calc(96px + var(--sab)) !important;
+  }
+}
+
+/* Apply safe area to cookie banner */
+#cookie-banner {
+  padding-bottom: calc(var(--sab) + 12px);
+}
+
 /* B-Social Dark Nature Theme */
 :root {
   --button-outline: rgba(255,255,255, .12);
@@ -538,7 +560,8 @@
 }
 
 /* Mobile: hide sidebar, show bottom nav */
-@media (max-width: 768px) {
+/* Covers: all phones portrait (≤768px) AND phones in landscape (≤932px wide + ≤500px tall) */
+@media (max-width: 768px), (max-width: 932px) and (max-height: 500px) {
   .dsk-sidebar {
     display: none;
   }

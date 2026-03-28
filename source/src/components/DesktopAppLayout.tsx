@@ -41,7 +41,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
         }`} style={isActive ? { boxShadow: "0 0 12px rgba(78,205,196,0.3)" } : undefined}>
           <Icon size={18} />
           {opts?.badge && opts.badge > 0 ? (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[11px] font-bold flex items-center justify-center">
               {opts.badge > 99 ? "99+" : opts.badge}
             </span>
           ) : null}
@@ -104,7 +104,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-white/80 font-medium truncate">{profile?.name || "Bruger"}</p>
-                  <p className="text-[10px] text-white/40 truncate">{profile?.city || ""}</p>
+                  <p className="text-xs text-white/40 truncate">{profile?.city || ""}</p>
                 </div>
               </div>
               {/* Settings + Logout */}
@@ -135,7 +135,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
           {/* Language switcher */}
           <LanguageSwitcher variant="toggle" />
         </div>
-        <div className="px-4 pb-3 text-white/15 text-[10px]">
+        <div className="px-4 pb-3 text-white/15 text-xs">
           v1.0 beta
         </div>
       </aside>
@@ -157,7 +157,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 text-[10px] py-3 px-4 min-h-[44px] min-w-[44px] select-none ${
+                className={`flex flex-col items-center justify-center gap-1 text-xs py-3 px-4 min-h-[44px] min-w-[44px] select-none ${
                   isActive ? "text-[#4ECDC4]" : "text-white/40"
                 }`}
                 style={{ touchAction: "manipulation" }}

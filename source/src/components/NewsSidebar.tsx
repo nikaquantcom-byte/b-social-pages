@@ -35,7 +35,7 @@ export default function NewsSidebar() {
           <h2 className="font-bold text-gray-900">{t('news.latest_news')}</h2>
         </div>
         {selectedTags.length > 0 && (
-          <span className="text-[9px] font-medium text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded-full">
+          <span className="text-[11px] font-medium text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded-full">
             {t('news.personalized')}
           </span>
         )}
@@ -91,7 +91,7 @@ export default function NewsSidebar() {
                     .map((tag) => {
                       const node = getTagNode(tag);
                       return (
-                        <span key={tag} className="inline-flex items-center gap-0.5 text-[9px] font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full">
+                        <span key={tag} className="inline-flex items-center gap-0.5 text-[11px] font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-full">
                           {node?.emoji && <span>{node.emoji}</span>}
                           {node?.label || tag}
                         </span>
@@ -99,7 +99,7 @@ export default function NewsSidebar() {
                     })}
                 </div>
               )}
-              <p className="text-[10px] text-gray-400 font-medium">{formatNewsTime(item.pubDate)}</p>
+              <p className="text-xs text-gray-400 font-medium">{formatNewsTime(item.pubDate)}</p>
             </div>
           </a>
         ))}
@@ -107,9 +107,9 @@ export default function NewsSidebar() {
         {/* Pro/Sponsored Slot */}
         <div className="mt-2 p-3 bg-blue-50 rounded-xl border border-blue-100 relative overflow-hidden group">
           <div className="relative z-10">
-            <span className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">{t('news.ad_label')}</span>
+            <span className="text-[11px] font-bold text-blue-600 uppercase tracking-widest">{t('news.ad_label')}</span>
             <h4 className="text-xs font-bold text-gray-900 mt-1 mb-2">{t('news.upgrade_to_pro')}</h4>
-            <button className="w-full bg-blue-600 text-white text-[10px] font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+            <button className="w-full bg-blue-600 text-white text-xs font-bold py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
               {t('news.read_more')}
             </button>
           </div>

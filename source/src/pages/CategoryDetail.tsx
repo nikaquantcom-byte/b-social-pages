@@ -121,8 +121,8 @@ function SpotsBar({ current, total }: { current: number; total: number }) {
   return (
     <div className="mt-1.5">
       <div className="flex items-center justify-between mb-0.5">
-        <span className="text-[10px] text-white/50 flex items-center gap-1"><Users size={9} />{current}/{total}</span>
-        <span className={`text-[10px] font-semibold ${almostFull ? "text-orange-400" : "text-[#4ECDC4]"}`}>
+        <span className="text-xs text-white/50 flex items-center gap-1"><Users size={9} />{current}/{total}</span>
+        <span className={`text-xs font-semibold ${almostFull ? "text-orange-400" : "text-[#4ECDC4]"}`}>
           {t('category.spots_remaining', { count: remaining })}
         </span>
       </div>
@@ -148,7 +148,7 @@ function CompactCard({
         <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         {badge && (
-          <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded-full text-white text-[9px] font-bold ${badge.color}`}>
+          <span className={`absolute top-2 right-2 px-1.5 py-0.5 rounded-full text-white text-[11px] font-bold ${badge.color}`}>
             {badge.text}
           </span>
         )}
@@ -160,7 +160,7 @@ function CompactCard({
       </div>
       <div className="p-2.5 pt-2">
         <p className="text-white/45 text-[11px] line-clamp-1 mb-1">{subtitle}</p>
-        <div className="flex items-center gap-2 text-[10px]">
+        <div className="flex items-center gap-2 text-xs">
           {rating && (
             <span className="flex items-center gap-0.5 text-white/50">
               <Star size={9} className="text-amber-400 fill-amber-400" /> {rating}
@@ -175,7 +175,7 @@ function CompactCard({
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
             {tags.slice(0, 2).map(tag => (
-              <span key={tag} className="px-1.5 py-0.5 rounded-full bg-white/6 text-white/35 text-[9px]">{tag}</span>
+              <span key={tag} className="px-1.5 py-0.5 rounded-full bg-white/6 text-white/35 text-[11px]">{tag}</span>
             ))}
           </div>
         )}
@@ -212,8 +212,8 @@ function EventMiniCard({ event }: { event: Event }) {
         <div className="flex flex-col justify-center py-1.5 min-w-0 flex-1">
           <h3 className="text-white text-[12px] font-semibold line-clamp-1">{event.title}</h3>
           <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-white/40 text-[10px]">{formatDanishDate(event.date)}</span>
-            <span className={`px-1 py-0 rounded text-[9px] font-semibold ${isGratis ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" : "bg-amber-500/20 text-amber-400"}`}>
+            <span className="text-white/40 text-xs">{formatDanishDate(event.date)}</span>
+            <span className={`px-1 py-0 rounded text-[11px] font-semibold ${isGratis ? "bg-[#4ECDC4]/20 text-[#4ECDC4]" : "bg-amber-500/20 text-amber-400"}`}>
               {isGratis ? t('events.free') : `${event.price} ${t('events.currency')}`}
             </span>
           </div>
@@ -233,24 +233,24 @@ function SupabasePlaceCard({ place }: { place: Place }) {
         <div className="flex items-start justify-between mb-1">
           <h3 className="text-white text-[13px] font-semibold line-clamp-2 flex-1 pr-2">{place.name}</h3>
           {isFree && (
-            <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold whitespace-nowrap">{t('events.free')}</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold whitespace-nowrap">{t('events.free')}</span>
           )}
         </div>
         <div className="flex items-center gap-1.5 mb-1.5">
           <Star size={9} className="text-amber-400 fill-amber-400" />
-          <span className="text-white/50 text-[10px]">{place.rating_avg?.toFixed(1)}</span>
+          <span className="text-white/50 text-xs">{place.rating_avg?.toFixed(1)}</span>
           <span className="text-white/25">·</span>
-          <span className="text-white/35 text-[10px] flex items-center gap-0.5">
+          <span className="text-white/35 text-xs flex items-center gap-0.5">
             <MapPin size={8} />{place.city}
           </span>
           {place.region && place.region !== "Nordjylland" && (
             <>
               <span className="text-white/25">·</span>
-              <span className="text-white/30 text-[9px]">{place.region}</span>
+              <span className="text-white/30 text-[11px]">{place.region}</span>
             </>
           )}
         </div>
-        <p className="text-white/30 text-[10px] line-clamp-2 mb-1.5">{place.description}</p>
+        <p className="text-white/30 text-xs line-clamp-2 mb-1.5">{place.description}</p>
         {place.tags && place.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {place.tags.slice(0, 3).map(tag => (
@@ -278,7 +278,7 @@ function Section({ title, icon, count, badge, children, defaultOpen = true }: {
         <span className="text-sm">{icon}</span>
         <h2 className="text-white font-semibold text-sm">{title}</h2>
         {count !== undefined && (
-          <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${badge ? badge.color : "bg-white/10 text-white/40"}`}>
+          <span className={`px-1.5 py-0.5 rounded-full text-[11px] font-bold ${badge ? badge.color : "bg-white/10 text-white/40"}`}>
             {badge ? badge.text : count}
           </span>
         )}
@@ -302,7 +302,7 @@ function SubChip({ label, emoji, active, count, onClick }: { label: string; emoj
     >
       <span>{emoji}</span>
       <span>{label}</span>
-      {count > 0 && <span className={`text-[9px] ml-0.5 ${active ? "text-white/70" : "text-white/30"}`}>{count}</span>}
+      {count > 0 && <span className={`text-[11px] ml-0.5 ${active ? "text-white/70" : "text-white/30"}`}>{count}</span>}
     </button>
   );
 }
@@ -323,7 +323,7 @@ function ActiveUsers({ count }: { count: number }) {
           <img key={i} src={a} alt="" className="w-5 h-5 rounded-full border-2 border-[#0d1117] object-cover" />
         ))}
       </div>
-      <span className="text-white/40 text-[10px]">+{count} {t('category.active_users')}</span>
+      <span className="text-white/40 text-xs">+{count} {t('category.active_users')}</span>
     </div>
   );
 }
@@ -676,7 +676,7 @@ export default function CategoryDetail() {
           <div className="absolute left-5 right-5 mt-1.5 z-20 glass-card rounded-xl border border-white/10 p-2.5 shadow-xl shadow-black/40">
             <div className="flex items-center gap-1.5 mb-2">
               <Sparkles size={12} className="text-[#4ECDC4]" />
-              <span className="text-white/40 text-[10px] font-medium">{t('category.suggestions_in', { label })}</span>
+              <span className="text-white/40 text-xs font-medium">{t('category.suggestions_in', { label })}</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {suggestions.map(s => (

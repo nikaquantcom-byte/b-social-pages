@@ -179,7 +179,7 @@ export default function Auth() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 data-testid="button-toggle-password"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -209,7 +209,7 @@ export default function Auth() {
                     setSuccessMsg(t('auth.reset_email_sent'));
                   }
                 }}
-                className="text-[#4ECDC4] text-xs font-medium pl-1 hover:underline mt-1"
+                className="text-[#4ECDC4] text-xs font-medium pl-1 hover:underline mt-1 py-2 inline-block"
               >
                 {resetLoading ? t('auth.sending_reset') : t('auth.forgot')}
               </button>

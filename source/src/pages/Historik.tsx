@@ -76,17 +76,17 @@ export default function Historik() {
         <div className="glass-card-strong rounded-2xl p-4 flex gap-4">
           <div className="flex-1 text-center">
             <p className="text-white text-xl font-bold">{totalEvents}</p>
-            <p className="text-white/40 text-[10px]">{t('history.experiences')}</p>
+            <p className="text-white/40 text-xs">{t('history.experiences')}</p>
           </div>
           <div className="w-px bg-white/10" />
           <div className="flex-1 text-center">
             <p className="text-white text-xl font-bold">{totalPeople}</p>
-            <p className="text-white/40 text-[10px]">{t('history.people_met')}</p>
+            <p className="text-white/40 text-xs">{t('history.people_met')}</p>
           </div>
           <div className="w-px bg-white/10" />
           <div className="flex-1 text-center">
             <p className="text-white text-xl font-bold">{HISTORY.length}</p>
-            <p className="text-white/40 text-[10px]">{t('history.active_months')}</p>
+            <p className="text-white/40 text-xs">{t('history.active_months')}</p>
           </div>
         </div>
 
@@ -96,7 +96,7 @@ export default function Historik() {
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-[#4ECDC4]" />
               <h2 className="text-white font-semibold text-sm">{group.period}</h2>
-              <span className="text-white/30 text-[10px]">{group.events.length} {t('history.experiences_count')}</span>
+              <span className="text-white/30 text-xs">{group.events.length} {t('history.experiences_count')}</span>
             </div>
 
             <div className="ml-3 border-l border-white/10 pl-4 space-y-2">
@@ -110,15 +110,15 @@ export default function Historik() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <h3 className="text-white text-sm font-semibold">{event.title}</h3>
-                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${badge.bg} ${badge.text}`}>
+                        <span className={`px-1.5 py-0.5 rounded-full text-[11px] font-bold ${badge.bg} ${badge.text}`}>
                           {t(badge.labelKey)}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-0.5 text-white/40 text-[10px]">
+                        <span className="flex items-center gap-0.5 text-white/40 text-xs">
                           <MapPin size={8} />{event.location}
                         </span>
-                        <span className="text-white/30 text-[10px]">· {event.people} {t('history.persons')}</span>
+                        <span className="text-white/30 text-xs">· {event.people} {t('history.persons')}</span>
                       </div>
                     </div>
                   </div>
