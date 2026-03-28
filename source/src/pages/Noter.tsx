@@ -168,12 +168,12 @@ export default function Noter() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-white text-sm font-semibold">{note.title}</h3>
-                      <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${colors.bg} ${colors.text}`}>
+                      <span className={`px-1.5 py-0.5 rounded-full text-[11px] font-bold ${colors.bg} ${colors.text}`}>
                         {t(colors.labelKey)}
                       </span>
                     </div>
                     <p className="text-white/50 text-xs leading-relaxed">{note.content}</p>
-                    <span className="text-white/25 text-[10px] mt-1.5 block">{note.tag}</span>
+                    <span className="text-white/25 text-xs mt-1.5 block">{note.tag}</span>
                   </div>
                 </div>
               </div>

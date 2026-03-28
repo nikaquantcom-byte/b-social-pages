@@ -32,7 +32,7 @@ function SettingsRow({ icon: Icon, label, value, onClick, badge }: {
       </div>
       <span className="flex-1 text-left text-sm font-medium text-white/80">{label}</span>
       {badge && (
-        <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${badge.color}`}>
+        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.color}`}>
           {badge.text}
         </span>
       )}
@@ -105,10 +105,10 @@ export default function FirmaIndstillinger() {
               </div>
               <p className="text-white/40 text-xs mt-0.5">{t('firma.settings_cvr_info')}</p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#4ECDC4]/15 text-[#4ECDC4]">
+                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#4ECDC4]/15 text-[#4ECDC4]">
                   {subscription}
                 </span>
-                <span className="text-white/30 text-[10px]">{t('firma.settings_events_published', { count: 45 })}</span>
+                <span className="text-white/30 text-xs">{t('firma.settings_events_published', { count: 45 })}</span>
               </div>
             </div>
           </div>
@@ -184,8 +184,8 @@ export default function FirmaIndstillinger() {
 
         {/* App info */}
         <div className="text-center pt-4 pb-8">
-          <p className="text-white/20 text-[10px]">B-Social Business v1.0</p>
-          <p className="text-white/15 text-[10px]">{t('firma.settings_made_with_love')}</p>
+          <p className="text-white/20 text-xs">B-Social Business v1.0</p>
+          <p className="text-white/15 text-xs">{t('firma.settings_made_with_love')}</p>
         </div>
       </div>
     </div>

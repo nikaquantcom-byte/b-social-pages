@@ -56,7 +56,7 @@ export function CalmBottomNav() {
                 )}
               </div>
               <span
-                className={`text-[10px] font-medium transition-colors duration-200 ${
+                className={`text-xs font-medium transition-colors duration-200 ${
                   isActive ? "text-[#4ECDC4]" : "text-white/40 group-hover:text-white/70"
                 }`}
               >

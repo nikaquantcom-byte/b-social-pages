@@ -207,8 +207,8 @@ export default function Vilkaar() {
 
         {/* Footer */}
         <div className="text-center pt-2 pb-8">
-          <p className="text-white/20 text-[10px]">{t('legal.terms_footer_line1')}</p>
-          <p className="text-white/15 text-[10px] mt-1">{t('legal.terms_footer_line2')}</p>
+          <p className="text-white/20 text-xs">{t('legal.terms_footer_line1')}</p>
+          <p className="text-white/15 text-xs mt-1">{t('legal.terms_footer_line2')}</p>
         </div>
       </div>
     </div>

@@ -233,7 +233,7 @@ export default function FirmaEvents() {
                         <div>
                           <p className="text-sm font-medium">{event.title}</p>
                           <div className="flex gap-1 mt-1">
-                            {event.tags.map((tag) => (<span key={tag} className="px-1.5 py-0.5 rounded text-[10px] bg-white/5 text-muted-foreground">{tag}</span>))}
+                            {event.tags.map((tag) => (<span key={tag} className="px-1.5 py-0.5 rounded text-xs bg-white/5 text-muted-foreground">{tag}</span>))}
                           </div>
                         </div>
                       </div>

@@ -289,14 +289,14 @@ export default function FirmaAuth() {
                       </div>
                     )}
                     {plan.highlight && (
-                      <div className="absolute top-3 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold uppercase">
+                      <div className="absolute top-3 right-10 px-2 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold uppercase">
                         {t('pricing.popular')}
                       </div>
                     )}
                     <div className="flex items-center gap-2 mb-1">
                       <Icon size={16} className={plan.color} />
                       <span className="text-white font-semibold text-sm">{t(plan.nameKey)}</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
                         {t('pricing.free_badge')}
                       </span>
                     </div>
@@ -316,7 +316,7 @@ export default function FirmaAuth() {
                         </li>
                       ))}
                     </ul>
-                    <p className="text-white/25 text-[10px] mt-2">{t('pricing.ideal_for', { audience: t(plan.idealForKey) })}</p>
+                    <p className="text-white/25 text-xs mt-2">{t('pricing.ideal_for', { audience: t(plan.idealForKey) })}</p>
                   </button>
                 );
               })}

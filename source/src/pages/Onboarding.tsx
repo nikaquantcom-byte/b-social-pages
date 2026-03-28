@@ -155,7 +155,7 @@ function KategoriRow({ kat, selectedTags, onToggle, onSelectAll }: {
               <button
                 key={under.tag}
                 onClick={() => onToggle(under.tag)}
-                className={`flex items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-all ${
+                className={`flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-medium transition-all ${
                   active
                     ? "bg-[#4ECDC4]/20 text-[#4ECDC4] ring-1 ring-[#4ECDC4]/30"
                     : "bg-white/5 text-white/40 hover:bg-white/8 hover:text-white/60"
@@ -218,7 +218,7 @@ function OverkategoriGroup({ over, selectedTags, onToggle, onSelectAll, forceExp
           {over.label}
         </span>
         {selCount > 0 && (
-          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[9px] font-bold">{selCount}</span>
+          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">{selCount}</span>
         )}
         <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all ${
           overSelected ? "bg-[#4ECDC4] shadow-sm shadow-[#4ECDC4]/30" : "bg-white/10"
@@ -406,7 +406,7 @@ export default function Onboarding() {
         ))}
       </div>
       <div className="px-8 pb-1">
-        <span className="text-white/25 text-[10px] font-medium">{t('common.step_of', { step, total: totalSteps })}</span>
+        <span className="text-white/25 text-xs font-medium">{t('common.step_of', { step, total: totalSteps })}</span>
       </div>
 
       <div className="flex-1 px-6 pt-3 pb-8 flex flex-col overflow-hidden">
@@ -462,7 +462,7 @@ export default function Onboarding() {
                   <div key={city} className="px-3 py-1.5 rounded-full bg-[#4ECDC4]/15 border border-[#4ECDC4]/30 flex items-center gap-1.5 animate-in fade-in duration-200">
                     <MapPin size={12} className="text-[#4ECDC4]" />
                     <span className="text-[#4ECDC4] text-sm font-medium">{city}</span>
-                    {i === 0 && <span className="text-[#4ECDC4]/40 text-[9px]">{t('onboarding.primary')}</span>}
+                    {i === 0 && <span className="text-[#4ECDC4]/40 text-[11px]">{t('onboarding.primary')}</span>}
                     <button onClick={() => removeCity(city)} className="ml-0.5 text-[#4ECDC4]/60 hover:text-[#4ECDC4]"><X size={12} /></button>
                   </div>
                 ))}
@@ -533,8 +533,8 @@ export default function Onboarding() {
 
             {tagCount > 0 && (
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[#4ECDC4] text-[10px] font-bold">{t('tags.selected_count', { count: tagCount })}</span>
-                <button onClick={() => setSelectedTags(new Set())} className="text-white/30 text-[10px]">{t('tags.reset')}</button>
+                <span className="text-[#4ECDC4] text-xs font-bold">{t('tags.selected_count', { count: tagCount })}</span>
+                <button onClick={() => setSelectedTags(new Set())} className="text-white/30 text-xs">{t('tags.reset')}</button>
               </div>
             )}
 
@@ -627,7 +627,7 @@ export default function Onboarding() {
                   return (
                     <button key={p.km} onClick={() => setSelectedRadius(p.km)} className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all flex flex-col items-center min-w-[60px] ${active ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20" : "bg-white/5 text-white/40 border border-white/8 hover:bg-white/10"}`}>
                       <span>{p.km === 0 ? t('onboarding.all_dk') : p.label}</span>
-                      <span className={`text-[9px] mt-0.5 ${active ? "text-white/70" : "text-white/25"}`}>{p.desc}</span>
+                      <span className={`text-[11px] mt-0.5 ${active ? "text-white/70" : "text-white/25"}`}>{p.desc}</span>
                     </button>
                   );
                 })}
@@ -635,11 +635,11 @@ export default function Onboarding() {
             </div>
 
             <div className="rounded-xl bg-white/4 border border-white/8 px-4 py-3 mb-3 mt-4">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider font-semibold mb-2">{t('onboarding.your_profile')}</p>
+              <p className="text-white/30 text-xs uppercase tracking-wider font-semibold mb-2">{t('onboarding.your_profile')}</p>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-2 py-1 rounded-lg bg-white/8 text-white/60 text-[10px] flex items-center gap-1"><MapPin size={10} /> {selectedCities.join(", ")}</span>
-                <span className="px-2 py-1 rounded-lg bg-[#4ECDC4]/15 text-[#4ECDC4] text-[10px] font-semibold">{t('onboarding.tags_count', { count: tagCount })}</span>
-                <span className="px-2 py-1 rounded-lg bg-white/8 text-white/60 text-[10px]">{radiusLabel}</span>
+                <span className="px-2 py-1 rounded-lg bg-white/8 text-white/60 text-xs flex items-center gap-1"><MapPin size={10} /> {selectedCities.join(", ")}</span>
+                <span className="px-2 py-1 rounded-lg bg-[#4ECDC4]/15 text-[#4ECDC4] text-xs font-semibold">{t('onboarding.tags_count', { count: tagCount })}</span>
+                <span className="px-2 py-1 rounded-lg bg-white/8 text-white/60 text-xs">{radiusLabel}</span>
               </div>
             </div>
 

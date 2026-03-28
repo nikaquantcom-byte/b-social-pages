@@ -58,7 +58,7 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
               </div>
               <div>
                 <p className="font-bold text-sm leading-tight">AktivNord Padel</p>
-                <p className="text-[10px] text-muted-foreground">{t('firma.pro_plan')}</p>
+                <p className="text-xs text-muted-foreground">{t('firma.pro_plan')}</p>
               </div>
             </div>
             <button onClick={() => setMobileOpen(false)} className="lg:hidden text-muted-foreground hover:text-foreground">
@@ -171,7 +171,7 @@ export default function FirmaLayout({ children }: { children: React.ReactNode })
                           {!n.unread && <div className="w-1.5 h-1.5 mt-1.5 shrink-0" />}
                           <div>
                             <p className="text-xs leading-snug">{n.text}</p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">{n.time}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{n.time}</p>
                           </div>
                         </div>
                       </div>

@@ -120,9 +120,9 @@ export default function Overblik() {
           <div className="flex items-end gap-2 h-32">
             {MONTHLY_DATA.map((d) => (
               <div key={d.monthKey} className="flex-1 flex flex-col items-center gap-1">
-                <span className="text-white/60 text-[10px] font-medium">{d.count}</span>
+                <span className="text-white/60 text-xs font-medium">{d.count}</span>
                 <div className="w-full rounded-t-lg bg-[#4ECDC4]/80 transition-all duration-500" style={{ height: `${(d.count / maxCount) * 100}%` }} />
-                <span className="text-white/40 text-[10px]">{t(d.monthKey)}</span>
+                <span className="text-white/40 text-xs">{t(d.monthKey)}</span>
               </div>
             ))}
           </div>
@@ -130,7 +130,7 @@ export default function Overblik() {
 
         {/* Category breakdown */}
         <div className="glass-card-strong rounded-2xl p-4">
-          <h3 className="text-white font-semibold text-sm mb-4">{t('overview.categories')} {placesCount > 0 && <span className="text-white/30 text-[10px] font-normal">({t('overview.from_database')})</span>}</h3>
+          <h3 className="text-white font-semibold text-sm mb-4">{t('overview.categories')} {placesCount > 0 && <span className="text-white/30 text-xs font-normal">({t('overview.from_database')})</span>}</h3>
           <div className="space-y-3">
             {categoryStats.map((cat) => (
               <div key={cat.name}>

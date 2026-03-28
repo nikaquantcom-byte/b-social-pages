@@ -221,7 +221,7 @@ export default function FirmaFakturering() {
               <div>
                 <div className="flex items-center gap-2">
                   <p className="font-semibold text-lg">{t(currentPlanDef.nameKey)}</p>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-primary/15 text-primary border border-primary/20">
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold uppercase bg-primary/15 text-primary border border-primary/20">
                     {currentPlanDef.revenueShare} {t('firma.revenue_share')}
                   </span>
                 </div>
@@ -286,7 +286,7 @@ export default function FirmaFakturering() {
                   } ${isCurrent ? "ring-1 ring-primary/40" : ""}`}
                 >
                   {plan.highlight && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider">
                       {t('pricing.most_popular')}
                     </div>
                   )}
@@ -324,7 +324,7 @@ export default function FirmaFakturering() {
                   </ul>
 
                   <div className="pt-2 border-t border-white/5 mb-4">
-                    <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
                       <TrendingUp size={10} />
                       {t('pricing.ideal_for', { audience: t(plan.idealForKey) })}
                     </p>
