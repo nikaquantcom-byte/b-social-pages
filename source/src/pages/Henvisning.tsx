@@ -141,7 +141,7 @@ export default function Henvisning() {
 
           <button
             onClick={() => setLocation("/auth")}
-            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 flex items-center justify-center gap-2 mb-3"
+            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 flex items-center justify-center gap-2 mb-3"
           >
             <LogIn size={18} />
             {t('referral.log_in_to_start')}
@@ -181,7 +181,7 @@ export default function Henvisning() {
           <p className="text-white/50 mb-8">{t('referral.not_influencer_yet')}</p>
           <button
             onClick={() => setLocation("/feed")}
-            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold"
+            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold"
           >{t('referral.back_to_feed')}</button>
         </motion.div>
       </div>
@@ -223,7 +223,7 @@ export default function Henvisning() {
             </div>
             <button
               onClick={copyLink}
-              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[#4ECDC4] text-white font-medium text-sm hover:bg-[#3dbdb5] transition-all whitespace-nowrap"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] font-medium text-sm hover:bg-[#3dbdb5] transition-all whitespace-nowrap"
             >
               {copied ? <Check size={16} /> : <Copy size={16} />}
               {copied ? t('referral.copied') : t('referral.copy')}
@@ -392,7 +392,7 @@ export default function Henvisning() {
             <p className="text-white/50 text-sm mb-4">{t('referral.stripe_description')}</p>
             <button
               onClick={() => alert(t('referral.stripe_coming_soon'))}
-              className="px-6 py-3 rounded-xl bg-[#4ECDC4] text-white font-medium text-sm hover:bg-[#3dbdb5] transition-all"
+              className="px-6 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] font-medium text-sm hover:bg-[#3dbdb5] transition-all"
             >
               {t('referral.create_stripe_account')}
             </button>
@@ -401,4 +401,4 @@ export default function Henvisning() {
       </div>
     </div>
   );
-                          }
+}

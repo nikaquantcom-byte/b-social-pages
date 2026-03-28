@@ -296,7 +296,7 @@ function SubChip({ label, emoji, active, count, onClick }: { label: string; emoj
       onClick={onClick}
       className={`flex items-center gap-1 px-3 py-2 rounded-2xl text-xs font-medium whitespace-nowrap transition-all ${
         active
-          ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20"
+          ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
           : "glass-card text-white/60 hover:text-white hover:bg-white/10"
       }`}
     >
@@ -651,7 +651,7 @@ export default function CategoryDetail() {
             onClick={() => setPriceFilter(priceFilter === "gratis" ? "alle" : "gratis")}
             className={`px-3 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
               priceFilter === "gratis"
-                ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/25"
+                ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/25"
                 : "bg-white/6 text-white/50 border border-white/10 hover:bg-white/10"
             }`}
             data-testid="btn-gratis"

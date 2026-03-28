@@ -32,7 +32,9 @@ export default function Auth() {
         setError(t('auth.error_wrong_credentials'));
         setLoading(false);
       } else {
-        setLocation("/feed");
+        const returnTo = sessionStorage.getItem('returnTo');
+        sessionStorage.removeItem('returnTo');
+        setLocation(returnTo || '/feed');
       }
     } else {
       if (!name.trim()) {
@@ -217,7 +219,7 @@ export default function Auth() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
             data-testid="button-submit-auth"
           >
             {loading && <Loader2 size={18} className="animate-spin" />}

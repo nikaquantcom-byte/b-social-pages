@@ -128,7 +128,7 @@ export default function Kalender() {
                   key={day}
                   onClick={() => setSelectedDate(isSelected ? null : dateStr)}
                   className={`w-full aspect-square rounded-xl flex flex-col items-center justify-center text-xs font-medium transition-all relative ${
-                    isSelected ? "bg-[#4ECDC4] text-white" :
+                    isSelected ? "bg-[#4ECDC4] text-[#0a0f1a]" :
                     isToday ? "bg-white/15 text-white" :
                     "text-white/60 hover:bg-white/10"
                   }`}

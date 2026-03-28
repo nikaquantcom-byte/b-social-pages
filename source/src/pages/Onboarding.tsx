@@ -495,7 +495,7 @@ export default function Onboarding() {
             <button
               onClick={() => selectedCities.length > 0 ? setStep(2) : null}
               disabled={selectedCities.length === 0}
-              className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#3dbdb5] active:scale-[0.98] transition-all shadow-lg mt-4"
+              className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-base disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#3dbdb5] active:scale-[0.98] transition-all shadow-lg mt-4"
               data-testid="button-next-step-1"
             >
               {t('common.continue')}
@@ -573,7 +573,7 @@ export default function Onboarding() {
               </button>
               <button
                 onClick={() => setStep(3)}
-                className="flex-1 py-3.5 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-sm hover:bg-[#3dbdb5] active:scale-[0.98] transition-all shadow-lg"
+                className="flex-1 py-3.5 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-sm hover:bg-[#3dbdb5] active:scale-[0.98] transition-all shadow-lg"
                 data-testid="button-next-step-2"
               >
                 {tagCount > 0 ? t('onboarding.continue_with', { count: tagCount }) : t('common.continue')}
@@ -625,7 +625,7 @@ export default function Onboarding() {
                 {RADIUS_PRESETS.map(p => {
                   const active = selectedRadius === p.km;
                   return (
-                    <button key={p.km} onClick={() => setSelectedRadius(p.km)} className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all flex flex-col items-center min-w-[60px] ${active ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20" : "bg-white/5 text-white/40 border border-white/8 hover:bg-white/10"}`}>
+                    <button key={p.km} onClick={() => setSelectedRadius(p.km)} className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all flex flex-col items-center min-w-[60px] ${active ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20" : "bg-white/5 text-white/40 border border-white/8 hover:bg-white/10"}`}>
                       <span>{p.km === 0 ? t('onboarding.all_dk') : p.label}</span>
                       <span className={`text-[9px] mt-0.5 ${active ? "text-white/70" : "text-white/25"}`}>{p.desc}</span>
                     </button>
@@ -644,7 +644,7 @@ export default function Onboarding() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <button onClick={handleFinish} disabled={saving} className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg flex items-center justify-center gap-2 disabled:opacity-60" data-testid="button-kom-i-gang-onboarding">
+              <button onClick={handleFinish} disabled={saving} className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg flex items-center justify-center gap-2 disabled:opacity-60" data-testid="button-kom-i-gang-onboarding">
                 {saving && <Loader2 size={18} className="animate-spin" />}
                 {saving ? t('onboarding.setting_up') : t('onboarding.start_feed')}
               </button>

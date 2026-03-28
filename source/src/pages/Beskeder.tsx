@@ -221,7 +221,19 @@ export default function Beskeder() {
         (payload: any) => {
           const newMsg = payload.new as MessageRow;
           setMessages(prev => {
+            // Skip if already have this exact message
             if (prev.some(m => m.id === newMsg.id)) return prev;
+            // Replace optimistic message (same sender + content within 10s) with real one
+            const optimisticIdx = prev.findIndex(m =>
+              m.sender_id === newMsg.sender_id &&
+              m.content === newMsg.content &&
+              Math.abs(new Date(m.created_at).getTime() - new Date(newMsg.created_at).getTime()) < 10000
+            );
+            if (optimisticIdx !== -1) {
+              const updated = [...prev];
+              updated[optimisticIdx] = newMsg;
+              return updated;
+            }
             return [...prev, newMsg];
           });
           // Update last message in conversation list
@@ -322,16 +334,23 @@ export default function Beskeder() {
   const [convoError, setConvoError] = useState<string | null>(null);
 
   const startConversation = async (otherUserId: string) => {
-    if (!myId) return;
+    console.log("[Beskeder] startConversation called", { otherUserId, myId });
+    if (!myId) {
+      setConvoError("Du er ikke logget ind. Prøv at genindlæse siden.");
+      console.error("[Beskeder] myId is null — user not logged in");
+      return;
+    }
     setStartingConvo(otherUserId);
     setConvoError(null);
 
     try {
       // Check if conversation already exists
-      const { data: myConvos } = await supabase
+      console.log("[Beskeder] Checking existing conversations...");
+      const { data: myConvos, error: fetchErr } = await supabase
         .from("conversation_participants")
         .select("conversation_id")
         .eq("user_id", myId);
+      console.log("[Beskeder] My convos:", myConvos?.length, "error:", fetchErr?.message);
 
       if (myConvos) {
         for (const mc of myConvos) {
@@ -353,11 +372,13 @@ export default function Beskeder() {
       }
 
       // Create new conversation
+      console.log("[Beskeder] Creating new conversation...");
       const { data: newConvo, error: convoErr } = await supabase
         .from("conversations")
         .insert({})
         .select("id")
         .single();
+      console.log("[Beskeder] Create result:", { newConvo, convoErr: convoErr?.message });
 
       if (convoErr || !newConvo) {
         setConvoError("Kunne ikke oprette samtale: " + (convoErr?.message || "ukendt fejl"));
@@ -688,6 +709,11 @@ export default function Beskeder() {
                 />
               </div>
 
+              {convoError && (
+                <div className="p-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-300 text-sm text-center mb-2">
+                  {convoError}
+                </div>
+              )}
               <div className="max-h-64 overflow-y-auto space-y-1">
                 {searchingUsers ? (
                   <div className="flex items-center justify-center py-8">

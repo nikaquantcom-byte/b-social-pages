@@ -188,7 +188,7 @@ export default function StedDetail() {
 
         {/* Action buttons */}
         <div className="flex gap-3 mb-6">
-          <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#4ECDC4] text-white font-semibold text-sm hover:bg-[#0ea572] transition-colors shadow-lg shadow-[#4ECDC4]/30">
+          <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-sm hover:bg-[#0ea572] transition-colors shadow-lg shadow-[#4ECDC4]/30">
             <Navigation size={16} /> {t('place.show_route')}
           </a>
           <button className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl glass-card text-white/70 font-semibold text-sm hover:bg-white/10 transition-colors">

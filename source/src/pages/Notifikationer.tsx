@@ -120,7 +120,7 @@ export default function Notifikationer() {
         <p className="text-white/50 text-sm">{t('notifications.login_to_see')}</p>
         <button
           onClick={() => setLocation("/auth")}
-          className="mt-4 px-6 py-2.5 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-sm"
+          className="mt-4 px-6 py-2.5 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-sm"
         >
           {t('notifications.log_in')}
         </button>

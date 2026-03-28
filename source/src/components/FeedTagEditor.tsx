@@ -14,7 +14,7 @@ interface FeedTagEditorProps {
 
 const PRICE_OPTIONS: { value: PriceTier; labelKey: string; activeClass: string }[] = [
   { value: "alle", labelKey: "tags.price_all", activeClass: "bg-white/15 text-white" },
-  { value: "gratis", labelKey: "tags.price_free", activeClass: "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/25" },
+  { value: "gratis", labelKey: "tags.price_free", activeClass: "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/25" },
   { value: "premium", labelKey: "tags.price_premium", activeClass: "bg-amber-500 text-white shadow-lg shadow-amber-500/25" },
 ];
 
@@ -280,7 +280,7 @@ export function FeedTagEditor({ open, onClose }: FeedTagEditorProps) {
         <div className="absolute bottom-0 left-0 right-0 p-5 pt-3" style={{ background: "linear-gradient(to top, rgba(20,26,46,1) 70%, transparent)" }}>
           <button
             onClick={handleSave}
-            className="w-full py-3.5 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-sm hover:bg-[#0EA372] active:scale-[0.98] transition-all shadow-lg shadow-[#4ECDC4]/20"
+            className="w-full py-3.5 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-sm hover:bg-[#0EA372] active:scale-[0.98] transition-all shadow-lg shadow-[#4ECDC4]/20"
             data-testid="button-save-tags"
           >
             {t('tags.save')} ({tagCount === 0 ? t('tags.shows_all') : t('tags.tag_count', { count: tagCount })} · {t(PRICE_OPTIONS.find(p => p.value === localPrice)?.labelKey ?? 'tags.price_all')})

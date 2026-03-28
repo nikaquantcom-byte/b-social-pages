@@ -146,7 +146,7 @@ export default function Noter() {
               onClick={() => setActiveType(f.key)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 activeType === f.key
-                  ? "bg-[#4ECDC4] text-white"
+                  ? "bg-[#4ECDC4] text-[#0a0f1a]"
                   : "glass-card text-white/50 hover:text-white"
               }`}
             >

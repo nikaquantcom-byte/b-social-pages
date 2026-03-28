@@ -516,7 +516,7 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
             </div>
           )}
 
-          <p className="text-white/55 text-xs leading-relaxed mb-3">{pin.descriptionKey ? t(pin.descriptionKey) : pin.description}</p>
+          <p className="text-white/55 text-xs leading-relaxed mb-3">{pin.descriptionKey ? (typeof t(pin.descriptionKey) === 'string' ? t(pin.descriptionKey) : (pin.description || '')) : pin.description}</p>
 
           {/* Event spots */}
           {pin.isEvent && pin.spots && (
@@ -546,7 +546,7 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
               </>
             ) : pin.fromSupabase ? (
               <>
-                <Link href={`/sted/${pin.id.startsWith('sb-') ? pin.id.slice(3) : pin.id}`} className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
+                <Link href={`/sted/${pin.id.startsWith('sb-') ? pin.id.slice(3) : pin.id}`} className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
                   {t('map.see_more')}
                 </Link>
                 <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="py-2.5 px-3 rounded-xl bg-white/10 text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-white/15 transition-colors">
@@ -555,7 +555,7 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
               </>
             ) : (
               <>
-                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-white text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
+                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="flex-1 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-[#0ea572] transition-colors">
                   <Navigation size={13} /> {t('map.show_route')}
                 </a>
                 {pin.isEvent && (
@@ -718,7 +718,7 @@ export default function Kort() {
           <button
             onClick={() => { setPriceFilter(priceFilter === "gratis" ? "alle" : "gratis"); setSelectedPin(null); }}
             className={`px-3.5 py-2.5 rounded-xl text-[11px] font-semibold transition-all whitespace-nowrap flex-shrink-0 ${
-              priceFilter === "gratis" ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/30" : "text-white/60 hover:text-white/80"
+              priceFilter === "gratis" ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/30" : "text-white/60 hover:text-white/80"
             }`}
             style={priceFilter !== "gratis" ? { background: "rgba(20, 26, 55, 0.9)", border: "1px solid rgba(255,255,255,0.1)" } : undefined}
             data-testid="filter-gratis"
@@ -747,7 +747,7 @@ export default function Kort() {
                   showLayer === layer
                     ? layer === "events"
                       ? "bg-[#f97316] text-white"
-                      : "bg-[#4ECDC4] text-white"
+                      : "bg-[#4ECDC4] text-[#0a0f1a]"
                     : "bg-white/8 text-white/40 hover:text-white/60"
                 }`}
                 data-testid={`filter-layer-${layer}`}
@@ -774,7 +774,7 @@ export default function Kort() {
                 onClick={() => handleCountrySelect(code)}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all whitespace-nowrap flex-shrink-0 ${
                   isActive
-                    ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20"
+                    ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
                     : "text-white/60 hover:text-white/80"
                 }`}
                 style={!isActive ? { background: "rgba(20, 26, 55, 0.9)", border: "1px solid rgba(255,255,255,0.1)" } : undefined}
