@@ -175,7 +175,7 @@ export default function Feed() {
           <div className="flex items-center gap-2 ml-3 flex-shrink-0">
             <button
               onClick={() => setTagEditorOpen(true)}
-              className="p-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+              className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               title="Rediger tags"
             >
               <SlidersHorizontal size={18} className="text-white/60" />
@@ -204,7 +204,7 @@ export default function Feed() {
                 </button>
               )}
             </div>
-            <Link href="/notifikationer" className="relative p-2.5 rounded-lg bg-white/5 hover:bg-white/10">
+            <Link href="/notifikationer" className="relative p-3 rounded-lg bg-white/5 hover:bg-white/10 min-w-[44px] min-h-[44px] flex items-center justify-center">
               <Bell size={18} className="text-white/60" />
               {unreadCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />}
             </Link>
@@ -249,7 +249,7 @@ export default function Feed() {
             <p className="text-white/50 text-sm leading-relaxed mb-5">
               {t('feed.demo_hero_desc')}
             </p>
-            <Link href="/auth" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all">
+            <Link href="/auth" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all min-h-[44px]">
               {t('feed.demo_hero_cta')}
             </Link>
           </div>
@@ -282,11 +282,11 @@ export default function Feed() {
                         <Link key={event.id} href={`/event/${event.id}`} className="glass-card rounded-xl overflow-hidden hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all group min-w-[180px] max-w-[220px] flex-shrink-0">
                           <img src={getEventImage(event)} alt={event.title} className="w-full h-28 object-cover" onError={(e) => { const target = e.target as HTMLImageElement; target.src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&auto=format&fit=crop"; }} />
                           <div className="p-3">
-                            <p className="text-[11px] text-white/40 mb-1">{formatDanishDate(event.date)}</p>
+                            <p className="text-xs text-white/40 mb-1">{formatDanishDate(event.date)}</p>
                             <h3 className="text-sm font-semibold leading-snug line-clamp-2">{event.title}</h3>
                             <div className="flex gap-1 mt-2 flex-wrap">
                               {event.interest_tags && event.interest_tags.slice(0, 2).map((tag: string) => (
-                                <span key={tag} className="text-[11px] bg-white/10 text-white/50 px-1.5 py-0.5 rounded-full">#{tag}</span>
+                                <span key={tag} className="text-xs bg-white/10 text-white/50 px-1.5 py-0.5 rounded-full">#{tag}</span>
                               ))}
                             </div>
                           </div>
@@ -355,11 +355,11 @@ export default function Feed() {
                       <Link key={event.id} href={`/event/${event.id}`} className="glass-card rounded-xl overflow-hidden hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all group min-w-[180px] max-w-[220px] flex-shrink-0">
                         <img src={getEventImage(event)} alt={event.title} className="w-full h-28 object-cover" onError={(e) => { const target = e.target as HTMLImageElement; target.src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&auto=format&fit=crop"; }} />
                         <div className="p-3">
-                          <p className="text-[11px] text-white/40 mb-1">{formatDanishDate(event.date)}</p>
+                          <p className="text-xs text-white/40 mb-1">{formatDanishDate(event.date)}</p>
                           <h3 className="text-sm font-semibold leading-snug line-clamp-2">{event.title}</h3>
                           <div className="flex gap-1 mt-2 flex-wrap">
                             {event.interest_tags && event.interest_tags.slice(0, 2).map((tag: string) => (
-                              <span key={tag} className="text-[11px] bg-white/10 text-white/50 px-1.5 py-0.5 rounded-full">#{tag}</span>
+                              <span key={tag} className="text-xs bg-white/10 text-white/50 px-1.5 py-0.5 rounded-full">#{tag}</span>
                             ))}
                           </div>
                         </div>
@@ -375,7 +375,7 @@ export default function Feed() {
             <div className="glass-card rounded-2xl p-4">
               <h3 className="text-sm font-semibold text-white/70 mb-3 flex items-center gap-2">
                 {t('feed.news_for_you')}
-                <span className="text-[11px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full">LIVE</span>
+                <span className="text-xs bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full">LIVE</span>
               </h3>
               {newsLoading ? (
                 <div className="flex items-center gap-2 text-white/40 text-sm py-4">
@@ -387,7 +387,7 @@ export default function Feed() {
                   {relevantNews.map((news, i) => (
                     <a key={i} href={news.link} target="_blank" rel="noopener noreferrer" className="flex gap-3 group hover:bg-white/5 rounded-lg p-1.5 -mx-1.5 transition-colors">
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] text-white/30 mb-0.5">
+                        <p className="text-xs text-white/30 mb-0.5">
                           {news.sourceEmoji} {news.source} &bull; {formatNewsTime(news.pubDate)}
                         </p>
                         <p className="text-xs font-medium text-white/80 line-clamp-2 group-hover:text-white transition-colors">{news.title}</p>
