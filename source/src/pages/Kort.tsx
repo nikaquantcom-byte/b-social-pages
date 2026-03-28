@@ -599,10 +599,10 @@ export default function Kort() {
 
   // Fetch Supabase places
   const { data: supabasePlaces } = useQuery<Place[]>({
-    queryKey: ["supabase-places-map", selectedCountry],
+    queryKey: ["supabase-places-map", mapCountry],
     queryFn: () => fetchPlaces({
       limit: 2000,
-      country: selectedCountry && selectedCountry !== 'ALL' ? (selectedCountry === 'DK' ? 'Denmark' : selectedCountry) : undefined,
+      country: mapCountry && mapCountry !== 'ALL' ? (mapCountry === 'DK' ? 'Denmark' : mapCountry) : undefined,
     }),
     staleTime: 5 * 60 * 1000,
   });
@@ -756,7 +756,7 @@ export default function Kort() {
               <button
                 key={layer}
                 onClick={() => { setShowLayer(layer); setSelectedPin(null); }}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                className={`px-3 py-2 rounded-full text-xs font-semibold transition-all min-h-[44px] ${
                   showLayer === layer
                     ? layer === "events"
                       ? "bg-[#f97316] text-white"
@@ -785,7 +785,7 @@ export default function Kort() {
               <button
                 key={code}
                 onClick={() => handleCountrySelect(code)}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap flex-shrink-0 ${
+                className={`flex items-center gap-1 px-3 py-2 rounded-full text-xs font-semibold transition-all whitespace-nowrap flex-shrink-0 min-h-[44px] ${
                   isActive
                     ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
                     : "text-white/60 hover:text-white/80"

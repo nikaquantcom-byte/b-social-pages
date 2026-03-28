@@ -537,7 +537,7 @@ export default function Udforsk() {
                   <button
                     key={code}
                     onClick={() => setActiveCountry(code)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+                    className={`flex items-center gap-1.5 px-3 py-2.5 rounded-full text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 min-h-[44px] ${
                       isActive
                         ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
                         : "glass-card text-white/60 hover:text-white hover:bg-white/10"
@@ -564,7 +564,7 @@ export default function Udforsk() {
                   <button
                     key={cat.key}
                     onClick={() => setLocation(`/kategori/${cat.key}`)}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl glass-card hover:bg-white/10 transition-all text-left"
+                    className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl glass-card hover:bg-white/10 transition-all text-left min-h-[44px]"
                     data-testid={`cat-chip-${cat.key}`}
                   >
                     <span className="text-base">{cat.emoji}</span>

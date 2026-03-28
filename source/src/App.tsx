@@ -4,6 +4,8 @@ import { useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import AIChatWidget from "@/components/AIChatWidget";
+import { EmailCaptureFooter, EmailCaptureExitIntent } from "@/components/EmailCapture";
 import { TagProvider } from "@/context/TagContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { JoinProvider } from "@/context/JoinContext";
@@ -129,6 +131,9 @@ function App() {
                 <RootRouter />
               </Router>
               <Toaster />
+              <AIChatWidget />
+              <EmailCaptureFooter />
+              <EmailCaptureExitIntent />
             </JoinProvider>
           </NotificationProvider>
         </TagProvider>
