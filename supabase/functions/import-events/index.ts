@@ -59,6 +59,27 @@ const DANISH_CITIES: Record<string, { lat: number; lng: number }> = {
   Roskilde: { lat: 55.6415, lng: 12.0803 },
 };
 
+// ─── Country Bounding Boxes (for OpenAgenda geo filter) ──────────────────────
+
+const COUNTRY_BOUNDING_BOXES: Record<string, { northEastLat: number; northEastLng: number; southWestLat: number; southWestLng: number }> = {
+  DK: { northEastLat: 57.75, northEastLng: 15.20, southWestLat: 54.56, southWestLng: 8.07 },
+  SE: { northEastLat: 69.06, northEastLng: 24.17, southWestLat: 55.34, southWestLng: 11.12 },
+  NO: { northEastLat: 71.19, northEastLng: 31.17, southWestLat: 57.96, southWestLng: 4.51 },
+  DE: { northEastLat: 55.06, northEastLng: 15.04, southWestLat: 47.27, southWestLng: 5.87 },
+  NL: { northEastLat: 53.51, northEastLng: 7.22, southWestLat: 50.75, southWestLng: 3.36 },
+  BE: { northEastLat: 51.51, northEastLng: 6.41, southWestLat: 49.50, southWestLng: 2.55 },
+  AT: { northEastLat: 49.02, northEastLng: 17.16, southWestLat: 46.37, southWestLng: 9.53 },
+  CH: { northEastLat: 47.81, northEastLng: 10.49, southWestLat: 45.83, southWestLng: 5.96 },
+  ES: { northEastLat: 43.79, northEastLng: 4.33, southWestLat: 35.99, southWestLng: -9.30 },
+  FR: { northEastLat: 51.09, northEastLng: 9.56, southWestLat: 41.34, southWestLng: -5.14 },
+  IT: { northEastLat: 47.09, northEastLng: 18.52, southWestLat: 36.65, southWestLng: 6.62 },
+  GB: { northEastLat: 60.86, northEastLng: 1.77, southWestLat: 49.87, southWestLng: -8.65 },
+  IE: { northEastLat: 55.39, northEastLng: -5.43, southWestLat: 51.44, southWestLng: -10.48 },
+  PL: { northEastLat: 54.84, northEastLng: 24.15, southWestLat: 49.00, southWestLng: 14.12 },
+  CZ: { northEastLat: 51.06, northEastLng: 18.86, southWestLat: 48.55, southWestLng: 12.09 },
+  FI: { northEastLat: 70.09, northEastLng: 31.59, southWestLat: 59.81, southWestLng: 20.55 },
+};
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /** Rate limiter: sleep ms */
@@ -190,6 +211,163 @@ function mapClassification(segment: string, genre: string): {
       indoor_outdoor: "indoor",
       weather_suitable: ["all"],
       suitable_for_modes: ["gruppe"],
+    };
+  }
+
+  return {
+    category: "arrangement",
+    interest_tags: ["arrangement", "oplevelse"],
+    indoor_outdoor: "indoor",
+    weather_suitable: ["all"],
+    suitable_for_modes: ["solo", "duo", "gruppe"],
+  };
+}
+
+/** Map Eventbrite category name to B-Social category */
+function mapEventbriteCategory(categoryName: string): {
+  category: string;
+  interest_tags: string[];
+  indoor_outdoor: string;
+  weather_suitable: string[];
+  suitable_for_modes: string[];
+} {
+  const name = (categoryName || "").toLowerCase();
+
+  if (name.includes("music")) {
+    return {
+      category: "musik",
+      interest_tags: ["musik", "koncert"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (name.includes("sport") || name.includes("fitness") || name.includes("health")) {
+    return {
+      category: "sport",
+      interest_tags: ["sport", "fitness"],
+      indoor_outdoor: "outdoor",
+      weather_suitable: ["clear", "cloudy"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (name.includes("art") || name.includes("theatre") || name.includes("culture") || name.includes("perform")) {
+    return {
+      category: "kultur",
+      interest_tags: ["kultur", "kunst"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (name.includes("food") || name.includes("drink")) {
+    return {
+      category: "mad",
+      interest_tags: ["mad", "drikke"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (name.includes("festival")) {
+    return {
+      category: "festival",
+      interest_tags: ["festival", "kultur"],
+      indoor_outdoor: "outdoor",
+      weather_suitable: ["clear", "cloudy"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (name.includes("family") || name.includes("children") || name.includes("kids")) {
+    return {
+      category: "familie",
+      interest_tags: ["familie", "børn"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["gruppe"],
+    };
+  }
+  if (name.includes("business") || name.includes("conference") || name.includes("networking")) {
+    return {
+      category: "arrangement",
+      interest_tags: ["business", "networking"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+
+  return {
+    category: "arrangement",
+    interest_tags: ["arrangement", "oplevelse"],
+    indoor_outdoor: "indoor",
+    weather_suitable: ["all"],
+    suitable_for_modes: ["solo", "duo", "gruppe"],
+  };
+}
+
+/** Map OpenAgenda category tags to B-Social category */
+function mapOpenAgendaCategory(tags: string[]): {
+  category: string;
+  interest_tags: string[];
+  indoor_outdoor: string;
+  weather_suitable: string[];
+  suitable_for_modes: string[];
+} {
+  const tagStr = (tags || []).join(" ").toLowerCase();
+
+  if (tagStr.includes("music") || tagStr.includes("concert") || tagStr.includes("musique")) {
+    return {
+      category: "musik",
+      interest_tags: ["musik", "koncert"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (tagStr.includes("sport") || tagStr.includes("fitness")) {
+    return {
+      category: "sport",
+      interest_tags: ["sport"],
+      indoor_outdoor: "outdoor",
+      weather_suitable: ["clear", "cloudy"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (tagStr.includes("theatre") || tagStr.includes("theater") || tagStr.includes("theatre") || tagStr.includes("art") || tagStr.includes("culture") || tagStr.includes("exhibition")) {
+    return {
+      category: "kultur",
+      interest_tags: ["kultur", "kunst"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (tagStr.includes("festival")) {
+    return {
+      category: "festival",
+      interest_tags: ["festival", "kultur"],
+      indoor_outdoor: "outdoor",
+      weather_suitable: ["clear", "cloudy"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
+    };
+  }
+  if (tagStr.includes("family") || tagStr.includes("children") || tagStr.includes("enfant")) {
+    return {
+      category: "familie",
+      interest_tags: ["familie", "børn"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["gruppe"],
+    };
+  }
+  if (tagStr.includes("food") || tagStr.includes("gastro") || tagStr.includes("cuisine")) {
+    return {
+      category: "mad",
+      interest_tags: ["mad", "gastronomi"],
+      indoor_outdoor: "indoor",
+      weather_suitable: ["all"],
+      suitable_for_modes: ["solo", "duo", "gruppe"],
     };
   }
 
@@ -490,6 +668,335 @@ function generateDanishEvents(): ImportedEvent[] {
   return events;
 }
 
+// ─── Source 3: Eventbrite by Country ─────────────────────────────────────────
+
+async function fetchEventbriteByCountry(
+  token: string,
+  countryCode: string
+): Promise<{ events: ImportedEvent[]; errors: string[] }> {
+  const errors: string[] = [];
+  const events: ImportedEvent[] = [];
+
+  // Map country codes to searchable location names + coordinates
+  const COUNTRY_CONFIG: Record<string, { address: string; lat: number; lng: number }> = {
+    DK: { address: "Denmark", lat: 56.26, lng: 9.50 },
+    SE: { address: "Sweden", lat: 60.13, lng: 18.64 },
+    NO: { address: "Norway", lat: 60.47, lng: 8.47 },
+    DE: { address: "Germany", lat: 51.17, lng: 10.45 },
+    NL: { address: "Netherlands", lat: 52.13, lng: 5.29 },
+    BE: { address: "Belgium", lat: 50.50, lng: 4.47 },
+    AT: { address: "Austria", lat: 47.52, lng: 14.55 },
+    CH: { address: "Switzerland", lat: 46.82, lng: 8.23 },
+    ES: { address: "Spain", lat: 40.46, lng: -3.75 },
+    FR: { address: "France", lat: 46.23, lng: 2.21 },
+    IT: { address: "Italy", lat: 41.87, lng: 12.57 },
+    GB: { address: "United Kingdom", lat: 55.38, lng: -3.44 },
+    IE: { address: "Ireland", lat: 53.41, lng: -8.24 },
+    PL: { address: "Poland", lat: 51.92, lng: 19.15 },
+    CZ: { address: "Czech Republic", lat: 49.82, lng: 15.47 },
+    FI: { address: "Finland", lat: 61.92, lng: 25.75 },
+    US: { address: "United States", lat: 37.09, lng: -95.71 },
+    CA: { address: "Canada", lat: 56.13, lng: -106.35 },
+    MX: { address: "Mexico", lat: 23.63, lng: -102.55 },
+    AU: { address: "Australia", lat: -25.27, lng: 133.78 },
+    NZ: { address: "New Zealand", lat: -40.90, lng: 174.89 },
+    AE: { address: "United Arab Emirates", lat: 23.42, lng: 53.85 },
+    ZA: { address: "South Africa", lat: -30.56, lng: 22.94 },
+    TR: { address: "Turkey", lat: 38.96, lng: 35.24 },
+    BR: { address: "Brazil", lat: -14.24, lng: -51.93 },
+    CL: { address: "Chile", lat: -35.68, lng: -71.54 },
+    PE: { address: "Peru", lat: -9.19, lng: -75.02 },
+  };
+
+  const config = COUNTRY_CONFIG[countryCode];
+  if (!config) {
+    errors.push(`Eventbrite: No config for country ${countryCode}`);
+    return { events, errors };
+  }
+
+  const url = new URL("https://www.eventbriteapi.com/v3/events/search/");
+  url.searchParams.set("location.address", config.address);
+  url.searchParams.set("location.within", "300km");
+  url.searchParams.set("expand", "venue,category");
+  url.searchParams.set("time_filter", "current_future");
+  url.searchParams.set("page_size", "50");
+
+  let data: any;
+  try {
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+      signal: AbortSignal.timeout(20000),
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      errors.push(`Eventbrite ${countryCode}: HTTP ${response.status} - ${body.slice(0, 300)}`);
+      return { events, errors };
+    }
+
+    data = await response.json();
+  } catch (err) {
+    errors.push(`Eventbrite ${countryCode}: fetch error - ${err}`);
+    return { events, errors };
+  }
+
+  const items: any[] = data.events || [];
+  console.log(`[import-events] Eventbrite ${countryCode}: found ${items.length} events`);
+
+  for (const item of items) {
+    try {
+      const venue = item.venue;
+      const lat = venue?.latitude ? parseFloat(venue.latitude) : null;
+      const lng = venue?.longitude ? parseFloat(venue.longitude) : null;
+
+      const startUtc = item.start?.utc;
+      if (!startUtc) continue;
+
+      // Skip events in the past
+      if (new Date(startUtc) < new Date()) continue;
+
+      const categoryName = item.category?.name || "";
+      const classification = mapEventbriteCategory(categoryName);
+
+      // Build location string
+      const venueName = venue?.name || "";
+      const venueCity = venue?.address?.city || "";
+      const locationStr = [venueName, venueCity].filter(Boolean).join(", ") || config.address;
+
+      // Description: prefer full description text, fall back to summary
+      const rawDesc = item.description?.text || item.summary || `${item.name?.text || "Event"} in ${venueCity || config.address}`;
+      const description = rawDesc.length > 500 ? rawDesc.substring(0, 497) + "..." : rawDesc;
+
+      // Image
+      const imageUrl = item.logo?.url || null;
+
+      // Derive country from venue address, fall back to requested countryCode
+      const venueCountry = venue?.address?.country || countryCode;
+
+      const title = item.name?.text;
+      if (!title) continue;
+
+      events.push({
+        title,
+        description,
+        location: locationStr,
+        image_url: imageUrl,
+        date: startUtc,
+        category: classification.category,
+        max_participants: item.capacity || 500,
+        created_by: null,
+        latitude: lat,
+        longitude: lng,
+        price: null, // Eventbrite free-tier API doesn't always expose ticket prices
+        interest_tags: classification.interest_tags,
+        suitable_for_modes: classification.suitable_for_modes,
+        weather_suitable: classification.weather_suitable,
+        indoor_outdoor: classification.indoor_outdoor,
+        category_level: 2,
+        min_required_participants: 1,
+        source: "eventbrite",
+        status: "active",
+        country: venueCountry,
+      });
+    } catch (itemErr) {
+      errors.push(`Eventbrite ${countryCode} event parse error: ${itemErr}`);
+    }
+  }
+
+  return { events, errors };
+}
+
+// ─── Source 4: OpenAgenda (pan-European) ─────────────────────────────────────
+
+async function fetchOpenAgendaEvents(
+  apiKey: string,
+  countriesToFilter?: string[]
+): Promise<{ events: ImportedEvent[]; errors: string[] }> {
+  const errors: string[] = [];
+  const allEvents: ImportedEvent[] = [];
+
+  // If specific countries are requested and we have bounding boxes, query per country
+  // Otherwise do a single broad European query
+  const countriesToQuery = countriesToFilter?.filter((cc) => COUNTRY_BOUNDING_BOXES[cc]) || [];
+
+  // Helper: fetch events from a single OpenAgenda endpoint URL
+  async function tryOpenAgendaUrl(url: string, defaultCountry: string | null): Promise<{ items: any[]; ok: boolean; status?: number }> {
+    try {
+      const response = await fetch(url, {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(20000),
+      });
+      if (!response.ok) return { items: [], ok: false, status: response.status };
+      const data = await response.json();
+      return { items: data.events || [], ok: true };
+    } catch {
+      return { items: [], ok: false };
+    }
+  }
+
+  if (countriesToQuery.length > 0) {
+    // Query per country using bounding boxes
+    for (const cc of countriesToQuery) {
+      const bbox = COUNTRY_BOUNDING_BOXES[cc];
+      const url = new URL("https://api.openagenda.com/v2/events");
+      url.searchParams.set("key", apiKey);
+      url.searchParams.set("size", "100");
+      url.searchParams.set("sort", "updatedAt.desc");
+      url.searchParams.append("relative[]", "current");
+      url.searchParams.append("relative[]", "upcoming");
+      url.searchParams.set("geo[northEast][lat]", String(bbox.northEastLat));
+      url.searchParams.set("geo[northEast][lng]", String(bbox.northEastLng));
+      url.searchParams.set("geo[southWest][lat]", String(bbox.southWestLat));
+      url.searchParams.set("geo[southWest][lng]", String(bbox.southWestLng));
+
+      const { items, ok, status } = await tryOpenAgendaUrl(url.toString(), cc);
+
+      if (!ok) {
+        if (status === 403) {
+          // Global event endpoint requires special access — fall back to popular public agendas
+          console.log(`[import-events] OpenAgenda ${cc}: global endpoint unauthorized, trying public agendas...`);
+          const publicAgendaIds = [41648, 86518, 501473, 1282232, 4641572, 5348688, 6294539, 821385];
+          for (const agendaId of publicAgendaIds) {
+            const agendaUrl = new URL(`https://api.openagenda.com/v2/agendas/${agendaId}/events`);
+            agendaUrl.searchParams.set("key", apiKey);
+            agendaUrl.searchParams.set("size", "50");
+            agendaUrl.searchParams.append("relative[]", "current");
+            agendaUrl.searchParams.append("relative[]", "upcoming");
+            agendaUrl.searchParams.set("geo[northEast][lat]", String(bbox.northEastLat));
+            agendaUrl.searchParams.set("geo[northEast][lng]", String(bbox.northEastLng));
+            agendaUrl.searchParams.set("geo[southWest][lat]", String(bbox.southWestLat));
+            agendaUrl.searchParams.set("geo[southWest][lng]", String(bbox.southWestLng));
+            const { items: agItems, ok: agOk } = await tryOpenAgendaUrl(agendaUrl.toString(), cc);
+            if (agOk) {
+              for (const item of agItems) {
+                const parsed = parseOpenAgendaEvent(item, cc);
+                if (parsed) allEvents.push(parsed);
+              }
+              console.log(`[import-events] OpenAgenda agenda ${agendaId}: found ${agItems.length} events`);
+            }
+            await sleep(300);
+          }
+        } else {
+          errors.push(`OpenAgenda ${cc}: HTTP ${status ?? "unknown"} error`);
+        }
+        await sleep(500);
+        continue;
+      }
+
+      console.log(`[import-events] OpenAgenda ${cc}: found ${items.length} events`);
+      for (const item of items) {
+        const parsed = parseOpenAgendaEvent(item, cc);
+        if (parsed) allEvents.push(parsed);
+      }
+
+      await sleep(500);
+    }
+  } else {
+    // Fallback: broad European query (no geo filter)
+    const url = new URL("https://api.openagenda.com/v2/events");
+    url.searchParams.set("key", apiKey);
+    url.searchParams.set("size", "100");
+    url.searchParams.set("sort", "updatedAt.desc");
+    url.searchParams.append("relative[]", "current");
+    url.searchParams.append("relative[]", "upcoming");
+
+    const { items, ok, status } = await tryOpenAgendaUrl(url.toString(), null);
+    if (!ok) {
+      errors.push(`OpenAgenda global: HTTP ${status ?? "unknown"} - global events endpoint may require special API access`);
+    } else {
+      console.log(`[import-events] OpenAgenda global: found ${items.length} events`);
+      for (const item of items) {
+        const parsed = parseOpenAgendaEvent(item, null);
+        if (parsed) allEvents.push(parsed);
+      }
+    }
+  }
+
+  return { events: allEvents, errors };
+}
+
+/** Parse a single OpenAgenda event object into ImportedEvent */
+function parseOpenAgendaEvent(item: any, defaultCountry: string | null): ImportedEvent | null {
+  try {
+    // Pick title: prefer French, then English, then any non-null
+    const title =
+      item.title?.fr ||
+      item.title?.en ||
+      Object.values(item.title || {}).find((v) => v) ||
+      null;
+    if (!title) return null;
+
+    // Date
+    const startDate = item.firstTiming?.begin;
+    if (!startDate) return null;
+    if (new Date(startDate) < new Date()) return null;
+
+    // Description
+    const rawDesc =
+      item.description?.fr ||
+      item.description?.en ||
+      Object.values(item.description || {}).find((v) => v) ||
+      "";
+    const description =
+      typeof rawDesc === "string" && rawDesc.length > 500
+        ? rawDesc.substring(0, 497) + "..."
+        : String(rawDesc || "");
+
+    // Location
+    const locationName = item.location?.name || "";
+    const locationCity = item.location?.city || "";
+    const locationStr = [locationName, locationCity].filter(Boolean).join(", ") || "Unknown location";
+
+    // Coordinates
+    const lat = item.location?.latitude ? parseFloat(item.location.latitude) : null;
+    const lng = item.location?.longitude ? parseFloat(item.location.longitude) : null;
+
+    // Image
+    const imageUrl =
+      item.image?.base && item.image?.filename
+        ? `${item.image.base}${item.image.filename}`
+        : item.image?.url || null;
+
+    // Country
+    const country = item.location?.countryCode || defaultCountry || "FR";
+
+    // Tags for category mapping
+    const tags: string[] = (item.keywords?.fr || item.keywords?.en || []).concat(
+      item.categories?.map((c: any) => c.label?.fr || c.label?.en || "") || []
+    );
+    const classification = mapOpenAgendaCategory(tags);
+
+    return {
+      title: String(title),
+      description,
+      location: locationStr,
+      image_url: imageUrl,
+      date: startDate,
+      category: classification.category,
+      max_participants: 500,
+      created_by: null,
+      latitude: lat,
+      longitude: lng,
+      price: null,
+      interest_tags: classification.interest_tags,
+      suitable_for_modes: classification.suitable_for_modes,
+      weather_suitable: classification.weather_suitable,
+      indoor_outdoor: classification.indoor_outdoor,
+      category_level: 2,
+      min_required_participants: 1,
+      source: "openagenda",
+      status: "active",
+      country,
+    };
+  } catch (err) {
+    console.error(`[import-events] OpenAgenda parse error: ${err}`);
+    return null;
+  }
+}
+
 // ─── Deduplication Check (day-level) ─────────────────────────────────────────
 
 async function checkExists(
@@ -610,6 +1117,9 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
     const ticketmasterKey = Deno.env.get("TICKETMASTER_API_KEY") ?? "";
+    // Fall back to hardcoded defaults when env vars are not set in Supabase secrets
+    const eventbriteToken = Deno.env.get("EVENTBRITE_TOKEN") ?? "GLK3WHWKEXU2J6UGKQPN";
+    const openAgendaKey = Deno.env.get("OPENAGENDA_KEY") ?? "95cdf9a694424435a29025dbf4e66b92";
 
     if (!supabaseUrl || !supabaseServiceKey) {
       throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables");
@@ -685,6 +1195,96 @@ Deno.serve(async (req: Request) => {
       results.push(result);
     }
 
+    // ── Source 3: Eventbrite by country ────────────────────────────────────
+    let eventbriteUsed = false;
+    if (eventbriteToken) {
+      console.log(`[import-events] Starting Eventbrite import for ${countriesToImport.length} countries...`);
+
+      for (const cc of countriesToImport) {
+        try {
+          const { events: ebEvents, errors: ebErrors } = await fetchEventbriteByCountry(
+            eventbriteToken,
+            cc
+          );
+
+          if (ebErrors.length > 0) {
+            globalErrors.push(...ebErrors);
+          }
+
+          if (ebEvents.length > 0) {
+            const result = await insertEvents(supabase, ebEvents, "eventbrite", cc);
+            results.push(result);
+            eventbriteUsed = true;
+          } else {
+            results.push({
+              source: "eventbrite",
+              country: cc,
+              fetched: 0,
+              inserted: 0,
+              skipped: 0,
+              errors: ebErrors,
+            });
+          }
+
+          // Rate limit: 1 request per second
+          await sleep(1000);
+        } catch (ccErr) {
+          globalErrors.push(`Eventbrite fatal error for country ${cc}: ${ccErr}`);
+          await sleep(1000);
+        }
+      }
+    } else {
+      console.log("[import-events] EVENTBRITE_TOKEN not set — skipping Eventbrite.");
+    }
+
+    // ── Source 4: OpenAgenda (pan-European) ────────────────────────────────
+    let openAgendaUsed = false;
+    if (openAgendaKey) {
+      console.log("[import-events] Starting OpenAgenda import...");
+
+      try {
+        // Pass countries that have bounding boxes defined; OpenAgenda is mostly European
+        const europeanCountries = countriesToImport.filter((cc) => COUNTRY_BOUNDING_BOXES[cc]);
+        const { events: oaEvents, errors: oaErrors } = await fetchOpenAgendaEvents(
+          openAgendaKey,
+          europeanCountries.length > 0 ? europeanCountries : countriesToImport
+        );
+
+        if (oaErrors.length > 0) {
+          globalErrors.push(...oaErrors);
+        }
+
+        if (oaEvents.length > 0) {
+          // Group events by country for separate result entries
+          const byCountry = new Map<string, ImportedEvent[]>();
+          for (const ev of oaEvents) {
+            const cc = ev.country || "XX";
+            if (!byCountry.has(cc)) byCountry.set(cc, []);
+            byCountry.get(cc)!.push(ev);
+          }
+
+          for (const [cc, ccEvents] of byCountry.entries()) {
+            const result = await insertEvents(supabase, ccEvents, "openagenda", cc);
+            results.push(result);
+          }
+          openAgendaUsed = true;
+        } else {
+          results.push({
+            source: "openagenda",
+            country: "EU",
+            fetched: 0,
+            inserted: 0,
+            skipped: 0,
+            errors: oaErrors,
+          });
+        }
+      } catch (oaErr) {
+        globalErrors.push(`OpenAgenda fatal error: ${oaErr}`);
+      }
+    } else {
+      console.log("[import-events] OPENAGENDA_KEY not set — skipping OpenAgenda.");
+    }
+
     // ── Summary ──────────────────────────────────────────────────────────
     const totalFetched = results.reduce((s, r) => s + r.fetched, 0);
     const totalInserted = results.reduce((s, r) => s + r.inserted, 0);
@@ -702,6 +1302,8 @@ Deno.serve(async (req: Request) => {
         countries_processed: countriesToImport.length,
         ticketmaster_used: ticketmasterUsed,
         curated_fallback_used: useFallback,
+        eventbrite_used: eventbriteUsed,
+        openagenda_used: openAgendaUsed,
         totals: {
           fetched: totalFetched,
           inserted: totalInserted,
