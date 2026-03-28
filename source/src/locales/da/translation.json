@@ -719,7 +719,9 @@
       "easy": "Let",
       "medium": "Middel",
       "medium_hard": "Middel/Svær"
-    }
+    },
+    "country_filter": "Land / Region",
+    "country_filter_all": "Hele verden"
   },
   "common": {
     "search": "Søg",
@@ -971,7 +973,10 @@
     "places_in_area": "Steder i dit område",
     "fetching_places": "Henter steder...",
     "no_places_category": "Ingen steder i denne kategori",
-    "trending_nearby": "Trending nær dig"
+    "trending_nearby": "Trending nær dig",
+    "country_filter_label": "Land / Region",
+    "country_filter_all": "Hele verden",
+    "country_filter_europe": "Europa"
   },
   "recruitment": {
     "title": "Rekruttering",
@@ -1311,6 +1316,7 @@
     "demo_hero_desc": "B-Social hjælper dig med at finde events, aktiviteter og oplevelser der matcher dine interesser. Mød nye mennesker og udforsk din by.",
     "demo_hero_cta": "Kom i gang — det er gratis",
     "demo_cta_banner": "Opret konto og tilpas dit feed",
-    "demo_subtitle": "Populære events i Danmark"
+    "demo_subtitle": "Populære events i Danmark",
+    "international_events": "Internationale events"
   }
 }

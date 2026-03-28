@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, User, Bell, Shield, Globe, LogOut, ChevronRight, Mail, Trash2, Pencil } from "lucide-react";
+import { ArrowLeft, Bell, Shield, Globe, LogOut, ChevronRight, Mail, Trash2, Pencil } from "lucide-react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
@@ -340,19 +340,10 @@ export default function Indstillinger() {
 
         {/* Account */}
         <SettingsGroup title={t('settings.account')}>
-          <SettingsRow icon={User} label={t('settings.edit_profile')} value={displayName} />
+          <EditProfileSection />
+          <ChangeEmailSection />
           <ToggleRow icon={Bell} label={t('settings.notifications')} enabled={notifikationer} onToggle={() => setNotifikationer(!notifikationer)} />
           <ToggleRow icon={Shield} label={t('settings.private_profile')} enabled={privatProfil} onToggle={() => setPrivatProfil(!privatProfil)} />
-        </SettingsGroup>
-
-        {/* Edit Profile */}
-        <SettingsGroup title={t('settings.edit_profile')}>
-          <EditProfileSection />
-        </SettingsGroup>
-
-        {/* Change Email */}
-        <SettingsGroup title={t('settings.email_section')}>
-          <ChangeEmailSection />
         </SettingsGroup>
 
         {/* Preferences */}

@@ -153,14 +153,18 @@ export default function FirmaAuth() {
     <div
       className="relative min-h-svh flex flex-col"
       style={{
-        backgroundImage: `
-          linear-gradient(to bottom, rgba(10,14,35,0.85) 0%, rgba(10,14,35,0.95) 100%),
-          url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop')
-        `,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        background: "#0D1220",
       }}
     >
+      {/* Subtle teal gradient glow at top */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at center top, rgba(78,205,196,0.06) 0%, transparent 60%)",
+          pointerEvents: "none",
+        }}
+      />
       {/* Back button */}
       <div className="pt-12 px-5">
         <button

@@ -16,6 +16,26 @@ import { ALL_PINS } from "@/pages/Kort";
 import { ALL_CATEGORIES } from "@/data/categories";
 import type { Category } from "@/data/categories";
 
+/* ── Country/Region filter config ── */
+const REGIONS: Record<string, { flag: string; label: string }> = {
+  'DK': { flag: '🇩🇰', label: 'Danmark' },
+  'SE': { flag: '🇸🇪', label: 'Sverige' },
+  'NO': { flag: '🇳🇴', label: 'Norge' },
+  'DE': { flag: '🇩🇪', label: 'Tyskland' },
+  'NL': { flag: '🇳🇱', label: 'Holland' },
+  'GB': { flag: '🇬🇧', label: 'UK' },
+  'FR': { flag: '🇫🇷', label: 'Frankrig' },
+  'ES': { flag: '🇪🇸', label: 'Spanien' },
+  'IT': { flag: '🇮🇹', label: 'Italien' },
+  'EUROPE': { flag: '🌍', label: 'Europa' },
+  'ALL': { flag: '🌎', label: 'Hele verden' },
+};
+
+const EUROPE_CODES = ['DK','SE','NO','DE','NL','BE','AT','CH','ES','FR','IT','GB','IE','PL','CZ','FI'];
+
+// Only show chips for countries that have events (plus EUROPE and ALL as always-visible)
+const COUNTRY_CHIP_ORDER = ['DK', 'SE', 'NO', 'DE', 'NL', 'GB', 'FR', 'ES', 'IT', 'EUROPE', 'ALL'] as const;
+
 const BRUGERE = [
   { name: "Anna", avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&auto=format&fit=crop&crop=face" },
   { name: "Mads", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&crop=face" },
@@ -279,6 +299,7 @@ export default function Udforsk() {
   const [search, setSearch] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeCountry, setActiveCountry] = useState<string>('DK');
   const searchRef = useRef<HTMLInputElement>(null);
 
   const { data: events } = useQuery<Event[]>({
@@ -288,7 +309,7 @@ export default function Udforsk() {
 
   const allEvents = events || [];
 
-  /* ── Filter events by active category or search (TAG-TREE AWARE) ── */
+  /* ── Filter events by active category, country, or search (TAG-TREE AWARE) ── */
   const filtered = useMemo(() => {
     // Expand search query through tag tree
     const q = search.toLowerCase().trim();
@@ -310,9 +331,18 @@ export default function Udforsk() {
       const matchCat = !activeCategory ||
         (e.interest_tags || []).some(tag => tag.toLowerCase().includes(activeCategory)) ||
         (e.category || "").toLowerCase().includes(activeCategory);
-      return matchSearch && matchCat;
+      // Country filter
+      let matchCountry = true;
+      if (activeCountry === 'ALL') {
+        matchCountry = true;
+      } else if (activeCountry === 'EUROPE') {
+        matchCountry = !e.country || EUROPE_CODES.includes(e.country);
+      } else {
+        matchCountry = !e.country || e.country === activeCountry;
+      }
+      return matchSearch && matchCat && matchCountry;
     });
-  }, [allEvents, search, activeCategory]);
+  }, [allEvents, search, activeCategory, activeCountry]);
 
   const popular = [...filtered].sort((a, b) => (b.max_participants || 0) - (a.max_participants || 0)).slice(0, 10);
   const comingSoon = [...filtered].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 6);
@@ -491,6 +521,36 @@ export default function Udforsk() {
               <button onClick={() => setActiveCategory(null)} className="text-[#4ECDC4] text-xs font-medium">{t('events.show_all')}</button>
             </div>
           )}
+
+          {/* ══ Country / Region chips ══ */}
+          <section>
+            <div className="flex items-center gap-2 px-5 mb-2">
+              <span className="text-sm">🌎</span>
+              <h2 className="text-white font-semibold text-sm">{t('udforsk.country_filter_label')}</h2>
+            </div>
+            <div className="flex gap-2 overflow-x-auto px-5 pb-1" style={{ scrollbarWidth: "none" }}>
+              {COUNTRY_CHIP_ORDER.map((code) => {
+                const region = REGIONS[code];
+                if (!region) return null;
+                const isActive = activeCountry === code;
+                return (
+                  <button
+                    key={code}
+                    onClick={() => setActiveCountry(code)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+                      isActive
+                        ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20"
+                        : "glass-card text-white/60 hover:text-white hover:bg-white/10"
+                    }`}
+                    data-testid={`country-chip-${code}`}
+                  >
+                    <span className="text-sm">{region.flag}</span>
+                    {region.label}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
 
           {/* ══ Kategori-chips — kompakte, scrollbare ══ */}
           {!activeCategory && (

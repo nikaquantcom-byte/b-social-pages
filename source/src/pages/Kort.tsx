@@ -24,6 +24,36 @@ import { Link } from "wouter";
 
 type PinCategory = "sport" | "kultur" | "natur" | "musik" | "mad" | "spil" | "events" | "mtb" | "vandring" | "loeb" | "hund" | "fiskeri" | "badning" | "shelter" | "dyrespot" | "kreativt" | "fitness" | "outdoor" | "socialt" | "karriere" | "tech" | "aktiv_sport" | "mad_hangout" | "rejser" | "logi" | "wellness" | "communities" | "ture" | "aktiv";
 
+/* ── Country filter config ── */
+const MAP_REGIONS: Record<string, { flag: string; label: string }> = {
+  'DK': { flag: '🇩🇰', label: 'Danmark' },
+  'SE': { flag: '🇸🇪', label: 'Sverige' },
+  'NO': { flag: '🇳🇴', label: 'Norge' },
+  'DE': { flag: '🇩🇪', label: 'Tyskland' },
+  'GB': { flag: '🇬🇧', label: 'UK' },
+  'FR': { flag: '🇫🇷', label: 'Frankrig' },
+  'EUROPE': { flag: '🌍', label: 'Europa' },
+  'ALL': { flag: '🌎', label: 'Hele verden' },
+};
+
+// European country codes (for future use when Supabase events carry country field)
+export const MAP_EUROPE_CODES = ['DK','SE','NO','DE','NL','BE','AT','CH','ES','FR','IT','GB','IE','PL','CZ','FI'];
+
+const MAP_COUNTRY_CHIPS = ['DK', 'SE', 'NO', 'DE', 'GB', 'FR', 'EUROPE', 'ALL'] as const;
+
+const COUNTRY_CENTERS: Record<string, { lat: number; lng: number; zoom: number }> = {
+  'DK': { lat: 56.26, lng: 9.50, zoom: 7 },
+  'SE': { lat: 62.0, lng: 15.0, zoom: 5 },
+  'NO': { lat: 64.0, lng: 12.0, zoom: 5 },
+  'DE': { lat: 51.16, lng: 10.45, zoom: 6 },
+  'GB': { lat: 54.0, lng: -2.0, zoom: 6 },
+  'FR': { lat: 46.6, lng: 2.2, zoom: 6 },
+  'ES': { lat: 40.0, lng: -3.7, zoom: 6 },
+  'IT': { lat: 42.5, lng: 12.5, zoom: 6 },
+  'EUROPE': { lat: 50.0, lng: 10.0, zoom: 4 },
+  'ALL': { lat: 30.0, lng: 10.0, zoom: 2 },
+};
+
 interface MapPin {
   id: string;
   name: string;
@@ -551,6 +581,7 @@ export default function Kort() {
   const [selectedPin, setSelectedPin] = useState<MapPin | null>(null);
   const [flyTo, setFlyTo] = useState<{ center: [number, number]; zoom: number } | null>(null);
   const [showLayer, setShowLayer] = useState<"alle" | "steder" | "events">("alle");
+  const [mapCountry, setMapCountry] = useState<string>('DK');
   const searchRef = useRef<HTMLInputElement>(null);
 
   // Dynamic user location from profile city
@@ -601,7 +632,12 @@ export default function Kort() {
       if (priceFilter === "gratis" && PREMIUM_CATS.has(p.category)) return false;
       if (priceFilter === "premium" && GRATIS_CATS.has(p.category)) return false;
       const q = search.toLowerCase();
-      if (!q) return true;
+      if (!q) {
+        // Country filter applied when no search query
+        // Note: hardcoded pins don't have a country field — treat them as DK
+        // Supabase events may have a country field via the event's country
+        return true; // all pins are shown (hardcoded pins are all DK-based)
+      }
       // Tag-tree-aware search
       const tagResults = searchTags(q);
       const expandedTerms = [q, ...tagResults.map(item => item.tag.toLowerCase()), ...tagResults.map(item => item.label.toLowerCase())];
@@ -614,6 +650,10 @@ export default function Kort() {
       );
     });
   }, [priceFilter, search, allPins, showLayer, t, PREMIUM_CATS, GRATIS_CATS]);
+
+  // Note: country filtering on map pins will be extended once MapPin gains a `country` field.
+  // For now, selecting a country chips flies the map to that country's center viewport.
+
 
   // Pre-create emoji icons for each category
   const categoryIcons = useMemo(() => {
@@ -636,6 +676,15 @@ export default function Kort() {
   function handleRecenter() {
     setFlyTo({ center: [USER_LAT, USER_LNG], zoom: 14 });
     setSelectedPin(null);
+  }
+
+  function handleCountrySelect(code: string) {
+    setMapCountry(code);
+    setSelectedPin(null);
+    const center = COUNTRY_CENTERS[code];
+    if (center) {
+      setFlyTo({ center: [center.lat, center.lng], zoom: center.zoom });
+    }
   }
 
   function handlePinClick(pin: MapPin) {
@@ -711,6 +760,31 @@ export default function Kort() {
             {filteredPins.length} {showLayer === "events" ? t('map.events') : showLayer === "steder" ? t('map.places') : t('map.pins')}
             {showLayer === "alle" && eventPins.length > 0 && ` (${eventPins.length} ${t('map.events')})`}
           </span>
+        </div>
+
+        {/* Country / Region chip bar */}
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+          {MAP_COUNTRY_CHIPS.map((code) => {
+            const region = MAP_REGIONS[code];
+            if (!region) return null;
+            const isActive = mapCountry === code;
+            return (
+              <button
+                key={code}
+                onClick={() => handleCountrySelect(code)}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all whitespace-nowrap flex-shrink-0 ${
+                  isActive
+                    ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20"
+                    : "text-white/60 hover:text-white/80"
+                }`}
+                style={!isActive ? { background: "rgba(20, 26, 55, 0.9)", border: "1px solid rgba(255,255,255,0.1)" } : undefined}
+                data-testid={`map-country-${code}`}
+              >
+                <span>{region.flag}</span>
+                {region.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
