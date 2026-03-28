@@ -40,6 +40,7 @@ export type Event = {
   weather_suitable: string | null;
   indoor_outdoor: string | null;
   category_level: string | null;
+  country: string | null;
 };
 
 export type Profile = {

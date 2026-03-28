@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
 import { getEventImage, formatDanishDate } from "@/lib/eventHelpers";
-import { Search, PenSquare, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal, Compass, X } from "lucide-react";
+import { Search, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal, Compass, X } from "lucide-react";
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { buildTagFeed, scoreEvent, getTrendingTags, getTagNode, type TagSection } from "@/lib/tagEngine";
 import { useAuth } from "@/context/AuthContext";
@@ -81,7 +81,7 @@ export default function Feed() {
       if (!catMap[cat]) catMap[cat] = [];
       catMap[cat].push(e);
     }
-    return Object.entries(catMap)
+    const categorySections = Object.entries(catMap)
       .filter(([_, evts]) => evts.length >= 2)
       .sort((a, b) => b[1].length - a[1].length)
       .slice(0, 6)
@@ -91,7 +91,20 @@ export default function Feed() {
         emoji: getTagNode(cat)?.emoji || '\uD83C\uDFAF',
         events: evts.slice(0, 8),
       }));
-  }, [events]);
+
+    // "Internationale events" section: events from non-DK countries
+    const intlEvents = events.filter(e => e.country && e.country !== 'DK');
+    if (intlEvents.length >= 2) {
+      categorySections.push({
+        tag: 'international',
+        label: t('feed.international_events'),
+        emoji: '🌍',
+        events: intlEvents.slice(0, 8),
+      });
+    }
+
+    return categorySections;
+  }, [events, t]);
 
   // Search filtering: filter demoSections or tagSections by activeSearch query
   const filteredDemoSections = useMemo(() => {
@@ -213,29 +226,37 @@ export default function Feed() {
         )}
 
         <div className="flex items-center gap-3 mb-8 px-1">
-          <Link href="/udforsk" className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 hover:bg-[#4ECDC4]/20 transition-all">
+          <button
+            onClick={() => setTagEditorOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#4ECDC4]/10 border border-[#4ECDC4]/20 hover:bg-[#4ECDC4]/20 transition-all"
+          >
             <div className="w-8 h-8 rounded-full bg-[#4ECDC4]/20 flex items-center justify-center">
-              <PenSquare size={14} className="text-[#4ECDC4]" />
+              <SlidersHorizontal size={14} className="text-[#4ECDC4]" />
             </div>
-            <span className="text-sm text-[#4ECDC4] font-medium">{t('feed.add_friends')}</span>
-          </Link>
+            <span className="text-sm text-[#4ECDC4] font-medium">
+              {selectedTags.length > 0 ? t('feed.edit_tags') : t('feed.select_interests_btn')}
+            </span>
+          </button>
         </div>
+
+        {/* Hero for anonymous users — full width, centered */}
+        {isAnonymous && tagSections.length === 0 && (
+          <div className="text-center mb-10 max-w-2xl mx-auto px-4">
+            <h2 className="text-2xl font-bold mb-3">{t('feed.demo_hero_title')}</h2>
+            <p className="text-white/50 text-sm leading-relaxed mb-5">
+              {t('feed.demo_hero_desc')}
+            </p>
+            <Link href="/auth" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all">
+              {t('feed.demo_hero_cta')}
+            </Link>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
           <div>
             {isAnonymous && tagSections.length === 0 ? (
               // ── DEMO FEED for anonymous users ──────────────────────────
               <>
-                {/* Hero section */}
-                <div className="text-center mb-10 max-w-xl mx-auto">
-                  <h2 className="text-2xl font-bold mb-3">{t('feed.demo_hero_title')}</h2>
-                  <p className="text-white/50 text-sm leading-relaxed mb-5">
-                    {t('feed.demo_hero_desc')}
-                  </p>
-                  <Link href="/auth" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all">
-                    {t('feed.demo_hero_cta')}
-                  </Link>
-                </div>
 
                 {/* Event rows by category */}
                 {filteredDemoSections.length === 0 && activeSearch ? (
