@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useRoute } from "wouter";
 import { ArrowLeft, MapPin, Star, Share2, Bookmark, ExternalLink, Navigation, Clock, Accessibility, Info, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 import { supabase, type Place } from "@/lib/supabase";
 
 /* ── Category → hero image ── */
@@ -91,7 +91,6 @@ export default function StedDetail() {
     return (
       <div className="relative min-h-svh pb-24 flex items-center justify-center" style={{ background: "#0D1220" }}>
         <div className="w-8 h-8 border-2 border-[#4ECDC4]/30 border-t-[#4ECDC4] rounded-full animate-spin" />
-        <CalmBottomNav />
       </div>
     );
   }
@@ -104,7 +103,6 @@ export default function StedDetail() {
           <p className="text-white/60 text-sm mb-4">{t('place.not_found')}</p>
           <button onClick={() => setLocation("/kort")} className="text-[#4ECDC4] text-sm font-medium">{t('place.back_to_map')}</button>
         </div>
-        <CalmBottomNav />
       </div>
     );
   }
@@ -247,7 +245,6 @@ export default function StedDetail() {
         )}
       </div>
 
-      <CalmBottomNav />
     </div>
   );
 }

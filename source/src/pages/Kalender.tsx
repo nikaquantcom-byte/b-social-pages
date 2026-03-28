@@ -4,7 +4,7 @@ import { useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
 import { useQuery } from "@tanstack/react-query";
 import { fetchEvents, type Event as SupabaseEvent } from "@/lib/supabase";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 
 const DAY_KEYS = ["calendar.day_mon", "calendar.day_tue", "calendar.day_wed", "calendar.day_thu", "calendar.day_fri", "calendar.day_sat", "calendar.day_sun"];
 const MONTH_NAME_KEYS = ["calendar.month_january", "calendar.month_february", "calendar.month_march", "calendar.month_april", "calendar.month_may", "calendar.month_june", "calendar.month_july", "calendar.month_august", "calendar.month_september", "calendar.month_october", "calendar.month_november", "calendar.month_december"];
@@ -172,7 +172,6 @@ export default function Kalender() {
           </div>
         ))}
       </div>
-      <CalmBottomNav />
     </div>
   );
 }

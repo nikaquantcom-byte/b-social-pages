@@ -126,11 +126,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session: s } }) => {
+      console.log("[AuthContext] getSession result:", s ? "HAS SESSION for " + s.user?.email : "NO SESSION");
       setSession(s);
       setUser(s?.user ?? null);
       if (s?.user) {
         fetchProfile(s.user.id);
       }
+      setLoading(false);
+    }).catch((err) => {
+      console.error("[AuthContext] getSession error:", err);
       setLoading(false);
     });
 

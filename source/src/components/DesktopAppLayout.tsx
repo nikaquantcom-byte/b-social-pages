@@ -7,7 +7,7 @@ import { useNotifications } from "@/context/NotificationContext";
 import { useAuth } from "@/context/AuthContext";
 
 const NAV_MAIN = [
-  { key: "nav.feed", icon: Home, href: "/" },
+  { key: "nav.feed", icon: Home, href: "/feed" },
   { key: "nav.udforsk", icon: Compass, href: "/udforsk" },
   { key: "nav.kort", icon: MapPin, href: "/kort" },
   { key: "nav.beskeder", icon: MessageCircle, href: "/beskeder" },
@@ -23,7 +23,9 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
 
   const navLink = (href: string, icon: any, label: string, opts?: { badge?: number; mt?: boolean }) => {
     const Icon = icon;
-    const isActive = href === "/" ? location === href : location.startsWith(href);
+    const isActive = href === "/feed"
+      ? (location === "/" || location === "/feed" || location === "/test")
+      : location.startsWith(href);
     return (
       <Link
         key={href}
@@ -146,7 +148,9 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
         <div className="flex items-center justify-around h-16">
           {NAV_MAIN.map((item) => {
             const Icon = item.icon;
-            const isActive = item.href === "/" ? location === item.href : location.startsWith(item.href);
+            const isActive = item.href === "/feed"
+              ? (location === "/" || location === "/feed" || location === "/test")
+              : location.startsWith(item.href);
             return (
               <Link
                 key={item.href}

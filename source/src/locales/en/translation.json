@@ -14,7 +14,8 @@
     "morning": "Good morning",
     "afternoon": "Good afternoon",
     "evening": "Good evening",
-    "anonymous": "explorer"
+    "anonymous": "explorer",
+    "welcome": "Welcome to B-Social"
   },
   "auth": {
     "login": "Log in",
@@ -1305,6 +1306,11 @@
     "news_for_you": "News for you",
     "fetching_news": "Fetching news...",
     "no_news": "No current news.",
-    "popular_tags": "Popular Tags"
+    "popular_tags": "Popular Tags",
+    "demo_hero_title": "Discover Denmark Together",
+    "demo_hero_desc": "B-Social helps you find events, activities and experiences that match your interests. Meet new people and explore your city.",
+    "demo_hero_cta": "Get started — it is free",
+    "demo_cta_banner": "Create an account and personalise your feed",
+    "demo_subtitle": "Popular events in Denmark"
   }
 }

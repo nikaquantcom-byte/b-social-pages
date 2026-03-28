@@ -26,23 +26,20 @@ if (rawHash && rawHash.includes("access_token")) {
   const refreshToken = params.get("refresh_token");
 
   if (accessToken && refreshToken) {
-    // Set session explicitly, then set hash and mount React
+    // Set session explicitly, then do a FULL page reload so AuthContext picks it up cleanly
     supabase.auth
       .setSession({ access_token: accessToken, refresh_token: refreshToken })
-      .then(() => {
-        // Change hash to /feed and mount React
-        window.location.hash = "#/feed";
-        createRoot(document.getElementById("root")!).render(<App />);
-      })
-      .catch(() => {
-        // Even on error, mount React so the user sees something
-        window.location.hash = "#/feed";
-        createRoot(document.getElementById("root")!).render(<App />);
+      .finally(() => {
+        // Full reload with clean hash — guarantees AuthContext reads the persisted session
+        window.location.href =
+          window.location.origin + window.location.pathname + "#/feed";
+        window.location.reload();
       });
   } else {
-    // Tokens missing — just mount React on feed
-    window.location.hash = "#/feed";
-    createRoot(document.getElementById("root")!).render(<App />);
+    // Tokens missing — full reload to feed
+    window.location.href =
+      window.location.origin + window.location.pathname + "#/feed";
+    window.location.reload();
   }
 } else if (rawHash && rawHash.includes("error_description")) {
   // OAuth error — mount React on auth page

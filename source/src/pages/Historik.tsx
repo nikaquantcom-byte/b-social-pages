@@ -1,7 +1,7 @@
 import { ArrowLeft, MapPin } from "lucide-react";
 import { useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 
 interface HistoryEvent {
   id: string;
@@ -128,7 +128,6 @@ export default function Historik() {
           </div>
         ))}
       </div>
-      <CalmBottomNav />
     </div>
   );
 }

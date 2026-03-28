@@ -12,7 +12,8 @@ import { useTags } from "@/context/TagContext";
 import { FeedTagEditor } from "@/components/FeedTagEditor";
 
 
-function getPersonalizedGreeting(name: string | null | undefined, t: (key: string) => string): string {
+function getPersonalizedGreeting(name: string | null | undefined, isAnonymous: boolean, t: (key: string) => string): string {
+  if (isAnonymous) return t('greeting.welcome');
   const hour = new Date().getHours();
   const timeGreeting = hour < 12 ? t('greeting.morning') : hour < 17 ? t('greeting.afternoon') : t('greeting.evening');
   // Use full name — never truncate
@@ -47,7 +48,8 @@ export default function Feed() {
 
   // Use profile name, falling back to user metadata full_name, then email prefix
   const displayName = profile?.name || user?.user_metadata?.full_name || user?.user_metadata?.name || null;
-  const greeting = getPersonalizedGreeting(displayName, t);
+  const isAnonymous = !profile && !user;
+  const greeting = getPersonalizedGreeting(displayName, isAnonymous, t);
 
   // Build tag-based feed sections using tagEngine (only upcoming events)
   const tagSections = useMemo(() => {
@@ -68,9 +70,32 @@ export default function Feed() {
     return getTrendingTags(events, 12);
   }, [events]);
 
+  // Demo sections for anonymous users — group all events by category
+  const demoSections = useMemo(() => {
+    if (events.length === 0) return [];
+    const catMap: Record<string, typeof events> = {};
+    for (const e of events) {
+      const cat = e.category || 'andet';
+      if (!catMap[cat]) catMap[cat] = [];
+      catMap[cat].push(e);
+    }
+    return Object.entries(catMap)
+      .filter(([_, evts]) => evts.length >= 2)
+      .sort((a, b) => b[1].length - a[1].length)
+      .slice(0, 6)
+      .map(([cat, evts]) => ({
+        tag: cat,
+        label: cat.charAt(0).toUpperCase() + cat.slice(1),
+        emoji: getTagNode(cat)?.emoji || '\uD83C\uDFAF',
+        events: evts.slice(0, 8),
+      }));
+  }, [events]);
+
   // Subtitle line
   const subtitle = profile
-    ? `${city || profile.city || t('feed.denmark')} · ${selectedTags.length} ${t('feed.tags_selected')}`
+    ? `${city || profile.city || t('feed.denmark')} \u00B7 ${selectedTags.length} ${t('feed.tags_selected')}`
+    : isAnonymous
+    ? t('feed.demo_subtitle')
     : t('feed.subtitle');
 
   if (isLoading) {
@@ -119,7 +144,62 @@ export default function Feed() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
           <div>
-            {tagSections.length === 0 ? (
+            {isAnonymous && tagSections.length === 0 ? (
+              // ── DEMO FEED for anonymous users ──────────────────────────
+              <>
+                {/* Hero section */}
+                <div className="text-center mb-10 max-w-xl mx-auto">
+                  <h2 className="text-2xl font-bold mb-3">{t('feed.demo_hero_title')}</h2>
+                  <p className="text-white/50 text-sm leading-relaxed mb-5">
+                    {t('feed.demo_hero_desc')}
+                  </p>
+                  <Link href="/auth" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all">
+                    {t('feed.demo_hero_cta')}
+                  </Link>
+                </div>
+
+                {/* Event rows by category */}
+                {demoSections.map(section => (
+                  <div key={section.tag} className="mb-10">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-bold">
+                        {section.emoji}&nbsp;&nbsp;{section.label}
+                      </h2>
+                      <Link href="/udforsk" className="text-xs text-[#4ECDC4] hover:underline flex items-center gap-1">
+                        <span>{t('feed.see_all')}</span> <ChevronRight size={14} />
+                      </Link>
+                    </div>
+                    <div className="flex gap-3 overflow-x-auto pb-2">
+                      {section.events.map(event => (
+                        <Link key={event.id} href={`/event/${event.id}`} className="glass-card rounded-xl overflow-hidden hover:ring-1 hover:ring-[#4ECDC4]/30 transition-all group min-w-[180px] max-w-[220px] flex-shrink-0">
+                          <img src={getEventImage(event)} alt={event.title} className="w-full h-28 object-cover" onError={(e) => { const target = e.target as HTMLImageElement; target.src = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&auto=format&fit=crop"; }} />
+                          <div className="p-3">
+                            <p className="text-[10px] text-white/40 mb-1">{formatDanishDate(event.date)}</p>
+                            <h3 className="text-sm font-semibold leading-snug line-clamp-2">{event.title}</h3>
+                            <div className="flex gap-1 mt-2 flex-wrap">
+                              {event.interest_tags && event.interest_tags.slice(0, 2).map((tag: string) => (
+                                <span key={tag} className="text-[9px] bg-white/10 text-white/50 px-1.5 py-0.5 rounded-full">#{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Floating CTA banner */}
+                <div className="sticky bottom-6 flex justify-center mt-6 pointer-events-none">
+                  <Link
+                    href="/auth"
+                    className="pointer-events-auto inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold shadow-lg shadow-[#4ECDC4]/20 hover:bg-[#3dbdb5] transition-all"
+                  >
+                    {t('feed.demo_cta_banner')}
+                  </Link>
+                </div>
+              </>
+            ) : !isAnonymous && tagSections.length === 0 ? (
+              // ── EMPTY STATE for logged-in users with no tags ────────────
               <div className="text-center py-16 max-w-md mx-auto">
                 <div className="w-16 h-16 rounded-2xl bg-[#4ECDC4]/10 flex items-center justify-center mx-auto mb-5">
                   <Compass size={28} className="text-[#4ECDC4]" />
@@ -146,6 +226,7 @@ export default function Feed() {
                 </div>
               </div>
             ) : (
+              // ── PERSONALIZED FEED for logged-in users with tags ─────────
               tagSections.map(section => (
                 <div key={section.tag} className="mb-10">
                   <div className="flex items-center justify-between mb-4">

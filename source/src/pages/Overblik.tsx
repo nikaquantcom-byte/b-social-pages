@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useTranslation } from 'react-i18next';
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlaces, fetchEvents, type Place, type Event as SupabaseEvent } from "@/lib/supabase";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 
 const MONTHLY_DATA = [
   { monthKey: "overview.month_oct", count: 3 }, { monthKey: "overview.month_nov", count: 5 }, { monthKey: "overview.month_dec", count: 2 },
@@ -169,7 +169,6 @@ export default function Overblik() {
           </div>
         )}
       </div>
-      <CalmBottomNav />
     </div>
   );
 }

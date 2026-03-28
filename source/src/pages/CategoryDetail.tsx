@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
 import { getEvents } from "@/lib/data";
 import { getCategoryEmoji, getEventImage, formatDanishDate } from "@/lib/eventHelpers";
-import { CalmBottomNav } from "@/components/CalmBottomNav";
+
 import { useJoin } from "@/context/JoinContext";
 import { getCategoryByKey, ALL_CATEGORIES } from "@/data/categories";
 import {
@@ -817,7 +817,6 @@ export default function CategoryDetail() {
         )}
       </div>
 
-      <CalmBottomNav />
     </div>
   );
 }

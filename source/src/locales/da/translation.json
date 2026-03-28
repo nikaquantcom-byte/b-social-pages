@@ -14,7 +14,8 @@
     "morning": "God morgen",
     "afternoon": "God eftermiddag",
     "evening": "God aften",
-    "anonymous": "opdagelsesrejsende"
+    "anonymous": "opdagelsesrejsende",
+    "welcome": "Velkommen til B-Social"
   },
   "auth": {
     "login": "Log ind",
@@ -1305,6 +1306,11 @@
     "news_for_you": "Nyheder til dig",
     "fetching_news": "Henter nyheder...",
     "no_news": "Ingen aktuelle nyheder.",
-    "popular_tags": "Populære Tags"
+    "popular_tags": "Populære Tags",
+    "demo_hero_title": "Oplev Danmark sammen",
+    "demo_hero_desc": "B-Social hjælper dig med at finde events, aktiviteter og oplevelser der matcher dine interesser. Mød nye mennesker og udforsk din by.",
+    "demo_hero_cta": "Kom i gang — det er gratis",
+    "demo_cta_banner": "Opret konto og tilpas dit feed",
+    "demo_subtitle": "Populære events i Danmark"
   }
 }
