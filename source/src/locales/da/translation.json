@@ -329,7 +329,7 @@
     "per_month": "kr/md",
     "current_plan": "Nuværende pakke",
     "no_revenue_share": "Ingen revenue share",
-    "revenue_share_of": "{{pct}}% af omsætning via B-Social",
+    "revenue_share_of": "{{pct}} af omsætning via B-Social",
     "most_popular": "Mest populær",
     "popular": "Populær",
     "ideal_for": "Perfekt til: {{audience}}",

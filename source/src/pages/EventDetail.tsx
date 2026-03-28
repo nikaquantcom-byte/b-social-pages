@@ -25,6 +25,7 @@ export default function EventDetail() {
 
   const handleJoin = () => {
     if (!user) {
+      sessionStorage.setItem('returnTo', `/event/${id}`);
       setLocation("/auth");
       return;
     }
@@ -59,7 +60,7 @@ export default function EventDetail() {
         <p className="text-white/60 text-base">{t('events.not_found')}</p>
         <button
           onClick={() => setLocation("/feed")}
-          className="mt-4 px-6 py-2.5 rounded-2xl bg-[#4ECDC4] text-white font-medium text-sm"
+          className="mt-4 px-6 py-2.5 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-medium text-sm"
         >
           {t('events.back_to_feed')}
         </button>
@@ -196,7 +197,7 @@ export default function EventDetail() {
           className={`w-full py-4 rounded-2xl font-semibold text-base transition-all duration-200 ${
             joined
               ? "bg-white/10 text-[#4ECDC4] border border-[#4ECDC4]/30"
-              : "bg-[#4ECDC4] text-white hover:bg-[#3dbdb5] active:scale-98 shadow-lg shadow-[#4ECDC4]/20"
+              : "bg-[#4ECDC4] text-[#0a0f1a] hover:bg-[#3dbdb5] active:scale-98 shadow-lg shadow-[#4ECDC4]/20"
           }`}
           data-testid="button-deltag"
         >

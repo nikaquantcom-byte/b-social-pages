@@ -121,7 +121,7 @@ function TrendingCard({ activity }: { activity: SocialActivity }) {
             <span className="flex items-center gap-0.5 text-white/40 text-[10px]"><Users size={8} />{activity.spots.current}/{activity.spots.total}</span>
           </div>
         </div>
-        <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4] text-white text-[9px] font-bold flex-shrink-0">{t('events.free')}</span>
+        <span className="px-2 py-0.5 rounded-full bg-[#4ECDC4] text-[#0a0f1a] text-[9px] font-bold flex-shrink-0">{t('events.free')}</span>
       </div>
     </Link>
   );
@@ -247,7 +247,7 @@ function SupabasePlacesSection() {
             onClick={() => setDbFilter(f.key)}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap flex-shrink-0 ${
               dbFilter === f.key
-                ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20"
+                ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
                 : "glass-card text-white/60 hover:text-white"
             }`}
             data-testid={`db-filter-${f.key || "alle"}`}
@@ -539,7 +539,7 @@ export default function Udforsk() {
                     onClick={() => setActiveCountry(code)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                       isActive
-                        ? "bg-[#4ECDC4] text-white shadow-lg shadow-[#4ECDC4]/20"
+                        ? "bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/20"
                         : "glass-card text-white/60 hover:text-white hover:bg-white/10"
                     }`}
                     data-testid={`country-chip-${code}`}

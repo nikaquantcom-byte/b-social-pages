@@ -67,7 +67,7 @@ export default function Landing() {
         <div className="flex flex-col gap-3 w-full max-w-xs mt-10">
           <button
             onClick={() => setLocation("/onboarding")}
-            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-98 transition-all duration-200 shadow-lg"
+            className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-[#0a0f1a] font-semibold text-base hover:bg-[#3dbdb5] active:scale-98 transition-all duration-200 shadow-lg"
             data-testid="button-kom-i-gang"
           >
             Kom i gang

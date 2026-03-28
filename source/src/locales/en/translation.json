@@ -329,7 +329,7 @@
     "per_month": "/mo",
     "current_plan": "Current plan",
     "no_revenue_share": "No revenue share",
-    "revenue_share_of": "{{pct}}% of revenue via B-Social",
+    "revenue_share_of": "{{pct}} of revenue via B-Social",
     "most_popular": "Most popular",
     "popular": "Popular",
     "ideal_for": "Ideal for: {{audience}}",
