@@ -53,8 +53,8 @@ function PopularCard({ event }: { event: Event }) {
   const { t } = useTranslation();
   const isGratis = !event.price || event.price === 0;
   return (
-    <Link href={`/event/${event.id}`}>
-      <div className="min-w-[170px] max-w-[170px] rounded-2xl overflow-hidden glass-card cursor-pointer hover:scale-[1.02] transition-transform flex-shrink-0">
+    <Link href={`/event/${event.id}`} className="block flex-shrink-0">
+      <div className="min-w-[170px] max-w-[170px] rounded-2xl overflow-hidden glass-card cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform">
         <div className="relative h-28">
           <img src={getEventImage(event)} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -78,8 +78,8 @@ function CalendarListCard({ event }: { event: Event }) {
   const { t } = useTranslation();
   const isGratis = !event.price || event.price === 0;
   return (
-    <Link href={`/event/${event.id}`}>
-      <div className="glass-card rounded-2xl overflow-hidden cursor-pointer hover:bg-white/8 transition-all flex gap-3 pr-3">
+    <Link href={`/event/${event.id}`} className="block">
+      <div className="glass-card rounded-2xl overflow-hidden cursor-pointer hover:bg-white/8 active:opacity-80 transition-all flex gap-3 pr-3">
         <div className="relative w-20 h-20 flex-shrink-0">
           <img src={getEventImage(event)} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
         </div>
@@ -109,8 +109,8 @@ function CalendarListCard({ event }: { event: Event }) {
 function TrendingCard({ activity }: { activity: SocialActivity }) {
   const { t } = useTranslation();
   return (
-    <Link href={`/social/${activity.id}`}>
-      <div className="glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/8 transition-all">
+    <Link href={`/social/${activity.id}`} className="block">
+      <div className="glass-card rounded-2xl p-3 flex items-center gap-3 cursor-pointer hover:bg-white/8 active:opacity-80 transition-all">
         <div className="w-10 h-10 rounded-xl bg-[#4ECDC4]/15 flex items-center justify-center flex-shrink-0 text-xl">
           {activity.emoji}
         </div>

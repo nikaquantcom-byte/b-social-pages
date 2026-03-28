@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Sitemap: https://b-social.net/sitemap.xml
+
+# Block API and auth paths
+Disallow: /api/
+Disallow: /auth/

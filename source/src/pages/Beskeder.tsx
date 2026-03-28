@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Send, Smile, Paperclip, Phone, Video, MoreVertical, Check, CheckCheck, Newspaper, ExternalLink, MessageCircle, Plus, ArrowLeft, X, Loader2, Users } from "lucide-react";
+import { Link } from "wouter";
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
@@ -436,6 +437,9 @@ export default function Beskeder() {
           <MessageCircle size={48} className="text-[#4ECDC4] mx-auto" />
           <h2 className="text-xl font-bold">{t('beskeder.title')}</h2>
           <p className="text-white/50 text-sm">{t('beskeder.login_prompt')}</p>
+          <Link href="/auth" className="mt-4 px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all inline-block">
+            Log ind
+          </Link>
         </div>
       </div>
     );

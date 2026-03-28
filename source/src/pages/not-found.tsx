@@ -1,23 +1,35 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { Link } from "wouter";
+import { AlertTriangle } from "lucide-react";
 
 export default function NotFound() {
-  const { t } = useTranslation();
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardContent className="pt-6">
-          <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">{t('errors.not_found')}</h1>
-          </div>
+    <div
+      className="min-h-screen w-full flex items-center justify-center"
+      style={{ background: "#0D1220" }}
+    >
+      <div className="text-center space-y-6 max-w-sm px-6">
+        {/* Icon */}
+        <div className="w-20 h-20 rounded-2xl bg-[#4ECDC4]/10 flex items-center justify-center mx-auto">
+          <AlertTriangle size={36} className="text-[#4ECDC4]" />
+        </div>
 
-          <p className="mt-4 text-sm text-gray-600">
-            {t('errors.not_found_description')}
+        {/* Heading */}
+        <div className="space-y-2">
+          <p className="text-[#4ECDC4] text-sm font-semibold tracking-widest uppercase">404</p>
+          <h1 className="text-white text-2xl font-bold">Siden blev ikke fundet</h1>
+          <p className="text-white/50 text-sm leading-relaxed">
+            Den side, du leder efter, eksisterer ikke eller er blevet flyttet.
           </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* CTA */}
+        <Link
+          href="/feed"
+          className="mt-2 px-6 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] active:scale-[0.98] transition-all inline-block"
+        >
+          Gå til forsiden
+        </Link>
+      </div>
     </div>
   );
 }
