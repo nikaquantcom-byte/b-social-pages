@@ -21,7 +21,7 @@ interface AuthContextType {
   companyId: string | null;
   isFirma: () => boolean;
   isAdmin: () => boolean;
-  isLoggedIn: () => boolean;
+  isLoggedIn: boolean;
 }
 
 export interface ProfileData {
@@ -56,7 +56,7 @@ const AuthContext = createContext<AuthContextType>({
   companyId: null,
   isFirma: () => false,
   isAdmin: () => false,
-  isLoggedIn: () => false,
+  isLoggedIn: false,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -118,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [user?.id, fetchProfile]);
 
-  const isLoggedIn = useCallback(() => !!user && !!session, [user, session]);
+  const isLoggedIn = !!user && !!session;
   const isFirma = useCallback(() => role === "firma" || role === "admin", [role]);
   const isAdmin = useCallback(() => role === "admin", [role]);
 

@@ -198,7 +198,7 @@ export default function Auth() {
                   setResetLoading(true);
                   setError(null);
                   const { error: resetErr } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: window.location.origin + window.location.pathname + "#/auth",
+                    redirectTo: window.location.origin + window.location.pathname + "?returnTo=/auth",
                   });
                   setResetLoading(false);
                   if (resetErr) {
@@ -256,7 +256,7 @@ export default function Auth() {
             const { error } = await supabase.auth.signInWithOAuth({
               provider: "google",
               options: {
-                redirectTo: window.location.origin + window.location.pathname + "#/feed",
+                redirectTo: window.location.origin + window.location.pathname + "?returnTo=/feed",
               },
             });
             if (error) setError(error.message);

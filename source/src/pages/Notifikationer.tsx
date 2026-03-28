@@ -113,7 +113,7 @@ export default function Notifikationer() {
     );
   }
 
-  if (!isLoggedIn()) {
+  if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-[#0a0e23] flex flex-col items-center justify-center px-6">
         <Inbox size={48} className="text-white/20 mb-4" />
