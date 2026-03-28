@@ -74,7 +74,7 @@ function FirmaRouter() {
 
   if (loading) return <PageLoader />;
 
-  if (!isLoggedIn() || !isFirma()) {
+  if (!isLoggedIn || !isFirma()) {
     return <Redirect to="/firma/auth" />;
   }
 

@@ -211,7 +211,8 @@ async function fetchTicketmasterByCountry(
   const errors: string[] = [];
   const events: ImportedEvent[] = [];
 
-  const now = new Date().toISOString();
+  // Ticketmaster requires YYYY-MM-DDTHH:mm:ssZ (no milliseconds)
+  const now = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
   const url = `https://app.ticketmaster.com/discovery/v2/events.json?countryCode=${countryCode}&size=50&apikey=${apiKey}&sort=date,asc&startDateTime=${encodeURIComponent(now)}`;
 
   let data: any;

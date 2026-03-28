@@ -421,7 +421,7 @@ export default function Beskeder() {
   }
 
   /* ── Not logged in state ── */
-  if (!isLoggedIn()) {
+  if (!isLoggedIn) {
     return (
       <div className="flex h-full bg-[#0a0f1a] text-white items-center justify-center">
         <div className="text-center space-y-4 max-w-sm px-6">

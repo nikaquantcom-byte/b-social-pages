@@ -14,41 +14,37 @@ if ("serviceWorker" in navigator) {
   }
 }
 
-// ── Step 2: Handle OAuth callback tokens in URL hash ──
-// Google OAuth redirects back with #access_token=xxx&refresh_token=xxx
-// We intercept these BEFORE the hash router sees them.
-const rawHash = window.location.hash;
+// ── Step 2: Handle PKCE OAuth callback ──
+// With PKCE flow, Supabase returns ?code=xxx in the URL.
+// We must let Supabase exchange the code BEFORE cleaning the URL.
+const searchParams = new URLSearchParams(window.location.search);
+const code = searchParams.get("code");
+const returnTo = searchParams.get("returnTo");
+const errorDescription = searchParams.get("error_description");
 
-if (rawHash && rawHash.includes("access_token")) {
-  // Parse tokens from the hash fragment
-  const params = new URLSearchParams(rawHash.substring(1));
-  const accessToken = params.get("access_token");
-  const refreshToken = params.get("refresh_token");
-
-  if (accessToken && refreshToken) {
-    // Set session explicitly, then do a FULL page reload so AuthContext picks it up cleanly
-    supabase.auth
-      .setSession({ access_token: accessToken, refresh_token: refreshToken })
-      .finally(() => {
-        // Full reload with clean hash — guarantees AuthContext reads the persisted session
-        window.location.href =
-          window.location.origin + window.location.pathname + "#/feed";
-        window.location.reload();
-      });
+async function bootstrap() {
+  if (code) {
+    // PKCE callback: let Supabase exchange the code for a session
+    // This reads ?code= from window.location and persists the session to localStorage
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      console.error("[Auth] Code exchange failed:", error.message);
+    }
+    // NOW clean the URL (code has been consumed)
+    const dest = returnTo || "/feed";
+    window.history.replaceState(null, "", window.location.pathname + "#" + dest);
+  } else if (errorDescription) {
+    window.history.replaceState(null, "", window.location.pathname + "#/auth");
   } else {
-    // Tokens missing — full reload to feed
-    window.location.href =
-      window.location.origin + window.location.pathname + "#/feed";
-    window.location.reload();
+    // Normal app load
+    const rawHash = window.location.hash;
+    if (!rawHash || rawHash === "#" || rawHash === "#/") {
+      window.location.hash = "#/";
+    }
   }
-} else if (rawHash && rawHash.includes("error_description")) {
-  // OAuth error — mount React on auth page
-  window.location.hash = "#/auth";
-  createRoot(document.getElementById("root")!).render(<App />);
-} else {
-  // ── Step 3: Normal app load — always mount React ──
-  if (!rawHash || rawHash === "#" || rawHash === "#/") {
-    window.location.hash = "#/";
-  }
+
+  // Mount React — session is now in localStorage, AuthContext will find it
   createRoot(document.getElementById("root")!).render(<App />);
 }
+
+bootstrap();

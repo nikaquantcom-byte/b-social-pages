@@ -304,7 +304,7 @@ export default function FirmaDashboard() {
   }, [events]);
 
   // Guard: if not authenticated or not firma, show login prompt only
-  if (!authLoading && (!isLoggedIn() || !isFirma())) {
+  if (!authLoading && (!isLoggedIn || !isFirma())) {
     return (
       <FirmaLayout>
         <div className="max-w-lg mx-auto py-20 text-center space-y-6">

@@ -68,7 +68,7 @@ export default function FirmaAuth() {
     e.preventDefault();
     setError(null);
 
-    if (!isLoggedIn()) {
+    if (!isLoggedIn) {
       setError(t('firma.must_be_logged_in_error'));
       return;
     }
@@ -191,7 +191,7 @@ export default function FirmaAuth() {
           </div>
         </div>
 
-        {!isLoggedIn() && (
+        {!isLoggedIn && (
           <div className="p-4 rounded-2xl bg-yellow-500/15 border border-yellow-500/25 text-yellow-300 text-sm text-center mb-6">
             {t('auth.must_be_logged_in')}{" "}
             <span
@@ -326,7 +326,7 @@ export default function FirmaAuth() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={loading || !isLoggedIn()}
+            disabled={loading || !isLoggedIn}
             className="w-full py-4 rounded-2xl bg-[#4ECDC4] text-white font-semibold text-base hover:bg-[#3dbdb5] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-[#4ECDC4]/20 disabled:opacity-60 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
           >
             {loading && <Loader2 size={18} className="animate-spin" />}

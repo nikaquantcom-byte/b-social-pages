@@ -19,7 +19,7 @@ export default function DesktopAppLayout({ children }: { children: React.ReactNo
   const [location, setLocation] = useHashLocation();
   const { unreadCount } = useNotifications();
   const { isLoggedIn, profile, signOut, loading: authLoading } = useAuth();
-  const loggedIn = !authLoading && isLoggedIn();
+  const loggedIn = !authLoading && isLoggedIn;
 
   const navLink = (href: string, icon: any, label: string, opts?: { badge?: number; mt?: boolean }) => {
     const Icon = icon;
