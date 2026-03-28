@@ -514,7 +514,7 @@ const RSS_FEEDS: FeedConfig[] = [
 ];
 
 // --- CORS Proxy (own Cloudflare Worker) ---
-const PROXY = "https://bsocial-rss-proxy.nicbj96.workers.dev/?url=";
+const PROXY = "https://bsocial-rss-proxy.pages.dev/?url=";
 
 // --- Cache ---
 const CACHE_KEY = "bsocial_news_v4";

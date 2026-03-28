@@ -606,7 +606,7 @@ export default function Onboarding() {
               </div>
 
               <p className="text-white/50 text-sm text-center mb-4">
-                Oplevelser inden for <span className="text-[#4ECDC4] font-semibold">{radiusLabel}</span> af {selectedCities[0] || "din by"}
+                {t('onboarding.experiences_within')} <span className="text-[#4ECDC4] font-semibold">{radiusLabel}</span> {t('onboarding.of_city', { city: selectedCities[0] || t('onboarding.your_city') })}
               </p>
 
               <div className="w-full px-4 mb-6">

@@ -25,8 +25,8 @@ const PLANS: {
     revenueSharePct: 0,
     icon: Heart,
     color: "text-emerald-400",
-    features: ["Op til 3 aktive events", "Basis statistik", "Firmaprofil", "Tag-targeting (basis)"],
-    idealForKey: "Små foreninger, klubber, frivillige",
+    features: ["pricing.feature_starter_1", "pricing.feature_starter_2", "pricing.feature_starter_3", "pricing.feature_starter_4"],
+    idealForKey: "pricing.ideal_for_starter",
   },
   {
     id: "vaekst",
@@ -36,8 +36,8 @@ const PLANS: {
     highlight: true,
     icon: Zap,
     color: "text-[#4ECDC4]",
-    features: ["Ubegrænsede events", "Fuld analytics", "Avanceret tag-targeting", "Promoted events", "Email support"],
-    idealForKey: "Voksende virksomheder, padel-centre, yoga-studier",
+    features: ["pricing.feature_vaekst_1", "pricing.feature_vaekst_2", "pricing.feature_vaekst_3", "pricing.feature_vaekst_4", "pricing.feature_vaekst_5"],
+    idealForKey: "pricing.ideal_for_vaekst",
   },
   {
     id: "partner",
@@ -46,8 +46,8 @@ const PLANS: {
     revenueSharePct: 3,
     icon: Crown,
     color: "text-purple-400",
-    features: ["Alt i Vækst", "Dedicated account manager", "Custom integrationer", "API-adgang", "Multi-lokation"],
-    idealForKey: "Større arrangører, festivaler, kæder",
+    features: ["pricing.feature_partner_1", "pricing.feature_partner_2", "pricing.feature_partner_3", "pricing.feature_partner_4", "pricing.feature_partner_5"],
+    idealForKey: "pricing.ideal_for_partner",
   },
 ];
 
@@ -69,20 +69,20 @@ export default function FirmaAuth() {
     setError(null);
 
     if (!isLoggedIn()) {
-      setError("Du skal være logget ind for at oprette en firmakonto. Log ind først.");
+      setError(t('firma.must_be_logged_in_error'));
       return;
     }
 
     if (!companyName.trim()) {
-      setError("Firmanavn er påkrævet");
+      setError(t('firma.company_name_required'));
       return;
     }
     if (!cvr.trim() || cvr.length < 8) {
-      setError("Gyldigt CVR-nummer er påkrævet (8 cifre)");
+      setError(t('firma.cvr_required'));
       return;
     }
     if (!email.trim()) {
-      setError("Firma-e-mail er påkrævet");
+      setError(t('firma.email_required'));
       return;
     }
 
@@ -308,11 +308,11 @@ export default function FirmaAuth() {
                       {plan.features.map((f) => (
                         <li key={f} className="text-white/40 text-xs flex items-center gap-1.5">
                           <Check size={10} className="text-[#4ECDC4] shrink-0" />
-                          {f}
+                          {t(f)}
                         </li>
                       ))}
                     </ul>
-                    <p className="text-white/25 text-[10px] mt-2">{t('pricing.ideal_for', { audience: plan.idealForKey })}</p>
+                    <p className="text-white/25 text-[10px] mt-2">{t('pricing.ideal_for', { audience: t(plan.idealForKey) })}</p>
                   </button>
                 );
               })}

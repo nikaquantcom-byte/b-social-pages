@@ -47,12 +47,12 @@ const PLANS: PlanDef[] = [
     icon: Heart,
     color: "text-emerald-400",
     features: [
-      "Op til 3 aktive events",
-      "Basis statistik",
-      "Firmaprofil",
-      "Tag-targeting (basis)",
+      "pricing.feature_starter_1",
+      "pricing.feature_starter_2",
+      "pricing.feature_starter_3",
+      "pricing.feature_starter_4",
     ],
-    idealForKey: "Små foreninger, klubber, frivillige",
+    idealForKey: "pricing.ideal_for_starter",
   },
   {
     id: "vaekst",
@@ -65,13 +65,13 @@ const PLANS: PlanDef[] = [
     icon: Zap,
     color: "text-[#4ECDC4]",
     features: [
-      "Ubegrænsede events",
-      "Fuld analytics dashboard",
-      "Avanceret tag-targeting",
-      "Promoted events (betalt reach)",
-      "Email support",
+      "pricing.feature_vaekst_1",
+      "pricing.feature_vaekst_2_full",
+      "pricing.feature_vaekst_3",
+      "pricing.feature_vaekst_4_full",
+      "pricing.feature_vaekst_5",
     ],
-    idealForKey: "Voksende virksomheder, padel-centre, yoga-studier",
+    idealForKey: "pricing.ideal_for_vaekst",
   },
   {
     id: "partner",
@@ -83,14 +83,14 @@ const PLANS: PlanDef[] = [
     icon: Crown,
     color: "text-purple-400",
     features: [
-      "Alt i Vækst",
-      "Dedicated account manager",
-      "Custom integrationer",
-      "API-adgang",
-      "Multi-lokation support",
-      "Prioriteret support",
+      "pricing.feature_partner_1",
+      "pricing.feature_partner_2",
+      "pricing.feature_partner_3",
+      "pricing.feature_partner_4",
+      "pricing.feature_partner_5_full",
+      "pricing.feature_partner_6",
     ],
-    idealForKey: "Større arrangører, festivaler, kæder",
+    idealForKey: "pricing.ideal_for_partner",
   },
 ];
 
@@ -227,8 +227,8 @@ export default function FirmaFakturering() {
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {currentPlanDef.revenueSharePct === 0
-                    ? "Ingen omkostninger — hverken faste eller variable"
-                    : `B-Social tager ${currentPlanDef.revenueShare} af billetindtægter via platformen`}
+                    ? t('pricing.no_costs')
+                    : t('pricing.bsocial_takes', { pct: currentPlanDef.revenueShare })}
                 </p>
               </div>
             </div>
@@ -318,7 +318,7 @@ export default function FirmaFakturering() {
                     {plan.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm">
                         <Check size={14} className="text-primary mt-0.5 shrink-0" />
-                        <span className="text-muted-foreground">{f}</span>
+                        <span className="text-muted-foreground">{t(f)}</span>
                       </li>
                     ))}
                   </ul>
@@ -326,7 +326,7 @@ export default function FirmaFakturering() {
                   <div className="pt-2 border-t border-white/5 mb-4">
                     <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                       <TrendingUp size={10} />
-                      {t('pricing.ideal_for', { audience: plan.idealForKey })}
+                      {t('pricing.ideal_for', { audience: t(plan.idealForKey) })}
                     </p>
                   </div>
 

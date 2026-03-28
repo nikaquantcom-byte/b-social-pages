@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { getEvents } from "@/lib/data";
@@ -11,15 +12,16 @@ import { useTags } from "@/context/TagContext";
 import { FeedTagEditor } from "@/components/FeedTagEditor";
 
 
-function getPersonalizedGreeting(name?: string | null): string {
+function getPersonalizedGreeting(name: string | null | undefined, t: (key: string) => string): string {
   const hour = new Date().getHours();
-  const timeGreeting = hour < 12 ? "God morgen" : hour < 17 ? "God eftermiddag" : "God aften";
+  const timeGreeting = hour < 12 ? t('greeting.morning') : hour < 17 ? t('greeting.afternoon') : t('greeting.evening');
   // Use full name — never truncate
   const displayName = name && name.length > 1 ? name : null;
-  return displayName ? `${timeGreeting}, ${displayName}` : `${timeGreeting}, opdagelsesrejsende`;
+  return displayName ? `${timeGreeting}, ${displayName}` : `${timeGreeting}, ${t('greeting.anonymous')}`;
 }
 
 export default function Feed() {
+  const { t } = useTranslation();
   const { profile, user } = useAuth();
   const { selectedTags, city } = useTags();
   const [tagEditorOpen, setTagEditorOpen] = useState(false);
@@ -45,7 +47,7 @@ export default function Feed() {
 
   // Use profile name, falling back to user metadata full_name, then email prefix
   const displayName = profile?.name || user?.user_metadata?.full_name || user?.user_metadata?.name || null;
-  const greeting = getPersonalizedGreeting(displayName);
+  const greeting = getPersonalizedGreeting(displayName, t);
 
   // Build tag-based feed sections using tagEngine (only upcoming events)
   const tagSections = useMemo(() => {
@@ -68,13 +70,13 @@ export default function Feed() {
 
   // Subtitle line
   const subtitle = profile
-    ? `${city || profile.city || "Danmark"} · ${selectedTags.length} tags valgt`
-    : "Her er hvad der sker i dine netværk";
+    ? `${city || profile.city || t('feed.denmark')} · ${selectedTags.length} ${t('feed.tags_selected')}`
+    : t('feed.subtitle');
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0a0e23] flex items-center justify-center">
-        <p className="text-white/50">Loader events...</p>
+        <p className="text-white/50">{t('feed.loading_events')}</p>
       </div>
     );
   }
@@ -111,7 +113,7 @@ export default function Feed() {
             <div className="w-8 h-8 rounded-full bg-[#4ECDC4]/20 flex items-center justify-center">
               <PenSquare size={14} className="text-[#4ECDC4]" />
             </div>
-            <span className="text-sm text-[#4ECDC4] font-medium">Tilføj venner</span>
+            <span className="text-sm text-[#4ECDC4] font-medium">{t('feed.add_friends')}</span>
           </Link>
         </div>
 
@@ -122,24 +124,24 @@ export default function Feed() {
                 <div className="w-16 h-16 rounded-2xl bg-[#4ECDC4]/10 flex items-center justify-center mx-auto mb-5">
                   <Compass size={28} className="text-[#4ECDC4]" />
                 </div>
-                <h2 className="text-lg font-bold text-white/80 mb-2">Kom i gang med dit feed</h2>
+                <h2 className="text-lg font-bold text-white/80 mb-2">{t('feed.get_started')}</h2>
                 <p className="text-white/40 text-sm mb-6">
                   {selectedTags.length === 0
-                    ? "Vælg dine interesser, så finder vi de bedste events til dig."
-                    : "Der er ingen kommende events for dine tags lige nu. Prøv at tilføje flere tags eller udforsk alle events."}
+                    ? t('feed.select_interests')
+                    : t('feed.no_events_for_tags')}
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <button
                     onClick={() => setTagEditorOpen(true)}
                     className="px-5 py-2.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all"
                   >
-                    {selectedTags.length === 0 ? "Vælg dine interesser" : "Rediger tags"}
+                    {selectedTags.length === 0 ? t('feed.select_interests_btn') : t('feed.edit_tags')}
                   </button>
                   <Link
                     href="/udforsk"
                     className="px-5 py-2.5 rounded-xl bg-white/10 text-white/70 text-sm font-medium hover:bg-white/15 transition-all"
                   >
-                    Udforsk alle events
+                    {t('feed.explore_all_events')}
                   </Link>
                 </div>
               </div>
@@ -151,7 +153,7 @@ export default function Feed() {
                       {section.emoji}&nbsp;&nbsp;{section.label}
                     </h2>
                     <Link href="/udforsk" className="text-xs text-[#4ECDC4] hover:underline flex items-center gap-1">
-                      <span>Se alle</span> <ChevronRight size={14} />
+                      <span>{t('feed.see_all')}</span> <ChevronRight size={14} />
                     </Link>
                   </div>
                   <div className="flex gap-3 overflow-x-auto pb-2">
@@ -178,13 +180,13 @@ export default function Feed() {
           <aside className="space-y-6">
             <div className="glass-card rounded-2xl p-4">
               <h3 className="text-sm font-semibold text-white/70 mb-3 flex items-center gap-2">
-                Nyheder til dig
+                {t('feed.news_for_you')}
                 <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded-full">LIVE</span>
               </h3>
               {newsLoading ? (
                 <div className="flex items-center gap-2 text-white/40 text-sm py-4">
                   <Loader2 size={14} className="animate-spin" />
-                  Henter nyheder...
+                  {t('feed.fetching_news')}
                 </div>
               ) : relevantNews.length > 0 ? (
                 <div className="space-y-3">
@@ -201,12 +203,12 @@ export default function Feed() {
                   ))}
                 </div>
               ) : (
-                <p className="text-white/30 text-xs py-4">Ingen aktuelle nyheder.</p>
+                <p className="text-white/30 text-xs py-4">{t('feed.no_news')}</p>
               )}
             </div>
 
             <div className="glass-card rounded-2xl p-4">
-              <h3 className="text-sm font-semibold text-white/70 mb-3">Populære Tags</h3>
+              <h3 className="text-sm font-semibold text-white/70 mb-3">{t('feed.popular_tags')}</h3>
               <div className="flex flex-wrap gap-2">
                 {trendingTags.map(({ tag, count }) => {
                   const node = getTagNode(tag);

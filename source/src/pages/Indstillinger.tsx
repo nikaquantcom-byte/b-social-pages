@@ -89,9 +89,9 @@ function EditProfileSection() {
       .eq("id", user.id);
 
     if (error) {
-      setMessage("Fejl: " + error.message);
+      setMessage(t('settings.error_prefix') + error.message);
     } else {
-      setMessage("Profil opdateret!");
+      setMessage(t('settings.profile_updated'));
       await refreshProfile();
       setTimeout(() => { setMessage(""); setEditing(false); }, 1500);
     }
@@ -107,7 +107,7 @@ function EditProfileSection() {
         <div className="w-8 h-8 rounded-xl bg-white/8 flex items-center justify-center">
           <Pencil size={16} className="text-white/60" />
         </div>
-        <span className="flex-1 text-left text-sm font-medium text-white/80">Rediger navn & by</span>
+        <span className="flex-1 text-left text-sm font-medium text-white/80">{t('settings.edit_name_city')}</span>
         <ChevronRight size={14} className="text-white/20" />
       </button>
     );
@@ -116,23 +116,23 @@ function EditProfileSection() {
   return (
     <div className="px-4 py-3 space-y-3">
       <div>
-        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">Navn</label>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">{t('settings.name_label')}</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
-          placeholder="Dit fulde navn"
+          placeholder={t('settings.name_placeholder')}
         />
       </div>
       <div>
-        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">By</label>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">{t('settings.city_label')}</label>
         <input
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white/90 focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
-          placeholder="F.eks. Aalborg"
+          placeholder={t('settings.city_placeholder')}
         />
       </div>
       {message && (
@@ -142,12 +142,12 @@ function EditProfileSection() {
         <button
           onClick={() => setEditing(false)}
           className="flex-1 px-3 py-2 rounded-xl bg-white/5 text-white/50 text-sm hover:bg-white/10 transition-colors"
-        >Annuller</button>
+        >{t('settings.cancel')}</button>
         <button
           onClick={handleSave}
           disabled={saving}
           className="flex-1 px-3 py-2 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-colors disabled:opacity-50"
-        >{saving ? "Gemmer..." : "Gem"}</button>
+        >{saving ? t('settings.saving') : t('settings.save')}</button>
       </div>
     </div>
   );
@@ -163,7 +163,7 @@ function ChangeEmailSection() {
 
   const handleChangeEmail = async () => {
     if (!newEmail.trim() || !newEmail.includes("@")) {
-      setMessage("Indtast en gyldig email");
+      setMessage(t('settings.invalid_email'));
       return;
     }
     setSaving(true);
@@ -172,9 +172,9 @@ function ChangeEmailSection() {
     const { error } = await supabase.auth.updateUser({ email: newEmail.trim() });
 
     if (error) {
-      setMessage("Fejl: " + error.message);
+      setMessage(t('settings.error_prefix') + error.message);
     } else {
-      setMessage("Bekræftelsesmail sendt til " + newEmail.trim());
+      setMessage(t('settings.confirmation_email_sent', { email: newEmail.trim() }));
       setTimeout(() => { setMessage(""); setEditing(false); setNewEmail(""); }, 3000);
     }
     setSaving(false);
@@ -189,7 +189,7 @@ function ChangeEmailSection() {
         <div className="w-8 h-8 rounded-xl bg-white/8 flex items-center justify-center">
           <Mail size={16} className="text-white/60" />
         </div>
-        <span className="flex-1 text-left text-sm font-medium text-white/80">Skift email</span>
+        <span className="flex-1 text-left text-sm font-medium text-white/80">{t('settings.change_email')}</span>
         <ChevronRight size={14} className="text-white/20" />
       </button>
     );
@@ -198,7 +198,7 @@ function ChangeEmailSection() {
   return (
     <div className="px-4 py-3 space-y-3">
       <div>
-        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">Ny email</label>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">{t('settings.new_email_label')}</label>
         <input
           type="email"
           value={newEmail}
@@ -214,12 +214,12 @@ function ChangeEmailSection() {
         <button
           onClick={() => { setEditing(false); setNewEmail(""); setMessage(""); }}
           className="flex-1 px-3 py-2 rounded-xl bg-white/5 text-white/50 text-sm hover:bg-white/10 transition-colors"
-        >Annuller</button>
+        >{t('settings.cancel')}</button>
         <button
           onClick={handleChangeEmail}
           disabled={saving}
           className="flex-1 px-3 py-2 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-colors disabled:opacity-50"
-        >{saving ? "Sender..." : "Send bekræftelse"}</button>
+        >{saving ? t('settings.sending') : t('settings.send_confirmation')}</button>
       </div>
     </div>
   );
@@ -236,7 +236,7 @@ function DeleteAccountSection() {
 
   const handleDelete = async () => {
     if (confirmText !== "SLET") {
-      setMessage("Skriv SLET for at bekræfte");
+      setMessage(t('settings.write_delete_confirm'));
       return;
     }
     if (!user?.id) return;
@@ -250,12 +250,12 @@ function DeleteAccountSection() {
       await supabase.from("profiles").delete().eq("id", user.id);
 
       // Sign out (actual auth user deletion requires admin/server-side)
-      setMessage("Konto slettet. Du logges ud...");
+      setMessage(t('settings.account_deleted'));
       setTimeout(async () => {
         await signOut();
       }, 2000);
     } catch (err) {
-      setMessage("Fejl ved sletning. Kontakt support.");
+      setMessage(t('settings.delete_error'));
     }
     setDeleting(false);
   };
@@ -269,16 +269,16 @@ function DeleteAccountSection() {
         <div className="w-8 h-8 rounded-xl bg-red-500/15 flex items-center justify-center">
           <Trash2 size={16} className="text-red-400" />
         </div>
-        <span className="flex-1 text-left text-sm font-medium text-red-400">Slet min konto</span>
+        <span className="flex-1 text-left text-sm font-medium text-red-400">{t('settings.delete_account')}</span>
       </button>
     );
   }
 
   return (
     <div className="px-4 py-3 space-y-3 border-t border-white/5">
-      <p className="text-red-400 text-xs font-medium">Denne handling kan ikke fortrydes. Al din data slettes permanent.</p>
+      <p className="text-red-400 text-xs font-medium">{t('settings.delete_warning')}</p>
       <div>
-        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">Skriv SLET for at bekræfte</label>
+        <label className="text-[11px] text-white/40 uppercase tracking-wider mb-1 block">{t('settings.delete_confirm_label')}</label>
         <input
           type="text"
           value={confirmText}
@@ -294,12 +294,12 @@ function DeleteAccountSection() {
         <button
           onClick={() => { setConfirmOpen(false); setConfirmText(""); setMessage(""); }}
           className="flex-1 px-3 py-2 rounded-xl bg-white/5 text-white/50 text-sm hover:bg-white/10 transition-colors"
-        >Annuller</button>
+        >{t('settings.cancel')}</button>
         <button
           onClick={handleDelete}
           disabled={deleting || confirmText !== "SLET"}
           className="flex-1 px-3 py-2 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50"
-        >{deleting ? "Sletter..." : "Slet permanent"}</button>
+        >{deleting ? t('settings.deleting') : t('settings.delete_permanent')}</button>
       </div>
     </div>
   );
@@ -351,7 +351,7 @@ export default function Indstillinger() {
         </SettingsGroup>
 
         {/* Change Email */}
-        <SettingsGroup title="Email">
+        <SettingsGroup title={t('settings.email_section')}>
           <ChangeEmailSection />
         </SettingsGroup>
 
