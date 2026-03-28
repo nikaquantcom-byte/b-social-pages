@@ -144,6 +144,8 @@ export default function Auth() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t('auth.your_name')}
                 required
+                onInvalid={(e) => { const t = e.target as HTMLInputElement; if (t.validity.valueMissing) t.setCustomValidity('Indtast venligst dit navn'); else t.setCustomValidity(''); }}
+                onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                 className="w-full px-4 py-3.5 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
                 data-testid="input-name"
               />
@@ -158,6 +160,8 @@ export default function Auth() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="din@email.dk"
               required
+              onInvalid={(e) => { const t = e.target as HTMLInputElement; if (t.validity.valueMissing) t.setCustomValidity('Udfyld venligst din e-mail'); else if (t.validity.typeMismatch) t.setCustomValidity('Indtast en gyldig e-mailadresse'); else t.setCustomValidity(''); }}
+              onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
               className="w-full px-4 py-3.5 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
               data-testid="input-email"
             />
@@ -173,6 +177,8 @@ export default function Auth() {
                 placeholder="••••••••"
                 required
                 minLength={6}
+                onInvalid={(e) => { const t = e.target as HTMLInputElement; if (t.validity.valueMissing) t.setCustomValidity('Indtast venligst en adgangskode'); else if (t.validity.tooShort) t.setCustomValidity('Adgangskoden skal være mindst 6 tegn'); else t.setCustomValidity(''); }}
+                onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                 className="w-full px-4 py-3.5 pr-12 rounded-2xl bg-white/10 border border-white/15 text-white placeholder:text-white/30 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/60 focus:border-[#4ECDC4]/40 transition-all"
                 data-testid="input-password"
               />

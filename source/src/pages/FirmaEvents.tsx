@@ -66,7 +66,7 @@ function BoostModal({ event, onClose }: { event: FirmaEvent; onClose: () => void
   const [budget, setBudget] = useState(200);
   const [duration, setDuration] = useState(7);
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} tabIndex={-1} ref={(el: HTMLDivElement | null) => el?.focus()}>
       <div className="glass-card rounded-xl p-6 w-full max-w-md mx-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-lg">{t('firma.events_boost_title')}: {event.title}</h3>
