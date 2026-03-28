@@ -60,7 +60,7 @@ export default function Privatlivspolitik() {
         <LanguageSwitcher variant="toggle" />
       </div>
 
-      <div className="px-5 mt-2 space-y-4">
+      <div className="px-5 mt-2 space-y-4 overflow-x-hidden break-words">
         {/* Intro card */}
         <div className="glass-card-strong rounded-2xl p-5 flex items-start gap-4">
           <div className="w-10 h-10 rounded-xl bg-[#4ECDC4]/15 flex items-center justify-center flex-shrink-0">

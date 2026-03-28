@@ -8,6 +8,7 @@ import { Search, ChevronRight, Bell, Loader2, ExternalLink, SlidersHorizontal, C
 import { fetchNews, formatNewsTime, type NewsItem } from "@/lib/newsEngine";
 import { buildTagFeed, scoreEvent, getTrendingTags, getTagNode, type TagSection } from "@/lib/tagEngine";
 import { useAuth } from "@/context/AuthContext";
+import { EmailCaptureInline } from "@/components/EmailCapture";
 import { useTags } from "@/context/TagContext";
 import { useNotifications } from "@/context/NotificationContext";
 import { FeedTagEditor } from "@/components/FeedTagEditor";
@@ -249,9 +250,13 @@ export default function Feed() {
             <p className="text-white/50 text-sm leading-relaxed mb-5">
               {t('feed.demo_hero_desc')}
             </p>
-            <Link href="/auth" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all min-h-[44px]">
+            <Link href="/auth" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all min-h-[44px] mb-5">
               {t('feed.demo_hero_cta')}
             </Link>
+            <div className="flex justify-center">
+              <EmailCaptureInline />
+            </div>
+            <p className="text-white/20 text-xs mt-2">Eller få events på e-mail — ingen spam, kun oplevelser</p>
           </div>
         )}
 
