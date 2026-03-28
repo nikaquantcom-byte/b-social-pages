@@ -599,10 +599,10 @@ export default function Kort() {
 
   // Fetch Supabase places
   const { data: supabasePlaces } = useQuery<Place[]>({
-    queryKey: ["supabase-places-map", selectedCountry],
+    queryKey: ["supabase-places-map", mapCountry],
     queryFn: () => fetchPlaces({
       limit: 2000,
-      country: selectedCountry && selectedCountry !== 'ALL' ? (selectedCountry === 'DK' ? 'Denmark' : selectedCountry) : undefined,
+      country: mapCountry && mapCountry !== 'ALL' ? (mapCountry === 'DK' ? 'Denmark' : mapCountry) : undefined,
     }),
     staleTime: 5 * 60 * 1000,
   });
