@@ -96,7 +96,7 @@ export function EmailCaptureFooter() {
   if (!visible || dismissed || state === "success") return null;
 
   return (
-    <div className="fixed bottom-[164px] left-3 right-3 z-[9998] bg-[#0d1225]/95 backdrop-blur-lg border border-white/10 rounded-2xl px-4 py-3 shadow-2xl shadow-black/50 md:bottom-4 md:left-auto md:right-4 md:max-w-sm animate-in slide-in-from-bottom-4">
+    <div data-email-footer className="fixed bottom-[164px] left-3 right-3 z-[9998] bg-[#0d1225]/95 backdrop-blur-lg border border-white/10 rounded-2xl px-4 py-3 shadow-2xl shadow-black/50 md:bottom-4 md:left-auto md:right-4 md:max-w-sm animate-in slide-in-from-bottom-4">
       <button
         onClick={() => { setDismissed(true); localStorage.setItem("bsocial_email_dismissed", "true"); }}
         className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/20 transition-colors"
