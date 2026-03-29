@@ -82,6 +82,7 @@ export default function AIChatWidget() {
     return (
       <button
         onClick={() => setOpen(true)}
+        data-chat-widget
         className="fixed bottom-24 right-4 z-[9999] w-14 h-14 rounded-full bg-[#4ECDC4] text-[#0a0f1a] shadow-lg shadow-[#4ECDC4]/30 flex items-center justify-center hover:scale-105 transition-transform md:bottom-6"
         aria-label="Åbn chat"
       >
