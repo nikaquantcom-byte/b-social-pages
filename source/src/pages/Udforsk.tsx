@@ -571,6 +571,15 @@ export default function Udforsk() {
                     <span className="text-white/80 text-xs font-medium">{cat.label}</span>
                   </button>
                 ))}
+                <a
+                  href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent('Denmark')}&aid=2380273`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#003580] hover:bg-[#00264D] transition-all text-left min-h-[44px] border border-[#003580]"
+                >
+                  <span className="text-base">🏨</span>
+                  <span className="text-white text-xs font-medium">Hoteller & overnatning</span>
+                </a>
               </div>
             </section>
           )}
