@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 const STATS = [
   { value: "95.000+", label: "Steder i databasen" },
   { value: "6.400+", label: "Aktive events" },
-    { value: "100+", label: "Lande dækket" },
+  { value: "100+", label: "Lande dækket" },
   { value: "10+", label: "Kategorier" },
 ];
 
@@ -86,7 +86,7 @@ export default function WhitelabelLanding() {
         </h1>
         <p className="text-white/60 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
           Få en komplet social oplevelses-platform i dit eget navn — bygget på B-Socials
-          kraftfulde infrastruktur med 95.000+ steder og 6.400+ events på tværs af 8+ lande.
+          kraftfulde infrastruktur med 95.000+ steder og 6.400+ events på tværs af 100+ lande.
         </p>
         <div className="flex flex-col sm:flex-row gap-3">
           <a
