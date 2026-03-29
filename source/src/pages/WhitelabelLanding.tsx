@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 const STATS = [
   { value: "95.000+", label: "Steder i databasen" },
   { value: "6.400+", label: "Aktive events" },
-  { value: "8+", label: "Lande dækket" },
+    { value: "100+", label: "Lande dækket" },
   { value: "10+", label: "Kategorier" },
 ];
 
