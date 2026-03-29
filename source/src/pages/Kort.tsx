@@ -777,6 +777,14 @@ export default function Kort() {
                 {layer === "alle" ? `📍 ${typeof t('map.all') === 'string' ? t('map.all') : 'Alle'}` : layer === "steder" ? `🏛️ ${typeof t('map.places') === 'string' ? t('map.places') : 'Steder'}` : `🎉 ${typeof t('map.events') === 'string' ? t('map.events') : 'Events'}`}
               </button>
             ))}
+            <a
+              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(city || 'Denmark')}&aid=2380273`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 rounded-full text-xs font-semibold transition-all min-h-[44px] bg-[#003580] text-white hover:bg-[#00264D]"
+            >
+              🏨 Hoteller
+            </a>
           </div>
           <span className="text-white/30 text-xs">
             {filteredPins.length} {showLayer === "events" ? t('map.events') : showLayer === "steder" ? t('map.places') : t('map.places')}
