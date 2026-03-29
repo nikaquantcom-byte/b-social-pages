@@ -13,7 +13,6 @@ import { NotificationProvider } from "@/context/NotificationContext";
 import { useReferralCapture } from "@/hooks/useReferral";
 // Layout — always loaded (wraps every main page)
 import DesktopAppLayout from "@/components/DesktopAppLayout";
-
 // ── Loading fallback ──
 function PageLoader() {
   return (
@@ -22,7 +21,6 @@ function PageLoader() {
     </div>
   );
 }
-
 // ── Lazy page imports ──
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Auth = lazy(() => import("@/pages/Auth"));
@@ -39,6 +37,7 @@ const Vilkaar = lazy(() => import("@/pages/Vilkaar"));
 const Henvisning = lazy(() => import("@/pages/Henvisning"));
 const InviterVenner = lazy(() => import("@/pages/InviterVenner"));
 const Notifikationer = lazy(() => import("@/pages/Notifikationer"));
+const WhitelabelLanding = lazy(() => import("@/pages/WhitelabelLanding"));
 // Firma pages
 const FirmaAuth = lazy(() => import("@/pages/FirmaAuth"));
 const FirmaDashboard = lazy(() => import("@/pages/FirmaDashboard"));
@@ -48,7 +47,6 @@ const FirmaAnalytics = lazy(() => import("@/pages/FirmaAnalytics"));
 const FirmaFakturering = lazy(() => import("@/pages/FirmaFakturering"));
 const FirmaRekruttering = lazy(() => import("@/pages/FirmaRekruttering"));
 const FirmaIndstillinger = lazy(() => import("@/pages/FirmaIndstillinger"));
-
 function MainRouter() {
   return (
     <DesktopAppLayout>
@@ -70,17 +68,13 @@ function MainRouter() {
     </DesktopAppLayout>
   );
 }
-
 /** Firma routes — requires firma or admin role, otherwise redirects to /firma/auth */
 function FirmaRouter() {
   const { isFirma, isLoggedIn, loading } = useAuth();
-
   if (loading) return <PageLoader />;
-
   if (!isLoggedIn || !isFirma()) {
     return <Redirect to="/firma/auth" />;
   }
-
   return (
     <Suspense fallback={<PageLoader />}>
       <Switch>
@@ -96,7 +90,6 @@ function FirmaRouter() {
     </Suspense>
   );
 }
-
 function RootRouter() {
   const [location] = useLocation();
   const isFirmaAuth = location === "/firma/auth";
@@ -107,7 +100,8 @@ function RootRouter() {
   const isOnboarding = location === "/onboarding";
   const isPrivatlivspolitik = location === "/privatlivspolitik";
   const isVilkaar = location === "/vilkaar";
-
+  const isWhitelabel = location === "/whitelabel";
+  if (isWhitelabel) return <Suspense fallback={<PageLoader />}><WhitelabelLanding /></Suspense>;
   if (isPrivatlivspolitik) return <Suspense fallback={<PageLoader />}><Privatlivspolitik /></Suspense>;
   if (isVilkaar) return <Suspense fallback={<PageLoader />}><Vilkaar /></Suspense>;
   if (isFirmaAuth) return <Suspense fallback={<PageLoader />}><FirmaAuth /></Suspense>;
@@ -118,7 +112,6 @@ function RootRouter() {
   if (isOnboarding) return <Suspense fallback={<PageLoader />}><Onboarding /></Suspense>;
   return <MainRouter />;
 }
-
 function App() {
   useReferralCapture();
   return (
@@ -141,5 +134,4 @@ function App() {
     </QueryClientProvider>
   );
 }
-
 export default App;
