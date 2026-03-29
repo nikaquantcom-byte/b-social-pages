@@ -489,7 +489,7 @@ function PinNearbyHotels({ lat, lng, city }: { lat: number; lng: number; city: s
           {hotels.map((h, i) => (
             <a
               key={i}
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.name)}&latitude=${h.lat}&longitude=${h.lon}&aid=304142`}
+              href={`https://www.booking.com/searchresults.da.html?ss=${encodeURIComponent(h.name)}&latitude=${h.lat}&longitude=${h.lon}&radius=1&aid=304142`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/4 hover:bg-white/8 transition-colors"
