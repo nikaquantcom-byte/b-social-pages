@@ -576,6 +576,16 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
               </>
             )}
           </div>
+
+          {/* Booking.com hotel link */}
+          <a
+            href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(pin.city || pin.name)}&latitude=${pin.lat}&longitude=${pin.lng}&aid=2380273`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 w-full mt-2 py-2 rounded-xl bg-[#003580]/80 text-white text-[11px] font-semibold hover:bg-[#003580] transition-colors"
+          >
+            🏨 Find hotel nærby
+          </a>
         </div>
       </div>
     </div>
