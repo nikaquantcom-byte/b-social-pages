@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
-import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar, ExternalLink, Ticket, BedDouble } from "lucide-react";
+import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar, ExternalLink, Ticket, BedDouble, Star, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
@@ -8,6 +8,44 @@ import { getEventById } from "@/lib/data";
 import { getCategoryEmoji, getEventImage, formatDanishDate } from "@/lib/eventHelpers";
 import { useAuth } from "@/context/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const GEOAPIFY_KEY = "c6ed42e8addb457ebf24265a045b892b";
+
+interface NearbyHotel {
+  name: string;
+  address: string;
+  lat: number;
+  lon: number;
+  brand?: string;
+  stars?: number;
+  distance?: number;
+}
+
+async function fetchNearbyHotels(lat: number, lon: number): Promise<NearbyHotel[]> {
+  try {
+    const res = await fetch(
+      `https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=circle:${lon},${lat},5000&limit=6&apiKey=${GEOAPIFY_KEY}`
+    );
+    const data = await res.json();
+    return (data.features || []).map((f: any) => {
+      const p = f.properties;
+      const dLat = (p.lat - lat) * 111320;
+      const dLon = (p.lon - lon) * 111320 * Math.cos(lat * Math.PI / 180);
+      const dist = Math.sqrt(dLat * dLat + dLon * dLon);
+      return {
+        name: p.name || "Hotel",
+        address: p.address_line2 || p.formatted || "",
+        lat: p.lat,
+        lon: p.lon,
+        brand: p.brand,
+        stars: p.datasource?.raw?.stars ? parseInt(p.datasource.raw.stars) : undefined,
+        distance: Math.round(dist),
+      };
+    });
+  } catch {
+    return [];
+  }
+}
 
 export default function EventDetail() {
   const { id } = useParams<{ id: string }>();
@@ -218,22 +256,8 @@ export default function EventDetail() {
           </div>
         )}
 
-        {/* Booking.com hotel link — shown for all events with location */}
-        {event.location && (
-          <div className="mb-6">
-            <a
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location.split(',')[0])}${event.date ? `&checkin=${event.date.split('T')[0]}` : ''}&aid=2380273`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#003580] text-white text-sm font-bold hover:bg-[#00264D] transition-colors min-h-[44px]"
-            >
-              <BedDouble size={16} />
-              Find overnatning nær eventet
-              <ExternalLink size={14} />
-            </a>
-            <p className="text-white/20 text-[10px] text-center mt-1.5">Booking.com · Sammenlign priser på hoteller, lejligheder og mere</p>
-          </div>
-        )}
+        {/* Nearby Hotels — intelligent section */}
+        <NearbyHotelsSection event={event} />
       </div>
 
       {/* Fixed bottom CTA */}
@@ -251,6 +275,100 @@ export default function EventDetail() {
           {joined ? t('events.joined') : joining ? t('events.joining') : t('events.join_experience')}
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   NEARBY HOTELS SECTION — Geoapify + Booking.com affiliate
+   ═══════════════════════════════════════════════ */
+function NearbyHotelsSection({ event }: { event: Event }) {
+  const [hotels, setHotels] = useState<NearbyHotel[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!event.latitude || !event.longitude) return;
+    setLoading(true);
+    fetchNearbyHotels(event.latitude, event.longitude)
+      .then(h => { setHotels(h); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [event.latitude, event.longitude]);
+
+  if (!event.latitude || !event.longitude) {
+    // Fallback: simple Booking.com link based on location text
+    if (!event.location) return null;
+    return (
+      <div className="mb-6">
+        <a
+          href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location.split(',')[0])}${event.date ? `&checkin=${event.date.split('T')[0]}` : ''}&aid=2380273`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#003580] text-white text-sm font-bold hover:bg-[#00264D] transition-colors min-h-[44px]"
+        >
+          <BedDouble size={16} />
+          Find overnatning nær eventet
+          <ExternalLink size={14} />
+        </a>
+      </div>
+    );
+  }
+
+  const checkinParam = event.date ? `&checkin=${event.date.split('T')[0]}` : '';
+  const bookingSearchUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location?.split(',')[0] || 'Hotel')}&latitude=${event.latitude}&longitude=${event.longitude}${checkinParam}&aid=2380273`;
+
+  return (
+    <div className="mb-6">
+      <div className="flex items-center gap-2 mb-3">
+        <BedDouble size={16} className="text-[#4ECDC4]" />
+        <h3 className="text-white font-semibold text-sm">Hoteller i nærheden</h3>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center gap-2 py-4 text-white/40 text-sm">
+          <Loader2 size={14} className="animate-spin" /> Søger hoteller...
+        </div>
+      ) : hotels.length > 0 ? (
+        <div className="space-y-2">
+          {hotels.map((hotel, i) => (
+            <a
+              key={i}
+              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(hotel.name)}&latitude=${hotel.lat}&longitude=${hotel.lon}${checkinParam}&aid=2380273`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-3 p-3 rounded-xl bg-white/4 border border-white/6 hover:bg-white/8 transition-colors group"
+            >
+              <div className="w-10 h-10 rounded-lg bg-[#003580]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <BedDouble size={16} className="text-[#003580]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-sm font-semibold truncate group-hover:text-[#4ECDC4] transition-colors">{hotel.name}</p>
+                <p className="text-white/40 text-xs truncate">{hotel.address}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  {hotel.brand && <span className="text-white/30 text-[10px]">{hotel.brand}</span>}
+                  {hotel.distance && (
+                    <span className="text-white/30 text-[10px]">
+                      {hotel.distance < 1000 ? `${hotel.distance} m` : `${(hotel.distance / 1000).toFixed(1)} km`} fra eventet
+                    </span>
+                  )}
+                </div>
+              </div>
+              <ExternalLink size={12} className="text-white/20 group-hover:text-white/50 mt-1 flex-shrink-0" />
+            </a>
+          ))}
+        </div>
+      ) : null}
+
+      {/* See all on Booking.com */}
+      <a
+        href={bookingSearchUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 w-full mt-3 py-3 rounded-xl bg-[#003580] text-white text-sm font-bold hover:bg-[#00264D] transition-colors min-h-[44px]"
+      >
+        Se alle hoteller på Booking.com
+        <ExternalLink size={14} />
+      </a>
+      <p className="text-white/15 text-[10px] text-center mt-1">Sammenlign priser på hoteller, lejligheder og mere</p>
     </div>
   );
 }
