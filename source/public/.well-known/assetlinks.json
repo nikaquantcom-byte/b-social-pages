@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "net.bsocial.app",
+        "sha256_cert_fingerprints": ["5E:BD:B4:DC:B3:D4:2B:FF:33:83:CF:E2:23:97:AB:B8:93:9A:2A:3C:D1:4A:A0:63:7F:20:2A:7E:F1:EA:EF:8F"]
+      }
+    }]
