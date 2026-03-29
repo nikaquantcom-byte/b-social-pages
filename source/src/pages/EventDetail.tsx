@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar, ExternalLink, Ticket } from "lucide-react";
+import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar, ExternalLink, Ticket, BedDouble } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
@@ -215,6 +215,23 @@ export default function EventDetail() {
                 <ExternalLink size={14} />
               </a>
             )}
+          </div>
+        )}
+
+        {/* Booking.com hotel link — shown for all events with location */}
+        {event.location && (
+          <div className="mb-6">
+            <a
+              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location.split(',')[0])}${event.date ? `&checkin=${event.date.split('T')[0]}` : ''}&aid=2380273`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#003580] text-white text-sm font-bold hover:bg-[#00264D] transition-colors min-h-[44px]"
+            >
+              <BedDouble size={16} />
+              Find overnatning nær eventet
+              <ExternalLink size={14} />
+            </a>
+            <p className="text-white/20 text-[10px] text-center mt-1.5">Booking.com · Sammenlign priser på hoteller, lejligheder og mere</p>
           </div>
         )}
       </div>
