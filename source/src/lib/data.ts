@@ -23,6 +23,8 @@ export type Event = {
   category_level: number | null;
   min_required_participants: number | null;
   country: string | null;
+  source?: string | null;
+  url?: string | null;
 };
 
 let _cachedEvents: Event[] | null = null;
