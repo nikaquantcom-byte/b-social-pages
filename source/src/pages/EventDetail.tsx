@@ -300,7 +300,7 @@ function NearbyHotelsSection({ event }: { event: Event }) {
     return (
       <div className="mb-6">
         <a
-          href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location.split(',')[0])}${event.date ? `&checkin=${event.date.split('T')[0]}` : ''}&aid=2380273`}
+          href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location.split(',')[0])}${event.date ? `&checkin=${event.date.split('T')[0]}` : ''}&aid=304142`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#003580] text-white text-sm font-bold hover:bg-[#00264D] transition-colors min-h-[44px]"
@@ -314,7 +314,7 @@ function NearbyHotelsSection({ event }: { event: Event }) {
   }
 
   const checkinParam = event.date ? `&checkin=${event.date.split('T')[0]}` : '';
-  const bookingSearchUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location?.split(',')[0] || 'Hotel')}&latitude=${event.latitude}&longitude=${event.longitude}${checkinParam}&aid=2380273`;
+  const bookingSearchUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location?.split(',')[0] || 'Hotel')}&latitude=${event.latitude}&longitude=${event.longitude}${checkinParam}&aid=304142`;
 
   return (
     <div className="mb-6">
@@ -332,7 +332,7 @@ function NearbyHotelsSection({ event }: { event: Event }) {
           {hotels.map((hotel, i) => (
             <a
               key={i}
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(hotel.name)}&latitude=${hotel.lat}&longitude=${hotel.lon}${checkinParam}&aid=2380273`}
+              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(hotel.name)}&latitude=${hotel.lat}&longitude=${hotel.lon}${checkinParam}&aid=304142`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 p-3 rounded-xl bg-white/4 border border-white/6 hover:bg-white/8 transition-colors group"
