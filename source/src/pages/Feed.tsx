@@ -243,20 +243,63 @@ export default function Feed() {
           </button>
         </div>
 
-        {/* Hero for anonymous users — full width, centered */}
+        {/* Hero for anonymous users — visual punch */}
         {isAnonymous && tagSections.length === 0 && (
-          <div className="text-center mb-10 max-w-2xl mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-3">{t('feed.demo_hero_title')}</h2>
-            <p className="text-white/50 text-sm leading-relaxed mb-5">
-              {t('feed.demo_hero_desc')}
-            </p>
-            <Link href="/auth" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-semibold hover:bg-[#3dbdb5] transition-all min-h-[44px] mb-5">
-              {t('feed.demo_hero_cta')}
-            </Link>
-            <div className="flex justify-center">
-              <EmailCaptureInline />
+          <div className="relative mb-10 rounded-2xl overflow-hidden">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#4ECDC4]/15 via-[#0a0e23] to-[#4ECDC4]/5" />
+            <div className="absolute top-0 right-0 w-40 h-40 bg-[#4ECDC4]/8 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#4ECDC4]/5 rounded-full blur-2xl" />
+            
+            <div className="relative px-5 py-8">
+              {/* Live badge */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4ECDC4] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#4ECDC4]" />
+                </span>
+                <span className="text-xs text-[#4ECDC4] font-medium tracking-wide uppercase">Live i dag</span>
+              </div>
+
+              <h2 className="text-[26px] font-extrabold leading-tight mb-2">Find din næste<br/><span className="text-[#4ECDC4]">oplevelse</span></h2>
+              <p className="text-white/50 text-sm leading-relaxed mb-5 max-w-xs">
+                Events, steder og aktiviteter i hele verden — alt samlet ét sted.
+              </p>
+
+              {/* Stats row */}
+              <div className="flex gap-3 mb-6">
+                <div className="flex-1 bg-white/5 backdrop-blur rounded-xl px-3 py-2.5 text-center border border-white/5">
+                  <p className="text-lg font-bold text-[#4ECDC4]">95K+</p>
+                  <p className="text-[10px] text-white/40 mt-0.5">Steder</p>
+                </div>
+                <div className="flex-1 bg-white/5 backdrop-blur rounded-xl px-3 py-2.5 text-center border border-white/5">
+                  <p className="text-lg font-bold text-[#4ECDC4]">6.4K</p>
+                  <p className="text-[10px] text-white/40 mt-0.5">Events</p>
+                </div>
+                <div className="flex-1 bg-white/5 backdrop-blur rounded-xl px-3 py-2.5 text-center border border-white/5">
+                  <p className="text-lg font-bold text-[#4ECDC4]">117</p>
+                  <p className="text-[10px] text-white/40 mt-0.5">Lande</p>
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="flex flex-col gap-3">
+                <Link href="/auth" className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#4ECDC4] text-[#0a0f1a] text-sm font-bold hover:bg-[#3dbdb5] transition-all min-h-[44px] shadow-lg shadow-[#4ECDC4]/20">
+                  Kom i gang gratis →
+                </Link>
+                <Link href="/udforsk" className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white/70 text-sm font-medium hover:bg-white/10 transition-all min-h-[44px]">
+                  Udforsk uden konto
+                </Link>
+              </div>
+
+              {/* Email capture - smaller, below CTAs */}
+              <div className="mt-5 pt-5 border-t border-white/5">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xs text-white/30">📨 Få ugentlige event-tips direkte i din indbakke</span>
+                </div>
+                <EmailCaptureInline />
+              </div>
             </div>
-            <p className="text-white/20 text-xs mt-2">Eller få events på e-mail — ingen spam, kun oplevelser</p>
           </div>
         )}
 

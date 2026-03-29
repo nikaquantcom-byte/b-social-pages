@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar } from "lucide-react";
+import { ArrowLeft, Share2, Heart, MapPin, Users, Calendar, ExternalLink, Ticket } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import type { Event } from "@/lib/data";
@@ -185,6 +185,36 @@ export default function EventDetail() {
                 #{tag}
               </span>
             ))}
+          </div>
+        )}
+
+        {/* Affiliate ticket links — shown for ticketmaster/seatgeek events */}
+        {event.source && ['ticketmaster', 'seatgeek'].includes(event.source) && (
+          <div className="mb-6">
+            {event.source === 'ticketmaster' && (
+              <a
+                href={event.url || `https://www.ticketmaster.com/search?q=${encodeURIComponent(event.title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#026CDF] text-white text-sm font-bold hover:bg-[#0256B3] transition-colors min-h-[44px]"
+              >
+                <Ticket size={16} />
+                Køb billetter på Ticketmaster
+                <ExternalLink size={14} />
+              </a>
+            )}
+            {event.source === 'seatgeek' && (
+              <a
+                href={event.url || `https://seatgeek.com/search?search=${encodeURIComponent(event.title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#4CAF50] text-white text-sm font-bold hover:bg-[#43A047] transition-colors min-h-[44px]"
+              >
+                <Ticket size={16} />
+                Køb billetter på SeatGeek
+                <ExternalLink size={14} />
+              </a>
+            )}
           </div>
         )}
       </div>
