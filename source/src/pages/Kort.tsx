@@ -449,6 +449,63 @@ function MapRecenter({ center, zoom }: { center: [number, number]; zoom: number 
   return null;
 }
 
+const GEOAPIFY_KEY = "c6ed42e8addb457ebf24265a045b892b";
+
+/* ── Inline nearby hotels for pin detail ── */
+function PinNearbyHotels({ lat, lng, city }: { lat: number; lng: number; city: string }) {
+  const [hotels, setHotels] = useState<{ name: string; dist: number; lat: number; lon: number }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const loadHotels = () => {
+    if (hotels.length > 0) { setExpanded(!expanded); return; }
+    setLoading(true);
+    setExpanded(true);
+    fetch(`https://api.geoapify.com/v2/places?categories=accommodation.hotel&filter=circle:${lng},${lat},5000&limit=4&apiKey=${GEOAPIFY_KEY}`)
+      .then(r => r.json())
+      .then(data => {
+        const h = (data.features || []).map((f: any) => {
+          const p = f.properties;
+          const dLat = (p.lat - lat) * 111320;
+          const dLon = (p.lon - lng) * 111320 * Math.cos(lat * Math.PI / 180);
+          return { name: p.name || "Hotel", dist: Math.round(Math.sqrt(dLat * dLat + dLon * dLon)), lat: p.lat, lon: p.lon };
+        });
+        setHotels(h);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
+
+  return (
+    <div className="mt-2">
+      <button
+        onClick={loadHotels}
+        className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-[#003580]/80 text-white text-[11px] font-semibold hover:bg-[#003580] transition-colors"
+      >
+        {loading ? "Søger hoteller..." : expanded ? "🏨 Skjul hoteller" : "🏨 Vis hoteller nærby"}
+      </button>
+      {expanded && hotels.length > 0 && (
+        <div className="mt-1.5 space-y-1">
+          {hotels.map((h, i) => (
+            <a
+              key={i}
+              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.name)}&latitude=${h.lat}&longitude=${h.lon}&aid=2380273`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/4 hover:bg-white/8 transition-colors"
+            >
+              <span className="text-white text-[11px] font-medium truncate flex-1">{h.name}</span>
+              <span className="text-white/30 text-[10px] ml-2 flex-shrink-0">
+                {h.dist < 1000 ? `${h.dist}m` : `${(h.dist / 1000).toFixed(1)}km`}
+              </span>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Pin detail bottom sheet ── */
 function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
   const { t } = useTranslation();
@@ -577,24 +634,8 @@ function PinDetail({ pin, onClose }: { pin: MapPin; onClose: () => void }) {
             )}
           </div>
 
-          {/* Hotel link — events go to event page (which shows nearby hotels), places go to Booking.com */}
-          {pin.isSupabaseEvent && pin.eventId ? (
-            <Link
-              href={`/event/${pin.eventId}#hoteller`}
-              className="flex items-center justify-center gap-1.5 w-full mt-2 py-2 rounded-xl bg-[#003580]/80 text-white text-[11px] font-semibold hover:bg-[#003580] transition-colors"
-            >
-              🏨 Se hoteller nær eventet
-            </Link>
-          ) : (
-            <a
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(pin.city || pin.name)}&latitude=${pin.lat}&longitude=${pin.lng}&aid=2380273`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 w-full mt-2 py-2 rounded-xl bg-[#003580]/80 text-white text-[11px] font-semibold hover:bg-[#003580] transition-colors"
-            >
-              🏨 Find hotel nærby
-            </a>
-          )}
+          {/* Inline nearby hotels */}
+          <PinNearbyHotels lat={pin.lat} lng={pin.lng} city={pin.city || pin.name} />
         </div>
       </div>
     </div>
