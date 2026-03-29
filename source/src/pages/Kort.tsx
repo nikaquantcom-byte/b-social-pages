@@ -13,7 +13,7 @@ import { MapContainer, TileLayer, Marker, useMap, CircleMarker } from "react-lea
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlaces, fetchEvents, type Place, type Event as SupabaseEvent } from "@/lib/supabase";
+import { fetchAllPlacesForMap, fetchEvents, type Place, type Event as SupabaseEvent } from "@/lib/supabase";
 import { useTranslation } from 'react-i18next';
 
 // Prevent Leaflet from injecting default marker image (red pin)
@@ -597,14 +597,13 @@ export default function Kort() {
   // Dynamic user location from profile city
   const [USER_LAT, USER_LNG] = CITY_COORDS[city] || [DEFAULT_LAT, DEFAULT_LNG];
 
-  // Fetch Supabase places
+  // Fetch ALL Supabase places (paginated, lightweight columns)
   const { data: supabasePlaces } = useQuery<Place[]>({
-    queryKey: ["supabase-places-map", mapCountry],
-    queryFn: () => fetchPlaces({
-      limit: 2000,
-      country: mapCountry && mapCountry !== 'ALL' ? (mapCountry === 'DK' ? 'Denmark' : mapCountry) : undefined,
-    }),
-    staleTime: 5 * 60 * 1000,
+    queryKey: ["supabase-places-map-all", mapCountry],
+    queryFn: () => fetchAllPlacesForMap(
+      mapCountry && mapCountry !== 'ALL' ? (mapCountry === 'DK' ? 'Denmark' : mapCountry) : undefined
+    ),
+    staleTime: 10 * 60 * 1000,
   });
 
   // Fetch Supabase events
