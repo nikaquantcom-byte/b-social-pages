@@ -609,7 +609,7 @@ export default function Kort() {
   const [search, setSearch] = useState("");
   const [selectedPin, setSelectedPin] = useState<MapPin | null>(null);
   const [flyTo, setFlyTo] = useState<{ center: [number, number]; zoom: number } | null>(null);
-  const [showLayer, setShowLayer] = useState<"alle" | "steder" | "events">("alle");
+  const [showLayer, setShowLayer] = useState<"alle" | "steder" | "events" | "hoteller">("alle");
   const [mapCountry, setMapCountry] = useState<string>('DK');
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -660,6 +660,12 @@ export default function Kort() {
       // Layer toggle: events vs places
       if (showLayer === "events" && !p.isSupabaseEvent) return false;
       if (showLayer === "steder" && p.isSupabaseEvent) return false;
+      if (showLayer === "hoteller") {
+        // Filter to only show accommodation/hotel places from Supabase
+        if (p.isSupabaseEvent) return false;
+        const cats = (p.tags || []).join(',').toLowerCase() + ',' + (p.category || '').toLowerCase();
+        if (!cats.includes('hotel') && !cats.includes('accommodation') && !cats.includes('logi') && !cats.includes('hostel') && !cats.includes('motel') && !cats.includes('resort')) return false;
+      }
       if (priceFilter === "gratis" && PREMIUM_CATS.has(p.category)) return false;
       if (priceFilter === "premium" && GRATIS_CATS.has(p.category)) return false;
       const q = search.toLowerCase();
@@ -786,14 +792,16 @@ export default function Kort() {
                 {layer === "alle" ? `📍 ${typeof t('map.all') === 'string' ? t('map.all') : 'Alle'}` : layer === "steder" ? `🏛️ ${typeof t('map.places') === 'string' ? t('map.places') : 'Steder'}` : `🎉 ${typeof t('map.events') === 'string' ? t('map.events') : 'Events'}`}
               </button>
             ))}
-            <a
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(city || 'Denmark')}&aid=2380273`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-3 py-2 rounded-full text-xs font-semibold transition-all min-h-[44px] bg-[#003580] text-white hover:bg-[#00264D]"
+            <button
+              onClick={() => { setShowLayer(showLayer === "hoteller" ? "alle" : "hoteller"); setSelectedPin(null); }}
+              className={`px-3 py-2 rounded-full text-xs font-semibold transition-all min-h-[44px] ${
+                showLayer === "hoteller"
+                  ? "bg-[#003580] text-white"
+                  : "bg-[#003580]/40 text-white/70 hover:bg-[#003580]/60"
+              }`}
             >
               🏨 Hoteller
-            </a>
+            </button>
           </div>
           <span className="text-white/30 text-xs">
             {filteredPins.length} {showLayer === "events" ? t('map.events') : showLayer === "steder" ? t('map.places') : t('map.places')}
