@@ -314,7 +314,7 @@ function NearbyHotelsSection({ event }: { event: Event }) {
   }
 
   const checkinParam = event.date ? `&checkin=${event.date.split('T')[0]}` : '';
-  const bookingSearchUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(event.location?.split(',')[0] || 'Hotel')}&latitude=${event.latitude}&longitude=${event.longitude}${checkinParam}&aid=304142`;
+  const bookingSearchUrl = `https://www.booking.com/searchresults.da.html?ss=${encodeURIComponent(event.location?.split(',')[0] || 'Hotel')}&latitude=${event.latitude}&longitude=${event.longitude}${checkinParam}&aid=304142`;
 
   return (
     <div className="mb-6">
@@ -332,7 +332,7 @@ function NearbyHotelsSection({ event }: { event: Event }) {
           {hotels.map((hotel, i) => (
             <a
               key={i}
-              href={`https://www.booking.com/searchresults.html?ss=${encodeURIComponent(hotel.name)}&latitude=${hotel.lat}&longitude=${hotel.lon}${checkinParam}&aid=304142`}
+              href={`https://www.booking.com/searchresults.da.html?ss=${encodeURIComponent(hotel.name)}&latitude=${hotel.lat}&longitude=${hotel.lon}&radius=1${checkinParam}&aid=304142`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-start gap-3 p-3 rounded-xl bg-white/4 border border-white/6 hover:bg-white/8 transition-colors group"
