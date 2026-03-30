@@ -5,6 +5,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import type { ReactNode } from "react";
 import type { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { isPushSupported, subscribeToPush } from "@/lib/pushNotifications";
 
 export type UserRole = "user" | "firma" | "admin";
 
@@ -131,6 +132,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(s?.user ?? null);
       if (s?.user) {
         fetchProfile(s.user.id);
+        // Auto-subscribe to push notifications
+        if (isPushSupported() && Notification.permission !== 'denied') {
+          subscribeToPush(s.user.id).catch(() => {});
+        }
       }
       setLoading(false);
     }).catch((err) => {
