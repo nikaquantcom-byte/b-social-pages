@@ -448,7 +448,7 @@ export default function Beskeder() {
   return (
     <div className="flex h-full bg-[#0a0f1a] text-white overflow-hidden">
       {/* ── Conversation list (left panel) ── */}
-      <div className="w-72 border-r border-white/10 flex flex-col flex-shrink-0">
+      <div className={`w-full md:w-72 border-r border-white/10 flex flex-col flex-shrink-0 ${activeConvoId ? 'hidden md:flex' : 'flex'}`}>
         <div className="px-6 pt-8 pb-4 border-b border-white/10">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-xl font-bold">{t('beskeder.title')}</h1>
@@ -528,12 +528,15 @@ export default function Beskeder() {
       </div>
 
       {/* ── Chat area (center panel) ── */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className={`flex-1 flex flex-col min-w-0 ${!activeConvoId ? 'hidden md:flex' : 'flex'}`}>
         {activeConvo ? (
           <>
             {/* Chat header */}
-            <div className="h-16 border-b border-white/10 px-6 flex items-center justify-between flex-shrink-0">
+            <div className="h-16 border-b border-white/10 px-4 md:px-6 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-3">
+                <button onClick={() => setActiveConvoId(null)} className="md:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60 hover:bg-white/10 mr-1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
                 <img
                   src={activeConvo.otherUser.avatar_url || defaultAvatar(activeConvo.otherUser.name)}
                   alt={activeConvo.otherUser.name ?? ""}

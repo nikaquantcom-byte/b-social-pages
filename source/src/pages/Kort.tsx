@@ -773,7 +773,7 @@ export default function Kort() {
   return (
     <div className="relative w-full h-svh pb-[72px]" data-testid="kort-page">
       {/* ── Search bar + Gratis / Premium ── */}
-      <div className="absolute top-0 left-0 right-0 z-[1000] pt-12 px-4 pb-2" style={{ background: "linear-gradient(to bottom, rgba(10,14,35,0.92) 60%, transparent)" }}>
+      <div className="absolute top-0 left-0 right-0 z-[1000] px-4 pb-2" style={{ background: "linear-gradient(to bottom, rgba(10,14,35,0.92) 60%, transparent)", paddingTop: "max(env(safe-area-inset-top, 12px), 48px)" }}>
         <div className="flex gap-2 items-center">
           <div className="relative flex-1">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" />
