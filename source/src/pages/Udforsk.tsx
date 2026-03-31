@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from "wouter";
 import { Search, MapPin, ChevronRight, X, Users, Heart, TrendingUp, Star, Loader2 } from "lucide-react";
@@ -31,7 +31,11 @@ const REGIONS: Record<string, { flag: string; label: string }> = {
   'ALL': { flag: '🌎', label: 'Hele verden' },
 };
 
-const EUROPE_CODES = ['DK','SE','NO','DE','NL','BE','AT','CH','ES','FR','IT','GB','IE','PL','CZ','FI'];
+const EUROPE_CODES = [
+  'DK','SE','NO','DE','NL','BE','AT','CH','ES','FR','IT','GB','IE','PL','CZ','FI',
+  'PT','GR','HU','RO','HR','SK','SI','LT','LV','EE','BG','RS','UA','BY',
+  'LU','MT','CY','LI','IS','AL','MK','BA','ME','MD','AM','GE','AZ',
+];
 
 // Only show chips for countries that have events (plus EUROPE and ALL as always-visible)
 const COUNTRY_CHIP_ORDER = ['DK', 'SE', 'NO', 'DE', 'NL', 'GB', 'FR', 'ES', 'IT', 'EUROPE', 'ALL'] as const;
@@ -297,10 +301,17 @@ export default function Udforsk() {
   const { selectedTags } = useTags();
   const [, setLocation] = useLocation();
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [activeCountry, setActiveCountry] = useState<string>('DK');
+  const [activeCountry, setActiveCountry] = useState<string>('EUROPE');
   const searchRef = useRef<HTMLInputElement>(null);
+
+  // Debounce search input — wait 250ms after user stops typing before filtering
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 250);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const { data: events } = useQuery<Event[]>({
     queryKey: ["events"],
@@ -311,14 +322,14 @@ export default function Udforsk() {
 
   /* ── Filter events by active category, country, or search (TAG-TREE AWARE) ── */
   const filtered = useMemo(() => {
-    // Expand search query through tag tree
-    const q = search.toLowerCase().trim();
+    // Expand search query through tag tree (uses debounced value for performance)
+    const q = debouncedSearch.toLowerCase().trim();
     let expandedTerms: string[] = q ? [q] : [];
     if (q) {
       const tagResults = searchTags(q);
       expandedTerms = [q, ...tagResults.map(tr => tr.tag.toLowerCase()), ...tagResults.map(tr => tr.label.toLowerCase())];
     }
-    
+
     return allEvents.filter((e) => {
       const matchSearch = !q ||
         expandedTerms.some(term =>
@@ -331,6 +342,9 @@ export default function Udforsk() {
       const matchCat = !activeCategory ||
         (e.interest_tags || []).some(tag => tag.toLowerCase().includes(activeCategory)) ||
         (e.category || "").toLowerCase().includes(activeCategory);
+      // Also apply user's selected interest tags (from onboarding/profile)
+      const matchUserTags = selectedTags.length === 0 || !activeCategory ||
+        selectedTags.some(t => (e.interest_tags || []).some(tag => tag.toLowerCase().includes(t.toLowerCase())));
       // Country filter
       let matchCountry = true;
       if (activeCountry === 'ALL') {
@@ -340,9 +354,9 @@ export default function Udforsk() {
       } else {
         matchCountry = !e.country || e.country === activeCountry;
       }
-      return matchSearch && matchCat && matchCountry;
+      return matchSearch && matchCat && matchCountry && matchUserTags;
     });
-  }, [allEvents, search, activeCategory, activeCountry]);
+  }, [allEvents, debouncedSearch, activeCategory, activeCountry, selectedTags]);
 
   const popular = [...filtered].sort((a, b) => (b.max_participants || 0) - (a.max_participants || 0)).slice(0, 10);
   const comingSoon = [...filtered].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).slice(0, 6);
@@ -383,7 +397,8 @@ export default function Udforsk() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setSearchFocused(true)}
-            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/10 border border-white/10 text-white placeholder:text-white/40 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
+            disabled
+            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/10 border border-white/10 text-white placeholder:text-white/40 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50 disabled:opacity-40 disabled:cursor-not-allowed"
             data-testid="input-search"
           />
           {(search || searchFocused) && (

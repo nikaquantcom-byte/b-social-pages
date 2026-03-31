@@ -208,7 +208,7 @@ export async function fetchAllPlacesForMap(country?: string): Promise<Place[]> {
   while (true) {
     let query = supabase
       .from("places")
-      .select("id,name,latitude,longitude,city,country,main_categories,type,rating_avg")
+      .select("id,name,latitude,longitude,city,country,main_categories,tags,rating_avg")
       .not("latitude", "is", null)
       .not("longitude", "is", null);
     if (country && country !== 'ALL') {

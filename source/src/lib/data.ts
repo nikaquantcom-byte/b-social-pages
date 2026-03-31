@@ -45,6 +45,7 @@ export async function getEvents(): Promise<Event[]> {
         .from("events")
         .select("*")
         .gte("date", todayISO)
+        .or("status.eq.active,status.is.null")
         .order("date", { ascending: true })
         .range(from, from + PAGE - 1);
       if (error) { console.warn("Supabase fetch error:", error); break; }
