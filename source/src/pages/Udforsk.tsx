@@ -397,8 +397,7 @@ export default function Udforsk() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setSearchFocused(true)}
-            disabled
-            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/10 border border-white/10 text-white placeholder:text-white/40 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/10 border border-white/10 text-white placeholder:text-white/40 text-sm focus:outline-none focus:ring-1 focus:ring-[#4ECDC4]/50"
             data-testid="input-search"
           />
           {(search || searchFocused) && (
