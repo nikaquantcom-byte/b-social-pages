@@ -182,11 +182,20 @@ function PlaceCard({ place }: { place: Place }) {
 const DB_FILTERS: { key: string | null; label: string; emoji: string }[] = [
   { key: null, label: "Alle", emoji: "✨" },
   { key: "natur", label: "Natur", emoji: "🌿" },
-  { key: "strand", label: "Strand", emoji: "🏖️" },
-  { key: "hundeskov", label: "Hundeskov", emoji: "🐕" },
   { key: "sport", label: "Sport", emoji: "🏃" },
   { key: "kultur", label: "Kultur", emoji: "🎭" },
   { key: "mad", label: "Mad", emoji: "🍽️" },
+  { key: "musik", label: "Musik", emoji: "🎵" },
+  { key: "natteliv", label: "Natteliv", emoji: "🌙" },
+  { key: "familie", label: "Familie", emoji: "👨‍👩‍👧" },
+  { key: "logi", label: "Logi", emoji: "🏕️" },
+  { key: "strand", label: "Strand", emoji: "🏖️" },
+  { key: "vandring", label: "Vandring", emoji: "🥾" },
+  { key: "fitness", label: "Fitness", emoji: "💪" },
+  { key: "wellness", label: "Wellness", emoji: "🧘" },
+  { key: "hundeskov", label: "Hundeskov", emoji: "🐕" },
+  { key: "shelter", label: "Shelter", emoji: "⛺" },
+  { key: "fiskeri", label: "Fiskeri", emoji: "🎣" },
 ];
 
 const PLACE_CAT_EMOJI: Record<string, string> = {
@@ -207,11 +216,14 @@ function SupabasePlacesSection() {
   const filteredPlaces = useMemo(() => {
     if (!places) return [];
     if (!dbFilter) return places;
+    // Expand filter through tag tree for smarter matching
+    const tagResults = searchTags(dbFilter);
+    const expandedTerms = [dbFilter, ...tagResults.map(tr => tr.tag.toLowerCase())];
     return places.filter(p => {
       const cats = (p.main_categories || []).map(c => c.toLowerCase());
       const tags = (p.tags || []).map(tag => tag.toLowerCase());
       const all = [...cats, ...tags];
-      return all.some(item => item.includes(dbFilter));
+      return all.some(item => expandedTerms.some(term => item.includes(term)));
     });
   }, [places, dbFilter]);
 
@@ -235,7 +247,7 @@ function SupabasePlacesSection() {
         <div className="flex items-center gap-2">
           <span className="text-sm">📍</span>
           <h2 className="text-white font-semibold text-sm">{t('udforsk.places_in_area')}</h2>
-          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">{places.length}</span>
+          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">{filteredPlaces.length}</span>
         </div>
         <Link href="/kort">
           <span className="text-white/30 text-xs flex items-center gap-0.5 hover:text-white/60 transition-colors cursor-pointer">
