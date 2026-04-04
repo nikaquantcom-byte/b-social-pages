@@ -351,6 +351,18 @@ const SUPABASE_CAT_MAP: Record<string, PinCategory> = {
   kultur: "kultur", museum: "kultur", kreativt: "kreativt",
   sport: "sport", aktiv_sport: "aktiv_sport", loeb: "loeb", mtb: "mtb", fitness: "fitness",
   mad: "mad", mad_hangout: "mad_hangout",
+  // Musik & lyd
+  musik: "musik", koncert: "musik", rock: "musik", pop: "musik", jazz: "musik",
+  metal: "musik", edm: "musik", hiphop: "musik", indie: "musik", rnb: "musik",
+  reggae: "musik", blues: "musik", punk: "musik", techno: "musik", house: "musik",
+  trance: "musik", folk: "musik", gospel: "musik", soul: "musik", funk: "musik",
+  dans: "musik", salsa: "musik", bachata: "musik", tango: "musik", ballet: "musik",
+  dj: "musik", guitar: "musik", klaver: "musik", sang: "musik",
+  festival: "musik", sommerfestival: "musik", openmic: "musik",
+  natteliv: "musik", bar: "musik", natklub: "musik",
+  // Events & socialt
+  events: "events", arrangement: "events", marked: "events", loppemarked: "events",
+  socialt: "socialt", netvaerk: "socialt",
   // New 10 locked categories
   rejser: "rejser", transport: "rejser", tog: "rejser", bus: "rejser", faerge: "rejser",
   logi: "logi", camping: "logi", vandrerhjem: "logi", hytter: "logi", glamping: "logi",
