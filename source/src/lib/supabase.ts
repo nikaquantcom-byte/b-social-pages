@@ -201,6 +201,26 @@ export async function fetchNewestPlaces(limit = 5): Promise<Place[]> {
 
 /** Fetch places with optional limit */
 // Paginate ALL places for map view (lightweight columns only)
+/** Fetch ALL places from the database (paginated, no cap) */
+export async function fetchAllPlaces(): Promise<Place[]> {
+  const all: Place[] = [];
+  let from = 0;
+  const PAGE = 1000;
+  while (true) {
+    const { data, error } = await supabase
+      .from("places")
+      .select("*")
+      .order("rating_avg", { ascending: false, nullsFirst: false })
+      .range(from, from + PAGE - 1);
+    if (error) { console.error("fetchAllPlaces error:", error); break; }
+    if (!data || data.length === 0) break;
+    all.push(...(data as Place[]));
+    if (data.length < PAGE) break;
+    from += PAGE;
+  }
+  return all;
+}
+
 export async function fetchAllPlacesForMap(country?: string): Promise<Place[]> {
   const all: Place[] = [];
   let from = 0;
