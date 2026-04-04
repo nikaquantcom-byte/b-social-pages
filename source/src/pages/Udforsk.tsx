@@ -5,7 +5,7 @@ import { Search, MapPin, ChevronRight, X, Users, Heart, TrendingUp, Star, Loader
 import { useQuery } from "@tanstack/react-query";
 import type { Event } from "@/lib/data";
 import { getEvents } from "@/lib/data";
-import { fetchPlacesWithLimit, type Place } from "@/lib/supabase";
+import { fetchPlaces, type Place } from "@/lib/supabase";
 import { getCategoryEmoji, getEventImage, formatDanishDate } from "@/lib/eventHelpers";
 import { useTags } from "@/context/TagContext";
 
@@ -208,8 +208,8 @@ function SupabasePlacesSection() {
   const { t } = useTranslation();
   const [dbFilter, setDbFilter] = useState<string | null>(null);
   const { data: places, isLoading } = useQuery<Place[]>({
-    queryKey: ["supabase-places-50"],
-    queryFn: () => fetchPlacesWithLimit(200),
+    queryKey: ["supabase-places-all"],
+    queryFn: () => fetchPlaces({ limit: 5000 }),
     staleTime: 5 * 60 * 1000,
   });
 

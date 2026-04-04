@@ -301,6 +301,6 @@ export async function fetchPlaceCounts(): Promise<{ aalborg: number; nordjylland
   if (error) { console.error("fetchPlaceCounts error:", error); return { aalborg: 0, nordjylland: 0 }; }
   const all = data || [];
   const aalborg = all.filter(p => p.city?.toLowerCase() === "aalborg").length;
-  const nordjylland = all.length; // All 60 are in Nordjylland
+  const nordjylland = all.length;
   return { aalborg, nordjylland };
 }
