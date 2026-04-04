@@ -209,7 +209,7 @@ function SupabasePlacesSection() {
   const [dbFilter, setDbFilter] = useState<string | null>(null);
   const { data: places, isLoading } = useQuery<Place[]>({
     queryKey: ["supabase-places-50"],
-    queryFn: () => fetchPlacesWithLimit(50),
+    queryFn: () => fetchPlacesWithLimit(200),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -248,7 +248,7 @@ function SupabasePlacesSection() {
           <span className="text-sm">📍</span>
           <h2 className="text-white font-semibold text-sm">{t('udforsk.places_in_area')}</h2>
           <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">
-            {dbFilter ? <>{filteredPlaces.length} <span className="text-white/30">/ {places.length}</span></> : places.length}
+            {filteredPlaces.length} <span className="text-white/30">/ {places.length}</span>
           </span>
         </div>
         <Link href="/kort">
