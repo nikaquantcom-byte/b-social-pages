@@ -247,7 +247,9 @@ function SupabasePlacesSection() {
         <div className="flex items-center gap-2">
           <span className="text-sm">📍</span>
           <h2 className="text-white font-semibold text-sm">{t('udforsk.places_in_area')}</h2>
-          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">{filteredPlaces.length}</span>
+          <span className="px-1.5 py-0.5 rounded-full bg-[#4ECDC4]/20 text-[#4ECDC4] text-[11px] font-bold">
+            {dbFilter ? <>{filteredPlaces.length} <span className="text-white/30">/ {places.length}</span></> : places.length}
+          </span>
         </div>
         <Link href="/kort">
           <span className="text-white/30 text-xs flex items-center gap-0.5 hover:text-white/60 transition-colors cursor-pointer">
