@@ -19,7 +19,7 @@ function SettingsGroup({ title, children }: { title: string; children: React.Rea
 }
 
 function SettingsRow({ icon: Icon, label, value, onClick, danger }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ size?: string | number; className?: string }>;
   label: string;
   value?: string;
   onClick?: () => void;
@@ -42,7 +42,7 @@ function SettingsRow({ icon: Icon, label, value, onClick, danger }: {
 }
 
 function ToggleRow({ icon: Icon, label, enabled, onToggle }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ size?: string | number; className?: string }>;
   label: string;
   enabled: boolean;
   onToggle: () => void;
